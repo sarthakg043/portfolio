@@ -118,17 +118,20 @@
 
 /* ── Cybersecurity Domain — Neon Green + Dark ── */
 [data-domain="cyber"] {
-  --domain-primary: #00ff41;
-  --domain-secondary: #00cc33;
-  --domain-accent: #0f0;
-  --domain-surface: #0a0f0a;
-  --domain-glow: rgba(0, 255, 65, 0.25);
-  --background: #050505;
-  --foreground: #c0c0c0;
-  --primary: #00ff41;
-  --ring: #00ff41;
-  --muted-foreground: #555;
-  --border: #1a2a1a;
+  --domain-primary: #11c114;        /* main green */
+  --domain-secondary: #0ea512;      /* slightly darker for layering */
+  --domain-accent: #3cff47;         /* brighter pop for highlights */
+  --domain-surface: #0a120a;        /* deep green-tinted dark */
+  --domain-glow: rgba(17, 193, 20, 0.25);
+
+  --background: #050805;           /* near-black with green hint */
+  --foreground: #d4fdd4;           /* soft readable green-white */
+
+  --primary: #11c114;
+  --ring: #11c114;
+
+  --muted-foreground: #6b8f6b;     /* muted green-gray */
+  --border: #1a2a1a;               /* subtle green border */
 }
 
 /* ── Scanlines overlay for cyber ── */

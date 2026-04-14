@@ -154,7 +154,7 @@ export function Hero() {
                 transition={{ delay: 0.6 + i * 0.1 }}
               >
                 <span className="text-4xl md:text-5xl font-black text-foreground">
-                  +{stat.value}
+                  {stat.value}
                 </span>
                 <p className="text-[10px] md:text-xs text-muted-foreground tracking-wider uppercase mt-1 whitespace-pre-line">
                   {stat.label}
