@@ -31,11 +31,18 @@ export function DomainProvider({ children }: { children: ReactNode }) {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  // Hydrate from localStorage
+  // Hydrate from localStorage, falling back to URL path
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY) as Domain | null;
     if (stored && VALID_DOMAINS.includes(stored)) {
       setDomainState(stored);
+    } else {
+      // Extract domain from URL as fallback (e.g. /portfolio/frontend)
+      const segments = window.location.pathname.split("/");
+      const urlDomain = segments[2] as Domain | undefined;
+      if (urlDomain && VALID_DOMAINS.includes(urlDomain)) {
+        setDomainState(urlDomain);
+      }
     }
     setMounted(true);
   }, []);
