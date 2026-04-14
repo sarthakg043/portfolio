@@ -5,36 +5,56 @@ import { useDomain } from "@/components/providers/domain-provider";
 import { useEffect, useRef } from "react";
 
 function CyberOverlay({ onComplete }: { onComplete: () => void }) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasTopRef = useRef<HTMLCanvasElement>(null);
+  const canvasBottomRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    const canvasTop = canvasTopRef.current;
+    const canvasBottom = canvasBottomRef.current;
+    if (!canvasTop || !canvasBottom) return;
+    const ctxTop = canvasTop.getContext("2d");
+    const ctxBottom = canvasBottom.getContext("2d");
+    if (!ctxTop || !ctxBottom) return;
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    canvasTop.width = canvasBottom.width = w;
+    canvasTop.height = canvasBottom.height = h;
 
-    const chars = "01アイウエオ";
+    const chars = "01アイウエオカキクケコ";
     const fontSize = 16;
-    const columns = Math.ceil(canvas.width / fontSize);
-    const drops = new Array(columns).fill(0);
+    const columns = Math.ceil(w / fontSize);
+    const dropsDown = new Array(columns).fill(0);
+    const dropsUp = new Array(columns).fill(Math.ceil(h / fontSize));
     let frame = 0;
 
     const draw = () => {
-      ctx.fillStyle = `rgba(0, 0, 0, ${frame < 10 ? 0.3 : 0.1})`;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "#00ff41";
-      ctx.font = `${fontSize}px monospace`;
+      const fade = frame < 10 ? 0.3 : 0.1;
 
-      for (let i = 0; i < drops.length; i++) {
+      // Top-down rain
+      ctxTop.fillStyle = `rgba(0, 0, 0, ${fade})`;
+      ctxTop.fillRect(0, 0, w, h);
+      ctxTop.fillStyle = "#00ff41";
+      ctxTop.font = `${fontSize}px monospace`;
+      for (let i = 0; i < dropsDown.length; i++) {
         const ch = chars[Math.floor(Math.random() * chars.length)];
-        ctx.fillText(ch, i * fontSize, drops[i] * fontSize);
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.95)
-          drops[i] = 0;
-        drops[i]++;
+        ctxTop.fillText(ch, i * fontSize, dropsDown[i] * fontSize);
+        if (dropsDown[i] * fontSize > h && Math.random() > 0.95) dropsDown[i] = 0;
+        dropsDown[i]++;
       }
+
+      // Bottom-up rain
+      ctxBottom.fillStyle = `rgba(0, 0, 0, ${fade})`;
+      ctxBottom.fillRect(0, 0, w, h);
+      ctxBottom.fillStyle = "#00ff41";
+      ctxBottom.font = `${fontSize}px monospace`;
+      for (let i = 0; i < dropsUp.length; i++) {
+        const ch = chars[Math.floor(Math.random() * chars.length)];
+        ctxBottom.fillText(ch, i * fontSize, dropsUp[i] * fontSize);
+        if (dropsUp[i] * fontSize < 0 && Math.random() > 0.95) dropsUp[i] = Math.ceil(h / fontSize);
+        dropsUp[i]--;
+      }
+
       frame++;
     };
 
@@ -49,13 +69,14 @@ function CyberOverlay({ onComplete }: { onComplete: () => void }) {
 
   return (
     <motion.div
-      className="fixed inset-0 z-[9998]"
+      className="fixed inset-0 z-9998"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <canvas ref={canvasRef} className="w-full h-full" />
+      <canvas ref={canvasTopRef} className="absolute inset-0 w-full h-full" />
+      <canvas ref={canvasBottomRef} className="absolute inset-0 w-full h-full mix-blend-lighten" />
     </motion.div>
   );
 }
@@ -115,18 +136,18 @@ function JavaOverlay({ onComplete }: { onComplete: () => void }) {
 }
 
 export function TransitionOverlay() {
-  const { isTransitioning, targetDomain } = useDomain();
+  const { isTransitioning, targetDomain, endTransition } = useDomain();
 
   return (
     <AnimatePresence>
       {isTransitioning && targetDomain === "cyber" && (
-        <CyberOverlay key="cyber" onComplete={() => {}} />
+        <CyberOverlay key="cyber" onComplete={endTransition} />
       )}
       {isTransitioning && targetDomain === "frontend" && (
-        <FrontendOverlay key="frontend" onComplete={() => {}} />
+        <FrontendOverlay key="frontend" onComplete={endTransition} />
       )}
       {isTransitioning && targetDomain === "java" && (
-        <JavaOverlay key="java" onComplete={() => {}} />
+        <JavaOverlay key="java" onComplete={endTransition} />
       )}
     </AnimatePresence>
   );

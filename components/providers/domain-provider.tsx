@@ -17,6 +17,7 @@ interface DomainContextValue {
   isTransitioning: boolean;
   targetDomain: Domain | null;
   transitionTo: (d: Domain) => void;
+  endTransition: () => void;
 }
 
 const DomainContext = createContext<DomainContextValue | null>(null);
@@ -58,26 +59,24 @@ export function DomainProvider({ children }: { children: ReactNode }) {
     setDomainState(d);
   }, []);
 
+  const endTransition = useCallback(() => {
+    setIsTransitioning(false);
+    setTargetDomain(null);
+  }, []);
+
   const transitionTo = useCallback(
     (d: Domain) => {
       if (d === domain || isTransitioning) return;
       setIsTransitioning(true);
       setTargetDomain(d);
-      // Apply domain mid-transition (overlay covers the switch)
-      setTimeout(() => {
-        setDomainState(d);
-      }, 600);
-      setTimeout(() => {
-        setIsTransitioning(false);
-        setTargetDomain(null);
-      }, 1200);
+      setDomainState(d);
     },
     [domain, isTransitioning]
   );
 
   return (
     <DomainContext.Provider
-      value={{ domain, setDomain, isTransitioning, targetDomain, transitionTo }}
+      value={{ domain, setDomain, isTransitioning, targetDomain, transitionTo, endTransition }}
     >
       {children}
     </DomainContext.Provider>
