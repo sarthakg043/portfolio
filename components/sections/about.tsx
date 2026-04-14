@@ -27,7 +27,7 @@ export function About() {
           {/* Main about text — comic white card */}
           <ScrollReveal delay={0.1}>
             <div className={`comic-card p-8 lg:col-span-2 h-full ${DOMAIN_FONTS[domain]}`}>
-              <p className="text-lg md:text-xl leading-relaxed text-[#333]">
+              <p className="text-lg md:text-xl leading-relaxed text-card-text-body">
                 {config.about[domain]}
               </p>
             </div>
@@ -48,12 +48,12 @@ export function About() {
                 ].map((item) => (
                   <div key={item.label}>
                     <p className="text-[10px] font-bold tracking-[0.2em] uppercase"
-                      style={{ color: domain === "cyber" ? "#000" : "rgba(255,255,255,0.6)" }}
+                      style={{ color: "var(--on-primary-muted)" }}
                     >
                       {item.label}
                     </p>
                     <p className="text-lg font-black"
-                      style={{ color: domain === "cyber" ? "#000" : "#fff" }}
+                      style={{ color: "var(--on-primary)" }}
                     >
                       {item.value}
                     </p>

@@ -13,27 +13,6 @@ interface Particle {
   color: string;
 }
 
-const domainParticleConfig = {
-  frontend: {
-    colors: ["#a855f7", "#ec4899", "#06b6d4", "#8b5cf6"],
-    count: 50,
-    speed: 0.3,
-    maxSize: 4,
-  },
-  java: {
-    colors: ["#d4a574", "#c9a84c", "#8b6f47", "#f5e6d3"],
-    count: 30,
-    speed: 0.15,
-    maxSize: 3,
-  },
-  cyber: {
-    colors: ["#00ff41", "#00cc33", "#009926"],
-    count: 60,
-    speed: 0.5,
-    maxSize: 2,
-  },
-};
-
 export function Particles({ className = "" }: { className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { domain } = useDomain();
@@ -45,7 +24,32 @@ export function Particles({ className = "" }: { className?: string }) {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    const cssStyle = getComputedStyle(document.documentElement);
+    const cssVar = (name: string) => cssStyle.getPropertyValue(name).trim();
+
+    const domainParticleConfig = {
+      frontend: {
+        colors: [cssVar("--particle-frontend-1"), cssVar("--particle-frontend-2"), cssVar("--particle-frontend-3"), cssVar("--particle-frontend-4")],
+        count: 50,
+        speed: 0.3,
+        maxSize: 4,
+      },
+      java: {
+        colors: [cssVar("--particle-java-1"), cssVar("--particle-java-2"), cssVar("--particle-java-3"), cssVar("--particle-java-4")],
+        count: 30,
+        speed: 0.15,
+        maxSize: 3,
+      },
+      cyber: {
+        colors: [cssVar("--particle-cyber-1"), cssVar("--particle-cyber-2"), cssVar("--particle-cyber-3")],
+        count: 60,
+        speed: 0.5,
+        maxSize: 2,
+      },
+    };
+
     const config = domainParticleConfig[domain];
+    const cyberLineColor = cssVar("--particle-cyber-1");
 
     const resize = () => {
       canvas.width = canvas.offsetWidth;
@@ -86,7 +90,7 @@ export function Particles({ className = "" }: { className?: string }) {
       // Draw connections for cyber domain
       if (domain === "cyber") {
         ctx.globalAlpha = 0.06;
-        ctx.strokeStyle = "#00ff41";
+        ctx.strokeStyle = cyberLineColor;
         ctx.lineWidth = 0.5;
         for (let i = 0; i < particles.length; i++) {
           for (let j = i + 1; j < particles.length; j++) {

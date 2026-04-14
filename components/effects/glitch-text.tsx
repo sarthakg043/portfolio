@@ -20,7 +20,7 @@ export function GlitchText({
         <span className="relative z-10">{children}</span>
         <span
           aria-hidden
-          className="absolute top-0 left-0 z-0 text-[#00ff41] opacity-70"
+          className="absolute top-0 left-0 z-0 text-glitch-primary opacity-70"
           style={{
             animation: "glitch-1 0.3s infinite linear alternate-reverse",
           }}
@@ -29,7 +29,7 @@ export function GlitchText({
         </span>
         <span
           aria-hidden
-          className="absolute top-0 left-0 z-0 text-[#ff0040] opacity-70"
+          className="absolute top-0 left-0 z-0 text-glitch-accent opacity-70"
           style={{
             animation: "glitch-2 0.3s infinite linear alternate-reverse",
           }}
@@ -65,7 +65,7 @@ export function TypewriterText({
         </motion.span>
       ))}
       <motion.span
-        className="inline-block w-0.5 h-[1em] bg-[#00ff41] ml-1 align-middle animate-blink"
+        className="inline-block w-[2px] h-[1em] bg-matrix ml-1 align-middle animate-blink"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: text.length * (speed / 1000) }}
@@ -90,7 +90,7 @@ export function InkStrokeText({
     >
       {children}
       <motion.span
-        className="absolute -bottom-2 left-0 h-0.5 bg-[#FFD700]"
+        className="absolute -bottom-2 left-0 h-0.5 bg-inkstroke"
         initial={{ width: 0 }}
         animate={{ width: "100%" }}
         transition={{ duration: 1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
@@ -118,7 +118,7 @@ export function DomainText({
 
   if (domain === "java") {
     return (
-      <InkStrokeText className="text-[#FF8C00]">{children}</InkStrokeText>
+      <InkStrokeText className="text-[var(--brand-java-primary)]">{children}</InkStrokeText>
     );
   }
 

@@ -84,16 +84,16 @@ export async function fetchReposByNames(
 
 export function getLanguageColor(lang: string): string {
   const colors: Record<string, string> = {
-    TypeScript: "#3178c6",
-    JavaScript: "#f1e05a",
-    Python: "#3572A5",
-    Java: "#b07219",
-    HTML: "#e34c26",
-    CSS: "#563d7c",
-    Shell: "#89e051",
-    Rust: "#dea584",
-    Go: "#00ADD8",
-    Ruby: "#701516",
+    TypeScript: "var(--lang-typescript)",
+    JavaScript: "var(--lang-javascript)",
+    Python: "var(--lang-python)",
+    Java: "var(--lang-java-color)",
+    HTML: "var(--lang-html)",
+    CSS: "var(--lang-css-color)",
+    Shell: "var(--lang-shell)",
+    Rust: "var(--lang-rust)",
+    Go: "var(--lang-go)",
+    Ruby: "var(--lang-ruby)",
   };
-  return colors[lang] ?? "#8b8b8b";
+  return colors[lang] ?? "var(--lang-unknown)";
 }

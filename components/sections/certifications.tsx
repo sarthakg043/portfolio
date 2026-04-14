@@ -38,15 +38,15 @@ export function Certifications() {
                 />
                 <div className="flex items-start justify-between mb-4">
                   <div
-                    className="w-10 h-10 rounded-full flex items-center justify-center text-white"
+                    className="w-10 h-10 rounded-full flex items-center justify-center text-on-primary"
                     style={{ background: "var(--domain-primary)" }}
                   >
                     <Award size={20} />
                   </div>
-                  <ArrowUpRight size={16} className="text-[#bbb] group-hover:text-domain-primary transition-colors" />
+                  <ArrowUpRight size={16} className="text-card-text-dim group-hover:text-domain-primary transition-colors" />
                 </div>
-                <h3 className="font-black text-[#0e0e0e] mb-1">{cert.name}</h3>
-                <p className="text-sm text-[#888]">{cert.issuer} • {cert.year}</p>
+                <h3 className="font-black text-card-text mb-1">{cert.name}</h3>
+                <p className="text-sm text-card-text-subtle">{cert.issuer} • {cert.year}</p>
               </motion.a>
             </StaggerItem>
           ))}

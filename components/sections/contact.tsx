@@ -73,10 +73,10 @@ export function Contact() {
                     <Icon size={18} />
                   </div>
                   <div className="flex-1 text-left">
-                    <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#999]">{label}</p>
-                    <p className="text-sm font-black text-[#0e0e0e]">{text}</p>
+                    <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-card-text-faint">{label}</p>
+                    <p className="text-sm font-black text-card-text">{text}</p>
                   </div>
-                  <ArrowUpRight size={16} className="text-[#bbb] group-hover:text-[var(--domain-primary)] transition-colors" />
+                  <ArrowUpRight size={16} className="text-card-text-dim group-hover:text-[var(--domain-primary)] transition-colors" />
                 </a>
               </MagneticButton>
             ))}

@@ -12,7 +12,7 @@ interface ProjectsProps {
   githubRepos: GitHubRepo[];
 }
 
-const accentColors = ["var(--domain-primary)", "var(--domain-secondary)", "#06b6d4", "#f59e0b"];
+const accentColors = ["var(--domain-primary)", "var(--domain-secondary)", "var(--accent-cyan)", "var(--accent-amber)"];
 
 export function Projects({ githubRepos }: ProjectsProps) {
   const { domain } = useDomain();
@@ -65,7 +65,7 @@ export function Projects({ githubRepos }: ProjectsProps) {
                   borderColor: filter === key ? "var(--domain-primary)" : "var(--border)",
                   background: filter === key ? "var(--domain-primary)" : "transparent",
                   color: filter === key
-                    ? (domain === "cyber" ? "#000" : "#fff")
+                    ? "var(--on-primary)"
                     : "var(--muted-foreground)",
                 }}
               >
@@ -96,17 +96,17 @@ export function Projects({ githubRepos }: ProjectsProps) {
                   />
 
                   <div className="flex items-start justify-between mb-4">
-                    <h3 className="text-xl font-black text-[#0e0e0e] group-hover:text-domain-primary transition-colors">
+                    <h3 className="text-xl font-black text-card-text group-hover:text-domain-primary transition-colors">
                       {project.name}
                     </h3>
-                    <ArrowUpRight size={18} className="text-[#bbb] group-hover:text-domain-primary transition-colors" />
+                    <ArrowUpRight size={18} className="text-card-text-dim group-hover:text-domain-primary transition-colors" />
                   </div>
 
-                  <p className="text-sm text-[#666] leading-relaxed mb-5">
+                  <p className="text-sm text-card-text-muted leading-relaxed mb-5">
                     {project.description}
                   </p>
 
-                  <div className="flex items-center gap-4 text-xs text-[#999]">
+                  <div className="flex items-center gap-4 text-xs text-card-text-faint">
                     {project.gh?.language && (
                       <span className="flex items-center gap-1.5">
                         <span
@@ -132,7 +132,7 @@ export function Projects({ githubRepos }: ProjectsProps) {
                     {project.domain.map((d) => (
                       <span
                         key={d}
-                        className="text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-wider bg-[#f0f0f0] text-[#555]"
+                        className="text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-wider bg-card-tag-bg text-card-tag-text"
                       >
                         {d}
                       </span>

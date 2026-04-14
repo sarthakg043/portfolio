@@ -35,7 +35,7 @@ export function Blog() {
                 whileHover={{ y: -4 }}
                 transition={{ duration: 0.2 }}
               >
-                <div className="flex items-center gap-2 text-xs text-[#999] font-bold mb-4">
+                <div className="flex items-center gap-2 text-xs text-card-text-faint font-bold mb-4">
                   <Calendar size={12} />
                   <span>
                     {new Date(post.date).toLocaleDateString("en-US", {
@@ -45,10 +45,10 @@ export function Blog() {
                     })}
                   </span>
                 </div>
-                <h3 className="font-black text-[#0e0e0e] mb-2 group-hover:text-domain-primary transition-colors">
+                <h3 className="font-black text-card-text mb-2 group-hover:text-domain-primary transition-colors">
                   {post.title}
                 </h3>
-                <p className="text-sm text-[#666] leading-relaxed mb-4 line-clamp-7">
+                <p className="text-sm text-card-text-muted leading-relaxed mb-4 line-clamp-7">
                   {post.excerpt}
                 </p>
                 <span

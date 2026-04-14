@@ -46,6 +46,23 @@
   --color-domain-accent: var(--domain-accent);
   --color-domain-surface: var(--domain-surface);
   --color-domain-glow: var(--domain-glow);
+  /* ── Semantic card text colors → Tailwind utilities ── */
+  --color-card-text: var(--card-text);
+  --color-card-text-body: var(--card-text-body);
+  --color-card-text-muted: var(--card-text-muted-val);
+  --color-card-text-subtle: var(--card-text-subtle);
+  --color-card-text-faint: var(--card-text-faint);
+  --color-card-text-dim: var(--card-text-dim);
+  --color-card-tag-bg: var(--card-tag-bg);
+  --color-card-tag-text: var(--card-tag-text);
+  /* ── On-color contrast text → Tailwind utilities ── */
+  --color-on-primary: var(--on-primary);
+  --color-on-secondary: var(--on-secondary);
+  /* ── Effect colors → Tailwind utilities ── */
+  --color-glitch-primary: var(--glitch-primary);
+  --color-glitch-accent: var(--glitch-accent);
+  --color-matrix: var(--matrix-color);
+  --color-inkstroke: var(--inkstroke-underline);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -88,6 +105,105 @@
   --domain-accent: #06b6d4;
   --domain-surface: #1a1a1a;
   --domain-glow: rgba(255, 77, 0, 0.3);
+
+  /* ── Card text hierarchy (text on white comic-cards) ── */
+  --card-text: #0e0e0e;
+  --card-text-body: #333333;
+  --card-text-muted-val: #666666;
+  --card-text-subtle: #888888;
+  --card-text-faint: #999999;
+  --card-text-dim: #bbbbbb;
+  --card-tag-bg: #f0f0f0;
+  --card-tag-text: #555555;
+  --card-border-radius: 1.25rem;
+
+  /* ── On-color contrast text ── */
+  /* Text placed on top of domain-primary colored backgrounds */
+  --on-primary: #ffffff;
+  --on-primary-muted: rgba(255, 255, 255, 0.6);
+  /* Text placed on top of domain-secondary colored backgrounds */
+  --on-secondary: #0e0e0e;
+  --on-secondary-muted: rgba(0, 0, 0, 0.5);
+
+  /* ── Background overlays ── */
+  --overlay-dark: rgba(14, 14, 14, 0.95);
+  --overlay-dark-mid: rgba(14, 14, 14, 0.8);
+  --tooltip-bg: rgba(10, 10, 15, 0.9);
+
+  /* ── Static domain brand colors (pre-domain / landing / switcher) ── */
+  --brand-frontend-primary: #FF4D00;
+  --brand-frontend-secondary: #CCFF00;
+  --brand-frontend-primary-faint: rgba(255, 77, 0, 0.08);
+  --brand-java-primary: #FF8C00;
+  --brand-java-secondary: #FFD700;
+  --brand-java-primary-faint: rgba(255, 140, 0, 0.08);
+  --brand-cyber-primary: #11c114;
+  --brand-cyber-secondary: #0ea512;
+  --brand-cyber-primary-faint: rgba(17, 193, 20, 0.08);
+
+  /* ── On-brand contrast text (for portal cards on landing) ── */
+  --on-brand-dark: #ffffff;
+  --on-brand-dark-muted: rgba(255, 255, 255, 0.6);
+  --on-brand-light: #0e0e0e;
+  --on-brand-light-muted: rgba(0, 0, 0, 0.5);
+
+  /* ── Domain chart hex (no '#' — for external image URL query param) ── */
+  --chart-domain-hex: FF4D00;
+
+  /* ── Cursor FX ── */
+  --cursor-frontend-from: #a855f7;
+  --cursor-frontend-to: #ec4899;
+  --cursor-frontend-glow: rgba(168, 85, 247, 0.4);
+  --cursor-java-color: #d4a574;
+  --cursor-java-glow: rgba(212, 165, 116, 0.3);
+  --cursor-cyber-color: #11c114;
+  --cursor-cyber-glow: rgba(17, 193, 20, 0.4);
+
+  /* ── Particle FX ── */
+  --particle-frontend-1: #a855f7;
+  --particle-frontend-2: #ec4899;
+  --particle-frontend-3: #06b6d4;
+  --particle-frontend-4: #8b5cf6;
+  --particle-java-1: #d4a574;
+  --particle-java-2: #c9a84c;
+  --particle-java-3: #8b6f47;
+  --particle-java-4: #f5e6d3;
+  --particle-cyber-1: #11c114;
+  --particle-cyber-2: #0ea512;
+  --particle-cyber-3: #0a7a0d;
+
+  /* ── Matrix / Cyber canvas FX ── */
+  --matrix-color: #11c114;
+  --matrix-fade: rgba(0, 0, 0, 0.05);
+
+  /* ── Glitch text FX ── */
+  --glitch-primary: #11c114;
+  --glitch-accent: #ff0040;
+  --typewriter-cursor-color: #11c114;
+  --inkstroke-underline: #FFD700;
+
+  /* ── GitHub language bar colors ── */
+  --lang-typescript: #3178c6;
+  --lang-javascript: #f1e05a;
+  --lang-python: #3572A5;
+  --lang-java-color: #b07219;
+  --lang-html: #e34c26;
+  --lang-css-color: #563d7c;
+  --lang-shell: #89e051;
+  --lang-rust: #dea584;
+  --lang-go: #00ADD8;
+  --lang-ruby: #701516;
+  --lang-unknown: #666666;
+
+  /* ── Misc accent colors ── */
+  --accent-cyan: #06b6d4;
+  --accent-amber: #f59e0b;
+
+  /* ── Easter egg terminal ── */
+  --terminal-bg: #0d0d0d;
+  --terminal-header-bg: #1a1a1a;
+  --terminal-prompt: #11c114;
+  --terminal-border-cyber: rgba(17, 193, 20, 0.19);
 }
 
 /* ── Frontend Domain — Orange + Lime ── */
@@ -99,6 +215,11 @@
   --domain-glow: rgba(255, 77, 0, 0.3);
   --primary: #FF4D00;
   --ring: #FF4D00;
+  --on-primary: #ffffff;
+  --on-primary-muted: rgba(255, 255, 255, 0.6);
+  --on-secondary: #0e0e0e;
+  --on-secondary-muted: rgba(0, 0, 0, 0.5);
+  --chart-domain-hex: FF4D00;
 }
 
 /* ── Java Backend Domain — Deep Brown + Gold ── */
@@ -114,24 +235,55 @@
   --ring: #FF8C00;
   --muted-foreground: #a09080;
   --border: #2a2518;
+  --on-primary: #ffffff;
+  --on-primary-muted: rgba(255, 255, 255, 0.6);
+  --on-secondary: #0e0e0e;
+  --on-secondary-muted: rgba(0, 0, 0, 0.5);
+  --chart-domain-hex: FF8C00;
 }
 
 /* ── Cybersecurity Domain — Neon Green + Dark ── */
 [data-domain="cyber"] {
-  --domain-primary: #11c114;        /* main green */
-  --domain-secondary: #0ea512;      /* slightly darker for layering */
-  --domain-accent: #3cff47;         /* brighter pop for highlights */
-  --domain-surface: #0a120a;        /* deep green-tinted dark */
+  /* Core palette */
+  --domain-primary: #11c114;
+  --domain-secondary: #0ea512;
+  --domain-accent: #2ee63a;
+  --domain-surface: #0a120a;
   --domain-glow: rgba(17, 193, 20, 0.25);
 
-  --background: #050805;           /* near-black with green hint */
-  --foreground: #d4fdd4;           /* soft readable green-white */
+  /* Base UI */
+  --background: #050805;
+  --foreground: #e6ffe6;
 
   --primary: #11c114;
-  --ring: #11c114;
+  --ring: #1bd61f;
 
-  --muted-foreground: #6b8f6b;     /* muted green-gray */
-  --border: #1a2a1a;               /* subtle green border */
+  --muted-foreground: #6f9f6f;
+  --border: #1a2a1a;
+
+  /* Text on colors */
+  --on-primary: #021402;                 /* softer than pure black */
+  --on-primary-muted: rgba(2, 20, 2, 0.65);
+  --on-secondary: #021402;
+  --on-secondary-muted: rgba(2, 20, 2, 0.65);
+
+  /* Data / charts */
+  --chart-domain-hex: 11c114;
+
+  /* Effects system (layered, not identical) */
+  --matrix-color: #1bd61f;               /* slightly brighter */
+  --glitch-primary: #3cff47;             /* high-energy accent */
+
+  --typewriter-cursor-color: #2ee63a;
+  --cursor-cyber-color: #1bd61f;
+  --cursor-cyber-glow: rgba(46, 230, 58, 0.45);
+
+  /* Particles (variation for realism) */
+  --particle-cyber-1: #11c114;
+  --particle-cyber-2: #1bd61f;
+
+  /* Terminal */
+  --terminal-prompt: #3cff47;
 }
 
 /* ── Scanlines overlay for cyber ── */
@@ -145,28 +297,28 @@
     0deg,
     transparent,
     transparent 2px,
-    rgba(0, 255, 65, 0.015) 2px,
-    rgba(0, 255, 65, 0.015) 4px
+    rgba(17, 193, 20, 0.015) 2px,
+    rgba(17, 193, 20, 0.015) 4px
   );
 }
 
 /* ── Gradient heading utilities ── */
 .text-gradient-frontend {
-  background: linear-gradient(135deg, #FF4D00, #CCFF00);
+  background: linear-gradient(135deg, var(--brand-frontend-primary), var(--brand-frontend-secondary));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .text-gradient-java {
-  background: linear-gradient(135deg, #FF8C00, #FFD700);
+  background: linear-gradient(135deg, var(--brand-java-primary), var(--brand-java-secondary));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .text-gradient-cyber {
-  background: linear-gradient(135deg, #00ff41, #00cc33, #0f0);
+  background: linear-gradient(135deg, var(--brand-cyber-primary), var(--brand-cyber-secondary), var(--brand-cyber-primary));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -174,23 +326,23 @@
 
 /* ── Comic style cards — solid white, thick border, no glass ── */
 .comic-card {
-  background: #ffffff;
-  color: #0e0e0e;
-  border: 3px solid #0e0e0e;
-  border-radius: 1.25rem;
+  background: var(--card);
+  color: var(--card-text);
+  border: 3px solid var(--card-text);
+  border-radius: var(--card-border-radius);
 }
 
 .comic-card-dark {
-  background: #1a1a1a;
-  color: #f5f5f5;
-  border: 3px solid #2a2a2a;
-  border-radius: 1.25rem;
+  background: var(--secondary);
+  color: var(--secondary-foreground);
+  border: 3px solid var(--border);
+  border-radius: var(--card-border-radius);
 }
 
 /* ── Accent colored cards ── */
 .comic-card-accent {
-  border: 3px solid #0e0e0e;
-  border-radius: 1.25rem;
+  border: 3px solid var(--card-text);
+  border-radius: var(--card-border-radius);
 }
 
 /* ── Bold outlined text (stroke effect) ── */

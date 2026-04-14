@@ -25,11 +25,15 @@ export function MatrixRain({ className = "" }: { className?: string }) {
     const columns = Math.floor(canvas.width / fontSize);
     const drops = new Array(columns).fill(1);
 
+    const cssStyle = getComputedStyle(document.documentElement);
+    const matrixColor = cssStyle.getPropertyValue("--matrix-color").trim() || "#11c114";
+    const matrixFade = cssStyle.getPropertyValue("--matrix-fade").trim() || "rgba(0, 0, 0, 0.05)";
+
     const draw = () => {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillStyle = matrixFade;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.fillStyle = "#00ff41";
+      ctx.fillStyle = matrixColor;
       ctx.font = `${fontSize}px monospace`;
 
       for (let i = 0; i < drops.length; i++) {

@@ -28,7 +28,7 @@ function SkillBadge({
       className="inline-flex items-center px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider border-2 transition-all duration-200"
       style={{
         borderColor: highlighted ? "var(--domain-primary)" : "var(--border)",
-        color: highlighted ? (["cyber"].includes("") ? "#000" : "#fff") : "var(--muted-foreground)",
+        color: highlighted ? "var(--on-primary)" : "var(--muted-foreground)",
         background: highlighted ? "var(--domain-primary)" : "transparent",
       }}
       whileHover={{

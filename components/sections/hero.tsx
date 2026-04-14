@@ -55,7 +55,7 @@ export function Hero() {
               />
             </div>
 
-            <h2 className="text-2xl font-black text-[#0e0e0e] mb-1">
+            <h2 className="text-2xl font-black text-card-text mb-1">
               {config.personal.name}
             </h2>
 
@@ -67,7 +67,7 @@ export function Hero() {
               />
             </div>
 
-            <p className="text-sm text-[#666] leading-relaxed mb-6">
+            <p className="text-sm text-card-text-muted leading-relaxed mb-6">
               {config.about[domain]}
             </p>
 
@@ -171,7 +171,7 @@ export function Hero() {
                 className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-bold text-sm uppercase tracking-wider transition-all cursor-pointer"
                 style={{
                   background: "var(--domain-primary)",
-                  color: domain === "cyber" ? "#000" : "#fff",
+                  color: "var(--on-primary)",
                 }}
               >
                 View My Work
@@ -207,13 +207,13 @@ export function Hero() {
         >
           <div className="pattern-zigzag absolute inset-0" />
           <div className="relative z-10">
-            <p className="text-2xl md:text-3xl font-black uppercase text-white leading-tight">
+            <p className="text-2xl md:text-3xl font-black uppercase text-on-primary leading-tight">
               {domain === "frontend" ? "DYNAMIC ANIMATION, MOTION DESIGN" 
                 : domain === "java" ? "SCALABLE APIS, MICROSERVICES"
                 : "PENETRATION TESTING, RED TEAM"}
             </p>
           </div>
-          <ArrowRight className="absolute bottom-4 right-4 text-white/60" size={24} />
+          <ArrowRight className="absolute bottom-4 right-4 text-on-primary/60" size={24} />
         </div>
 
         <div
@@ -223,7 +223,7 @@ export function Hero() {
           <div className="pattern-zigzag absolute inset-0" />
           <div className="relative z-10">
             <p className="text-2xl md:text-3xl font-black uppercase leading-tight"
-              style={{ color: domain === "cyber" ? "#000" : "#0e0e0e" }}
+              style={{ color: "var(--on-secondary)" }}
             >
               {domain === "frontend" ? "REACT, NEXT.JS, TYPESCRIPT, TAILWIND"
                 : domain === "java" ? "SPRING BOOT, HIBERNATE, DOCKER"
@@ -233,7 +233,7 @@ export function Hero() {
           <ArrowRight
             className="absolute bottom-4 right-4 opacity-60"
             size={24}
-            style={{ color: domain === "cyber" ? "#000" : "#0e0e0e" }}
+            style={{ color: "var(--on-secondary)" }}
           />
         </div>
       </motion.div>

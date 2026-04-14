@@ -28,13 +28,16 @@ function CyberOverlay({ onComplete }: { onComplete: () => void }) {
     const dropsUp = new Array(columns).fill(Math.ceil(h / fontSize));
     let frame = 0;
 
+    const cyberColor = getComputedStyle(document.documentElement)
+      .getPropertyValue("--brand-cyber-primary").trim() || "#11c114";
+
     const draw = () => {
       const fade = frame < 10 ? 0.3 : 0.1;
 
       // Top-down rain
       ctxTop.fillStyle = `rgba(0, 0, 0, ${fade})`;
       ctxTop.fillRect(0, 0, w, h);
-      ctxTop.fillStyle = "#00ff41";
+      ctxTop.fillStyle = cyberColor;
       ctxTop.font = `${fontSize}px monospace`;
       for (let i = 0; i < dropsDown.length; i++) {
         const ch = chars[Math.floor(Math.random() * chars.length)];
@@ -46,7 +49,7 @@ function CyberOverlay({ onComplete }: { onComplete: () => void }) {
       // Bottom-up rain
       ctxBottom.fillStyle = `rgba(0, 0, 0, ${fade})`;
       ctxBottom.fillRect(0, 0, w, h);
-      ctxBottom.fillStyle = "#00ff41";
+      ctxBottom.fillStyle = cyberColor;
       ctxBottom.font = `${fontSize}px monospace`;
       for (let i = 0; i < dropsUp.length; i++) {
         const ch = chars[Math.floor(Math.random() * chars.length)];
@@ -96,7 +99,7 @@ function FrontendOverlay({ onComplete }: { onComplete: () => void }) {
       {/* Left panel slides in from left, out to left */}
       <motion.div
         className="w-1/2 h-full"
-        style={{ background: "#FF4D00" }}
+        style={{ background: "var(--brand-frontend-primary)" }}
         initial={{ x: "-100%" }}
         animate={{ x: "0%" }}
         exit={{ x: "-100%" }}
@@ -107,7 +110,7 @@ function FrontendOverlay({ onComplete }: { onComplete: () => void }) {
       {/* Right panel slides in from right, out to right */}
       <motion.div
         className="w-1/2 h-full"
-        style={{ background: "#CCFF00" }}
+        style={{ background: "var(--brand-frontend-secondary)" }}
         initial={{ x: "100%" }}
         animate={{ x: "0%" }}
         exit={{ x: "100%" }}
@@ -134,7 +137,7 @@ function JavaOverlay({ onComplete }: { onComplete: () => void }) {
       {/* Top panel slides down, exits up */}
       <motion.div
         className="absolute top-0 left-0 right-0 h-1/2"
-        style={{ background: "#FF8C00" }}
+        style={{ background: "var(--brand-java-primary)" }}
         initial={{ y: "-100%" }}
         animate={{ y: "0%" }}
         exit={{ y: "-100%" }}
@@ -143,7 +146,7 @@ function JavaOverlay({ onComplete }: { onComplete: () => void }) {
       {/* Bottom panel slides up, exits down */}
       <motion.div
         className="absolute bottom-0 left-0 right-0 h-1/2"
-        style={{ background: "#FFD700" }}
+        style={{ background: "var(--brand-java-secondary)" }}
         initial={{ y: "100%" }}
         animate={{ y: "0%" }}
         exit={{ y: "100%" }}

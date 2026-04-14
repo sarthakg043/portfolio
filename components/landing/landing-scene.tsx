@@ -10,28 +10,36 @@ const portals: {
   domain: Domain;
   title: string;
   subtitle: string;
-  colors: [string, string];
+  bgVar: string;
+  textVar: string;
+  subtitleVar: string;
   icon: string;
 }[] = [
   {
     domain: "frontend",
     title: "Frontend",
     subtitle: "Pixel-Perfect Experiences",
-    colors: ["#FF4D00", "#CCFF00"],
+    bgVar: "var(--brand-frontend-primary)",
+    textVar: "var(--on-brand-dark)",
+    subtitleVar: "var(--on-brand-dark-muted)",
     icon: "🎨",
   },
   {
     domain: "java",
     title: "Java Backend",
     subtitle: "Scalable Architecture",
-    colors: ["#FF8C00", "#FFD700"],
+    bgVar: "var(--brand-java-secondary)",
+    textVar: "var(--on-brand-light)",
+    subtitleVar: "var(--on-brand-light-muted)",
     icon: "☕",
   },
   {
     domain: "cyber",
     title: "Cybersecurity",
     subtitle: "Hack & Secure",
-    colors: ["#00ff41", "#00cc33"],
+    bgVar: "var(--brand-cyber-primary)",
+    textVar: "var(--on-brand-dark)",
+    subtitleVar: "var(--on-brand-dark-muted)",
     icon: "🔒",
   },
 ];
@@ -39,11 +47,9 @@ const portals: {
 function PortalCard({
   portal,
   onSelect,
-  index,
 }: {
   portal: (typeof portals)[0];
   onSelect: (d: Domain) => void;
-  index: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [hovered, setHovered] = useState(false);
@@ -84,20 +90,16 @@ function PortalCard({
       whileTap={{ scale: 0.97 }}
     >
       <motion.div
-        className="relative w-full h-95 md:h-115 overflow-hidden comic-card-accent"
-        style={{
-          background: index % 2 === 0 ? portal.colors[0] : portal.colors[1],
-        }}
-        animate={{
-          y: hovered ? -8 : 0,
-        }}
+        className="relative w-full h-[380px] md:h-[460px] overflow-hidden comic-card-accent"
+        style={{ background: portal.bgVar }}
+        animate={{ y: hovered ? -8 : 0 }}
         transition={{ duration: 0.3 }}
       >
         {/* Pattern overlay */}
         <div className="pattern-zigzag absolute inset-0" />
 
         {/* Content */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center p-8 z-10">
+        <div className="absolute inset-0 flex flex-col items-center justify-center p-8 relative z-10">
           {/* Icon */}
           <motion.div
             className="text-7xl mb-6"
@@ -113,7 +115,7 @@ function PortalCard({
           {/* Title */}
           <h3
             className="text-3xl md:text-4xl font-black uppercase text-center mb-2"
-            style={{ color: index % 2 === 0 ? "#fff" : "#0e0e0e" }}
+            style={{ color: portal.textVar }}
           >
             {portal.title}
           </h3>
@@ -121,12 +123,7 @@ function PortalCard({
           {/* Subtitle */}
           <p
             className="text-sm uppercase tracking-[0.2em] font-bold text-center"
-            style={{
-              color:
-                index % 2 === 0
-                  ? "rgba(255,255,255,0.6)"
-                  : "rgba(0,0,0,0.5)",
-            }}
+            style={{ color: portal.subtitleVar }}
           >
             {portal.subtitle}
           </p>
@@ -135,8 +132,8 @@ function PortalCard({
           <motion.div
             className="mt-8 px-6 py-3 rounded-full border-2 text-sm font-black uppercase tracking-wider flex items-center gap-2"
             style={{
-              borderColor: index % 2 === 0 ? "#fff" : "#0e0e0e",
-              color: index % 2 === 0 ? "#fff" : "#0e0e0e",
+              borderColor: portal.textVar,
+              color: portal.textVar,
             }}
             initial={{ opacity: 0, y: 10 }}
             animate={{
@@ -199,12 +196,11 @@ export function LandingScene() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       >
-        {portals.map((portal, i) => (
+        {portals.map((portal) => (
           <PortalCard
             key={portal.domain}
             portal={portal}
             onSelect={handleSelect}
-            index={i}
           />
         ))}
       </motion.div>

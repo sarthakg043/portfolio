@@ -35,7 +35,7 @@ export function IdleDetector() {
           className="fixed top-20 right-4 z-9997 max-w-xs p-4 rounded-xl border shadow-lg backdrop-blur-sm"
           style={{
             borderColor: "var(--domain-primary)",
-            background: "rgba(10, 10, 15, 0.9)",
+            background: "var(--tooltip-bg)",
           }}
           initial={{ opacity: 0, x: 50, scale: 0.9 }}
           animate={{ opacity: 1, x: 0, scale: 1 }}

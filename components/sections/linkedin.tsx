@@ -31,26 +31,26 @@ export function LinkedIn() {
               <LinkedinIcon size={28} className="text-white" />
             </div>
             <div className="flex-1 text-center md:text-left">
-              <p className="text-xl font-black text-[#0e0e0e]">
+              <p className="text-xl font-black text-card-text">
                 {config.personal.name}
               </p>
-              <p className="text-sm text-[#888]">{stats.headline}</p>
+              <p className="text-sm text-card-text-subtle">{stats.headline}</p>
             </div>
             <div className="flex items-center gap-8">
               <div className="text-center">
-                <span className="text-2xl font-black text-[#0e0e0e]">{stats.followers}</span>
-                <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#999]">Followers</p>
+                <span className="text-2xl font-black text-card-text">{stats.followers}</span>
+                <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-card-text-faint">Followers</p>
               </div>
               <div className="text-center">
-                <span className="text-2xl font-black text-[#0e0e0e]">{stats.connections}</span>
-                <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#999]">Connections</p>
+                <span className="text-2xl font-black text-card-text">{stats.connections}</span>
+                <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-card-text-faint">Connections</p>
               </div>
             </div>
             <a
               href={config.socials.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-xs font-black uppercase tracking-wider text-white"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-xs font-black uppercase tracking-wider text-on-primary"
               style={{ background: "var(--domain-primary)" }}
             >
               Connect <ArrowUpRight size={14} />

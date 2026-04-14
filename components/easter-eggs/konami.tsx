@@ -60,7 +60,7 @@ export function KonamiCode() {
             exit={{ opacity: 0, scale: 0.5 }}
             transition={{ delay: 0.5 }}
           >
-            <p className="text-[#00ff41] text-2xl font-mono font-bold text-center px-4">
+            <p className="text-matrix text-2xl font-mono font-bold text-center px-4">
               ↑↑↓↓←→←→BA
               <br />
               <span className="text-sm opacity-60">

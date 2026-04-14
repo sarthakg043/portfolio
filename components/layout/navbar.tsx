@@ -39,7 +39,7 @@ export function Navbar() {
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         style={{
-          background: scrolled ? "rgba(14, 14, 14, 0.95)" : "transparent",
+          background: scrolled ? "var(--overlay-dark)" : "transparent",
           borderBottom: scrolled ? "2px solid var(--border)" : "2px solid transparent",
         }}
       >

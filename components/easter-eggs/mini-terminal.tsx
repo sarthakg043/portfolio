@@ -115,8 +115,8 @@ export function MiniTerminal() {
         <motion.div
           className="fixed bottom-4 right-4 z-9998 w-105 max-w-[calc(100vw-2rem)] rounded-xl overflow-hidden border shadow-2xl"
           style={{
-            borderColor: domain === "cyber" ? "#00ff4130" : "var(--border)",
-            background: "#0d0d0d",
+            borderColor: domain === "cyber" ? "var(--terminal-border-cyber)" : "var(--border)",
+            background: "var(--terminal-bg)",
           }}
           initial={{ opacity: 0, y: 50, scale: 0.9 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -124,7 +124,7 @@ export function MiniTerminal() {
           transition={{ type: "spring", stiffness: 300, damping: 25 }}
         >
           {/* Title bar */}
-          <div className="flex items-center gap-2 px-4 py-2 bg-[#1a1a1a] border-b border-white/5">
+          <div className="flex items-center gap-2 px-4 py-2 bg-secondary border-b border-white/5">
             <div className="flex gap-1.5">
               <button
                 onClick={() => setOpen(false)}
@@ -144,7 +144,7 @@ export function MiniTerminal() {
               <div key={i} className="mb-2">
                 {entry.cmd && (
                   <div className="flex items-center gap-1">
-                    <span className="text-[#00ff41]">$</span>
+                    <span className="text-matrix text-xs font-mono">$</span>
                     <span className="text-gray-300">{entry.cmd}</span>
                   </div>
                 )}
@@ -161,7 +161,7 @@ export function MiniTerminal() {
             onSubmit={handleSubmit}
             className="flex items-center gap-2 px-4 py-2 border-t border-white/5"
           >
-            <span className="text-[#00ff41] text-xs font-mono">$</span>
+            <span className="text-matrix text-xs font-mono">$</span>
             <input
               ref={inputRef}
               value={input}

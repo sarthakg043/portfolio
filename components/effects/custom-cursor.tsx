@@ -48,29 +48,35 @@ export function CustomCursor() {
 
   if (!mounted || !hasMoved || !domain) return null;
 
+  const style = typeof window !== "undefined"
+    ? getComputedStyle(document.documentElement)
+    : null;
+  const cssVar = (name: string, fallback: string) =>
+    style?.getPropertyValue(name).trim() || fallback;
+
   const cursorStyles: Record<string, React.CSSProperties> = {
     frontend: {
       width: clicking ? 16 : 20,
       height: clicking ? 16 : 20,
       borderRadius: "50%",
-      background: "linear-gradient(135deg, #a855f7, #ec4899)",
-      boxShadow: "0 0 20px rgba(168,85,247,0.4)",
+      background: `linear-gradient(135deg, ${cssVar("--cursor-frontend-from", "#a855f7")}, ${cssVar("--cursor-frontend-to", "#ec4899")})`,
+      boxShadow: `0 0 20px ${cssVar("--cursor-frontend-glow", "rgba(168,85,247,0.4)")}`,
     },
     java: {
       width: clicking ? 14 : 18,
       height: clicking ? 14 : 18,
       borderRadius: "50%",
-      border: "2px solid #d4a574",
+      border: `2px solid ${cssVar("--cursor-java-color", "#d4a574")}`,
       background: "transparent",
-      boxShadow: "0 0 12px rgba(212,165,116,0.3)",
+      boxShadow: `0 0 12px ${cssVar("--cursor-java-glow", "rgba(212,165,116,0.3)")}`,
     },
     cyber: {
       width: 24,
       height: 24,
       borderRadius: 0,
       background: "transparent",
-      border: "1px solid #00ff41",
-      boxShadow: "0 0 8px rgba(0,255,65,0.4)",
+      border: `1px solid ${cssVar("--cursor-cyber-color", "#11c114")}`,
+      boxShadow: `0 0 8px ${cssVar("--cursor-cyber-glow", "rgba(17,193,20,0.4)")}`,
       transform: `rotate(45deg) scale(${clicking ? 0.8 : 1})`,
     },
   };

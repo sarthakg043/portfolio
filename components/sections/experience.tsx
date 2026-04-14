@@ -78,24 +78,24 @@ export function Experience() {
                     style={{ background: i % 2 === 0 ? "var(--domain-primary)" : "var(--domain-secondary)" }}
                   />
 
-                  <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#888] mb-2 block">
+                  <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-card-text-subtle mb-2 block">
                     {exp.period}
                   </span>
-                  <h3 className="text-lg font-black text-[#0e0e0e] mb-1">
+                  <h3 className="text-lg font-black text-card-text mb-1">
                     {exp.title}
                   </h3>
                   <p className="text-sm font-bold mb-3" style={{ color: "var(--domain-primary)" }}>
                     {exp.company}{" "}
-                    <span className="text-[#999] font-normal">• {exp.location}</span>
+                    <span className="text-card-text-faint font-normal">• {exp.location}</span>
                   </p>
-                  <p className="text-sm text-[#666] leading-relaxed mb-4">
+                  <p className="text-sm text-card-text-muted leading-relaxed mb-4">
                     {exp.description}
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {exp.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-wider bg-[#f0f0f0] text-[#555]"
+                        className="text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-wider bg-card-tag-bg text-card-tag-text"
                       >
                         {tag}
                       </span>
