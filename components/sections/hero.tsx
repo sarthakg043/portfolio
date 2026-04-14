@@ -68,7 +68,7 @@ export function Hero() {
             </div>
 
             <p className="text-sm text-[#666] leading-relaxed mb-6">
-              {config.about[domain].slice(0, 100)}...
+              {config.about[domain]}
             </p>
 
             {/* Social icons row */}

@@ -14,7 +14,7 @@ const domainIcons: Record<Domain, React.ReactNode> = {
 const domainColors: Record<Domain, string> = {
   frontend: "#FF4D00",
   java: "#FF8C00",
-  cyber: "#00ff41",
+  cyber: "#11c114",
 };
 
 export function DomainSwitcher() {
