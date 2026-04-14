@@ -34,7 +34,13 @@ export function PortfolioClient({
 }: PortfolioClientProps) {
   const { domain, setDomain } = useDomain();
 
-  // Set domain from URL on initial load only
+  // Authoritative domain source: the URL param.
+  // Covers two cases:
+  //   1. Direct URL access / page refresh — context domain is null on mount,
+  //      this effect sets it so the page renders immediately.
+  //   2. Navigation from landing (which no longer calls setDomain itself) —
+  //      DomainProvider already initialised from the URL, but calling setDomain
+  //      here is a safe no-op if the value is the same.
   useEffect(() => {
     setDomain(urlDomain);
     // eslint-disable-next-line react-hooks/exhaustive-deps

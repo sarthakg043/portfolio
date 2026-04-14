@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
-import { useDomain, type Domain } from "@/components/providers/domain-provider";
+import { type Domain } from "@/components/providers/domain-provider";
 import { useRouter } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 
@@ -111,15 +111,22 @@ function PortalCard({
           </motion.div>
 
           {/* Title */}
-          <h3 className="text-3xl md:text-4xl font-black uppercase text-center mb-2"
+          <h3
+            className="text-3xl md:text-4xl font-black uppercase text-center mb-2"
             style={{ color: index % 2 === 0 ? "#fff" : "#0e0e0e" }}
           >
             {portal.title}
           </h3>
 
           {/* Subtitle */}
-          <p className="text-sm uppercase tracking-[0.2em] font-bold text-center"
-            style={{ color: index % 2 === 0 ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.5)" }}
+          <p
+            className="text-sm uppercase tracking-[0.2em] font-bold text-center"
+            style={{
+              color:
+                index % 2 === 0
+                  ? "rgba(255,255,255,0.6)"
+                  : "rgba(0,0,0,0.5)",
+            }}
           >
             {portal.subtitle}
           </p>
@@ -147,11 +154,14 @@ function PortalCard({
 }
 
 export function LandingScene() {
-  const { setDomain } = useDomain();
   const router = useRouter();
 
+  // Only navigate — do NOT call setDomain here.
+  // Setting domain here would trigger the useEffect in app/page.tsx
+  // (which also redirects when domain changes), causing a double navigation
+  // that results in a blank screen. PortfolioClient sets the domain from
+  // the URL param after the page loads.
   const handleSelect = (d: Domain) => {
-    setDomain(d);
     router.push(`/portfolio/${d}`);
   };
 
