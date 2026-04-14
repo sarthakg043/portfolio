@@ -1,0 +1,153 @@
+{
+  "personal": {
+    "name": "Sarthak Gupta",
+    "tagline": "Frontend Developer | Next.js | TypeScript | Building Scalable AI Systems",
+    "email": "sarthakg043@gmail.com",
+    "avatar": "/avatar.jpg",
+    "resumePdf": "/resume.pdf",
+    "location": "India"
+  },
+  "socials": {
+    "github": "https://github.com/sarthakg043",
+    "githubOrg": "https://github.com/SKD-Innovations",
+    "linkedin": "https://www.linkedin.com/in/sarthak-gupta-webdev/",
+    "twitter": "https://x.com/sarthak_webdev"
+  },
+  "about": {
+    "frontend": "I craft pixel-perfect, performant web experiences with React, Next.js, and modern CSS. From micro-interactions to full design systems — if it's on a screen, I make it beautiful.",
+    "java": "I architect robust, scalable backend systems using Java and Spring Boot. Clean code, solid design patterns, and enterprise-grade reliability are my hallmarks.",
+    "cyber": "I probe, test, and fortify digital systems. From network security tools to vulnerability assessments — I break things so others can't."
+  },
+  "domainTaglines": {
+    "frontend": "Crafting Pixel-Perfect Experiences",
+    "java": "Architecting Scalable Systems",
+    "cyber": "Breaking & Securing Systems"
+  },
+  "skills": {
+    "frontend": [
+      "React", "Next.js", "TypeScript", "JavaScript", "Tailwind CSS",
+      "Framer Motion", "HTML5", "CSS3", "Redux", "Zustand",
+      "Responsive Design", "Figma", "Webpack", "Vite"
+    ],
+    "java": [
+      "Java", "Spring Boot", "Spring MVC", "Hibernate", "Maven",
+      "REST APIs", "Microservices", "PostgreSQL", "MySQL", "Redis",
+      "Docker", "Kafka", "JUnit", "Design Patterns"
+    ],
+    "cyber": [
+      "Network Security", "Penetration Testing", "Linux", "Python",
+      "Wireshark", "Nmap", "Metasploit", "Burp Suite", "OWASP",
+      "DNS Security", "Firewalls", "Cryptography", "CTF", "Bash Scripting"
+    ],
+    "common": [
+      "Git", "GitHub", "VS Code", "CI/CD", "Agile", "Problem Solving"
+    ]
+  },
+  "experience": [
+    {
+      "title": "SDE-1",
+      "company": "Tripfactory",
+      "location": "Bengaluru, India",
+      "period": "Jan 2026 – Present",
+      "description": "Building scalable web applications with Next.js and Java. Full-stack feature development and code reviews.",
+      "tags": ["Next.js", "Java", "TypeScript"],
+      "domain": ["frontend", "java"]
+    },
+    {
+      "title": "SDE Intern",
+      "company": "Tripfactory",
+      "location": "Bengaluru, India",
+      "period": "Oct 2025 – Jan 2026",
+      "description": "Developed frontend features, built REST APIs, and contributed to production deployments.",
+      "tags": ["React", "Java", "REST APIs"],
+      "domain": ["frontend", "java"]
+    },
+    {
+      "title": "SIH'23 Finalist",
+      "company": "Smart India Hackathon",
+      "location": "India",
+      "period": "2023",
+      "description": "Reached the national finals of Smart India Hackathon, competing among the top teams across the country.",
+      "tags": ["Hackathon", "Innovation", "Teamwork"],
+      "domain": ["frontend", "java", "cyber"]
+    },
+    {
+      "title": "B.Tech CSE – Cybersecurity",
+      "company": "IIIT Kottayam",
+      "location": "Kerala, India",
+      "period": "2022 – 2026",
+      "description": "Specialized in Cybersecurity with coursework in network security, cryptography, and ethical hacking.",
+      "tags": ["Cybersecurity", "Computer Science"],
+      "domain": ["cyber", "frontend", "java"]
+    }
+  ],
+  "repos": [
+    {
+      "name": "bharatdns",
+      "owner": "sarthakg043",
+      "description": "A network security DNS tool built with Python for DNS filtering and monitoring.",
+      "domain": ["cyber"],
+      "image": "/projects/bharatdns.png",
+      "demoUrl": null
+    },
+    {
+      "name": "bharatdns-frontend",
+      "owner": "sarthakg043",
+      "description": "Frontend dashboard for BharatDNS — real-time DNS monitoring interface.",
+      "domain": ["frontend", "cyber"],
+      "image": "/projects/bharatdns-frontend.png",
+      "demoUrl": null
+    },
+    {
+      "name": "status-update-mail-ai-agent",
+      "owner": "SKD-Innovations",
+      "description": "AI-powered agent for automated status update emails.",
+      "domain": ["java", "frontend"],
+      "image": "/projects/status-update-agent.png",
+      "demoUrl": null
+    },
+    {
+      "name": "face-attendance-tracking",
+      "owner": "sarthakg043",
+      "description": "Face recognition based attendance tracking system.",
+      "domain": ["cyber", "frontend"],
+      "image": "/projects/face-attendance.png",
+      "demoUrl": null
+    }
+  ],
+  "certifications": [
+    {
+      "name": "Add your certification here",
+      "issuer": "Issuer Name",
+      "year": "2024",
+      "url": "https://example.com",
+      "domain": ["frontend"]
+    }
+  ],
+  "blog": [
+    {
+      "title": "Add your blog post title",
+      "url": "https://example.com/blog-post",
+      "date": "2024-01-01",
+      "excerpt": "A brief description of your blog post goes here.",
+      "domain": ["frontend"]
+    }
+  ],
+  "linkedin": {
+    "stats": {
+      "followers": "500+",
+      "connections": "500+",
+      "headline": "SDE-1 @ Tripfactory | IIIT Kottayam | Frontend Developer | React.js"
+    },
+    "posts": [
+      "https://www.linkedin.com/embed/feed/update/urn:li:share:YOUR_POST_ID_1",
+      "https://www.linkedin.com/embed/feed/update/urn:li:share:YOUR_POST_ID_2",
+      "https://www.linkedin.com/embed/feed/update/urn:li:share:YOUR_POST_ID_3"
+    ]
+  },
+  "github": {
+    "username": "sarthakg043",
+    "showContributions": true,
+    "showLanguages": true
+  }
+}

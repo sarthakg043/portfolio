@@ -3,21 +3,19 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useDomain } from "@/components/providers/domain-provider";
-import { LandingScene } from "@/components/landing/landing-scene";
 
-export default function Home() {
+// /portfolio (no domain in URL) — redirect to /portfolio/[domain] or landing
+export default function PortfolioRedirect() {
   const { domain } = useDomain();
   const router = useRouter();
 
-  // If domain is already chosen (localStorage), skip landing
   useEffect(() => {
     if (domain) {
       router.replace(`/portfolio/${domain}`);
+    } else {
+      router.replace("/");
     }
   }, [domain, router]);
 
-  // Show landing when no domain chosen
-  if (domain) return null;
-
-  return <LandingScene />;
+  return null;
 }
