@@ -113,7 +113,7 @@ export function MiniTerminal() {
     <AnimatePresence>
       {open && (
         <motion.div
-          className="fixed bottom-4 right-4 z-[9998] w-[420px] max-w-[calc(100vw-2rem)] rounded-xl overflow-hidden border shadow-2xl"
+          className="fixed bottom-4 right-4 z-9998 w-105 max-w-[calc(100vw-2rem)] rounded-xl overflow-hidden border shadow-2xl"
           style={{
             borderColor: domain === "cyber" ? "#00ff4130" : "var(--border)",
             background: "#0d0d0d",

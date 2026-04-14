@@ -65,7 +65,7 @@ export function TypewriterText({
         </motion.span>
       ))}
       <motion.span
-        className="inline-block w-[2px] h-[1em] bg-[#00ff41] ml-1 align-middle animate-blink"
+        className="inline-block w-0.5 h-[1em] bg-[#00ff41] ml-1 align-middle animate-blink"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: text.length * (speed / 1000) }}
@@ -90,7 +90,7 @@ export function InkStrokeText({
     >
       {children}
       <motion.span
-        className="absolute bottom-0 left-0 h-[2px] bg-[#FFD700]"
+        className="absolute -bottom-2 left-0 h-0.5 bg-[#FFD700]"
         initial={{ width: 0 }}
         animate={{ width: "100%" }}
         transition={{ duration: 1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}

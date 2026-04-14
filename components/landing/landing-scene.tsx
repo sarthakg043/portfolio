@@ -84,7 +84,7 @@ function PortalCard({
       whileTap={{ scale: 0.97 }}
     >
       <motion.div
-        className="relative w-full h-[380px] md:h-[460px] overflow-hidden comic-card-accent"
+        className="relative w-full h-95 md:h-115 overflow-hidden comic-card-accent"
         style={{
           background: index % 2 === 0 ? portal.colors[0] : portal.colors[1],
         }}
@@ -97,7 +97,7 @@ function PortalCard({
         <div className="pattern-zigzag absolute inset-0" />
 
         {/* Content */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center p-8 relative z-10">
+        <div className="absolute inset-0 flex flex-col items-center justify-center p-8 z-10">
           {/* Icon */}
           <motion.div
             className="text-7xl mb-6"

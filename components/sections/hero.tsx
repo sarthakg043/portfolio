@@ -35,7 +35,7 @@ export function Hero() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         >
-          <div className="comic-card p-8 w-full max-w-[380px] text-center relative">
+          <div className="comic-card p-8 w-full max-w-95 text-center relative">
             {/* Dashed decorative arc */}
             <div
               className="absolute -top-6 -left-6 w-40 h-40 rounded-full border-2 border-dashed opacity-50"

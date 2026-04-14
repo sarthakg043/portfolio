@@ -96,10 +96,10 @@ export function Projects({ githubRepos }: ProjectsProps) {
                   />
 
                   <div className="flex items-start justify-between mb-4">
-                    <h3 className="text-xl font-black text-[#0e0e0e] group-hover:text-[var(--domain-primary)] transition-colors">
+                    <h3 className="text-xl font-black text-[#0e0e0e] group-hover:text-domain-primary transition-colors">
                       {project.name}
                     </h3>
-                    <ArrowUpRight size={18} className="text-[#bbb] group-hover:text-[var(--domain-primary)] transition-colors" />
+                    <ArrowUpRight size={18} className="text-[#bbb] group-hover:text-domain-primary transition-colors" />
                   </div>
 
                   <p className="text-sm text-[#666] leading-relaxed mb-5">

@@ -43,7 +43,7 @@ export function Certifications() {
                   >
                     <Award size={20} />
                   </div>
-                  <ArrowUpRight size={16} className="text-[#bbb] group-hover:text-[var(--domain-primary)] transition-colors" />
+                  <ArrowUpRight size={16} className="text-[#bbb] group-hover:text-domain-primary transition-colors" />
                 </div>
                 <h3 className="font-black text-[#0e0e0e] mb-1">{cert.name}</h3>
                 <p className="text-sm text-[#888]">{cert.issuer} • {cert.year}</p>
