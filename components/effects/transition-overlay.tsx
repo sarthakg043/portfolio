@@ -83,56 +83,74 @@ function CyberOverlay({ onComplete }: { onComplete: () => void }) {
 
 function FrontendOverlay({ onComplete }: { onComplete: () => void }) {
   useEffect(() => {
-    const timeout = setTimeout(onComplete, 1000);
+    const timeout = setTimeout(onComplete, 900);
     return () => clearTimeout(timeout);
   }, [onComplete]);
 
   return (
     <motion.div
-      className="fixed inset-0 z-[9998] overflow-hidden"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
+      className="fixed inset-0 z-9998 overflow-hidden flex"
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 1 }}
     >
-      {[...Array(5)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute rounded-full"
-          style={{
-            background: `radial-gradient(circle, ${
-              ["#FF4D00", "#CCFF00", "#FF4D00", "#CCFF00", "#FF4D00"][i]
-            }88, transparent)`,
-            width: "150vmax",
-            height: "150vmax",
-          }}
-          initial={{
-            x: `${Math.random() * 100}vw`,
-            y: `${Math.random() * 100}vh`,
-            scale: 0,
-            opacity: 0,
-          }}
-          animate={{
-            scale: 1,
-            opacity: [0, 0.6, 0],
-          }}
-          transition={{
-            duration: 0.8,
-            delay: i * 0.08,
-            ease: [0.22, 1, 0.36, 1],
-          }}
-        />
-      ))}
+      {/* Left panel slides in from left, out to left */}
+      <motion.div
+        className="w-1/2 h-full"
+        style={{ background: "#FF4D00" }}
+        initial={{ x: "-100%" }}
+        animate={{ x: "0%" }}
+        exit={{ x: "-100%" }}
+        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <div className="pattern-zigzag absolute inset-0 opacity-30" />
+      </motion.div>
+      {/* Right panel slides in from right, out to right */}
+      <motion.div
+        className="w-1/2 h-full"
+        style={{ background: "#CCFF00" }}
+        initial={{ x: "100%" }}
+        animate={{ x: "0%" }}
+        exit={{ x: "100%" }}
+        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <div className="pattern-zigzag absolute inset-0 opacity-30" />
+      </motion.div>
     </motion.div>
   );
 }
 
 function JavaOverlay({ onComplete }: { onComplete: () => void }) {
   useEffect(() => {
-    onComplete();
+    const timeout = setTimeout(onComplete, 900);
+    return () => clearTimeout(timeout);
   }, [onComplete]);
 
-  return null;
+  return (
+    <motion.div
+      className="fixed inset-0 z-9998 overflow-hidden"
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 1 }}
+    >
+      {/* Top panel slides down, exits up */}
+      <motion.div
+        className="absolute top-0 left-0 right-0 h-1/2"
+        style={{ background: "#FF8C00" }}
+        initial={{ y: "-100%" }}
+        animate={{ y: "0%" }}
+        exit={{ y: "-100%" }}
+        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+      />
+      {/* Bottom panel slides up, exits down */}
+      <motion.div
+        className="absolute bottom-0 left-0 right-0 h-1/2"
+        style={{ background: "#FFD700" }}
+        initial={{ y: "100%" }}
+        animate={{ y: "0%" }}
+        exit={{ y: "100%" }}
+        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+      />
+    </motion.div>
+  );
 }
 
 export function TransitionOverlay() {
