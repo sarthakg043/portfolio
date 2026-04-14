@@ -31,7 +31,7 @@ export function Blog() {
                 href={post.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block comic-card p-6 group relative overflow-hidden"
+                className="block comic-card p-6 group relative overflow-hidden h-[360px] flex flex-col"
                 whileHover={{ y: -4 }}
                 transition={{ duration: 0.2 }}
               >
@@ -45,14 +45,14 @@ export function Blog() {
                     })}
                   </span>
                 </div>
-                <h3 className="font-black text-[#0e0e0e] mb-2 group-hover:text-[var(--domain-primary)] transition-colors">
+                <h3 className="font-black text-[#0e0e0e] mb-2 group-hover:text-domain-primary transition-colors">
                   {post.title}
                 </h3>
-                <p className="text-sm text-[#666] leading-relaxed mb-4">
+                <p className="text-sm text-[#666] leading-relaxed mb-4 line-clamp-7">
                   {post.excerpt}
                 </p>
                 <span
-                  className="inline-flex items-center gap-1 text-xs font-black uppercase tracking-wider"
+                  className="inline-flex items-center gap-1 text-xs font-black uppercase tracking-wider mt-auto"
                   style={{ color: "var(--domain-primary)" }}
                 >
                   Read more <ArrowUpRight size={12} />

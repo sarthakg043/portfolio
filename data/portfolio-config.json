@@ -5,6 +5,11 @@
     "email": "sarthakg043@gmail.com",
     "avatar": "/avatar.jpg",
     "resumePdf": "/resume.pdf",
+    "resumeMap": {
+      "frontend": "/resume_frontend.pdf",
+      "java": "/resume_java.pdf",
+      "cyber": "/resume_cyber.pdf"
+    },
     "location": "India"
   },
   "socials": {
@@ -126,11 +131,18 @@
   ],
   "blog": [
     {
-      "title": "Add your blog post title",
-      "url": "https://example.com/blog-post",
-      "date": "2024-01-01",
-      "excerpt": "A brief description of your blog post goes here.",
-      "domain": ["frontend"]
+      "title": "System Prompts and Prompting Types: Mastering AI's Hidden Playbook",
+      "url": "https://medium.com/@sarthakg043/system-prompts-and-prompting-types-mastering-ais-hidden-playbook-4a9d312767f0",
+      "date": "2025-08-15",
+      "excerpt": "For months, you've likely been firing off questions to AI like ChatGPT, getting responses that feel almost human. But ever wondered what's pulling the strings? Why does the AI sometimes respond like a wise mentor and other times like a quirky comedian? It's not random — it's...",
+      "domain": ["Java"]
+    },
+    {
+      "title": "How does ChatGPT understand Human Language?",
+      "url": "https://medium.com/@sarthakg043/how-does-chatgpt-understand-human-language-a2d0f6821404",
+      "date": "2025-08-13",
+      "excerpt": "For months, this question had been a curiosity for every developer and student researcher. Why? Are there no resources available? Is it a classified information? No, the resources are available but...",
+      "domain": ["Java"]
     }
   ],
   "linkedin": {
