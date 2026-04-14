@@ -7,7 +7,7 @@ import { DomainText } from "@/components/effects/glitch-text";
 import { MagneticButton } from "@/components/effects/magnetic-button";
 import { DOMAIN_FONTS, DOMAIN_GRADIENT_CLASS } from "@/lib/constants";
 import config from "@/data/portfolio-config.json";
-import { ChevronDown, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 export function Hero() {
   const { domain } = useDomain();
@@ -233,23 +233,6 @@ export function Hero() {
         </div>
       </motion.div>
 
-      {/* Scroll indicator */}
-      <motion.div
-        className="absolute bottom-8 flex flex-col items-center gap-2 z-10"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
-      >
-        <span className="text-xs text-muted-foreground tracking-widest uppercase">
-          Scroll
-        </span>
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-        >
-          <ChevronDown size={16} className="text-muted-foreground" />
-        </motion.div>
-      </motion.div>
     </section>
   );
 }
