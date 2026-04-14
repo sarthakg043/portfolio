@@ -4,7 +4,6 @@ import { useDomain, type Domain } from "@/components/providers/domain-provider";
 import { DOMAIN_LABELS } from "@/lib/constants";
 import { motion } from "motion/react";
 import { Code, Coffee, Shield } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 const domainIcons: Record<Domain, React.ReactNode> = {
   frontend: <Code size={14} />,
@@ -20,11 +19,9 @@ const domainColors: Record<Domain, string> = {
 
 export function DomainSwitcher() {
   const { domain, transitionTo } = useDomain();
-  const router = useRouter();
 
   const handleSwitch = (d: Domain) => {
     transitionTo(d);
-    router.push(`/portfolio/${d}`);
   };
 
   return (

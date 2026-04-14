@@ -15,33 +15,40 @@ interface DomainContextValue {
   domain: Domain | null;
   setDomain: (d: Domain) => void;
   isTransitioning: boolean;
+  targetDomain: Domain | null;
   transitionTo: (d: Domain) => void;
 }
 
 const DomainContext = createContext<DomainContextValue | null>(null);
 
 const STORAGE_KEY = "portfolio-domain";
+const VALID_DOMAINS: Domain[] = ["frontend", "java", "cyber"];
 
 export function DomainProvider({ children }: { children: ReactNode }) {
   const [domain, setDomainState] = useState<Domain | null>(null);
+  const [targetDomain, setTargetDomain] = useState<Domain | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   // Hydrate from localStorage
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY) as Domain | null;
-    if (stored && ["frontend", "java", "cyber"].includes(stored)) {
+    if (stored && VALID_DOMAINS.includes(stored)) {
       setDomainState(stored);
     }
     setMounted(true);
   }, []);
 
-  // Sync data-domain attribute + localStorage
+  // Sync data-domain attribute, localStorage, and URL when domain changes
   useEffect(() => {
     if (!mounted) return;
     if (domain) {
       document.documentElement.setAttribute("data-domain", domain);
       localStorage.setItem(STORAGE_KEY, domain);
+      // Keep URL in sync without triggering navigation
+      if (window.location.pathname !== `/portfolio/${domain}`) {
+        window.history.replaceState(null, "", `/portfolio/${domain}`);
+      }
     } else {
       document.documentElement.removeAttribute("data-domain");
     }
@@ -55,13 +62,14 @@ export function DomainProvider({ children }: { children: ReactNode }) {
     (d: Domain) => {
       if (d === domain || isTransitioning) return;
       setIsTransitioning(true);
-      // Transition overlay will read isTransitioning and targetDomain
-      // After overlay animation completes (~1200ms), we apply the domain
+      setTargetDomain(d);
+      // Apply domain mid-transition (overlay covers the switch)
       setTimeout(() => {
         setDomainState(d);
       }, 600);
       setTimeout(() => {
         setIsTransitioning(false);
+        setTargetDomain(null);
       }, 1200);
     },
     [domain, isTransitioning]
@@ -69,7 +77,7 @@ export function DomainProvider({ children }: { children: ReactNode }) {
 
   return (
     <DomainContext.Provider
-      value={{ domain, setDomain, isTransitioning, transitionTo }}
+      value={{ domain, setDomain, isTransitioning, targetDomain, transitionTo }}
     >
       {children}
     </DomainContext.Provider>

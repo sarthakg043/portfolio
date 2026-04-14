@@ -9,6 +9,11 @@ import { DOMAIN_FONTS, DOMAIN_GRADIENT_CLASS } from "@/lib/constants";
 import config from "@/data/portfolio-config.json";
 import { ArrowRight } from "lucide-react";
 
+function scrollToSection(id: string) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: "smooth" });
+}
+
 export function Hero() {
   const { domain } = useDomain();
   if (!domain) return null;
@@ -161,9 +166,9 @@ export function Hero() {
           {/* CTA buttons */}
           <div className="flex flex-col sm:flex-row items-start gap-4">
             <MagneticButton>
-              <a
-                href="#projects"
-                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-bold text-sm uppercase tracking-wider transition-all"
+              <button
+                onClick={() => scrollToSection("projects")}
+                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-bold text-sm uppercase tracking-wider transition-all cursor-pointer"
                 style={{
                   background: "var(--domain-primary)",
                   color: domain === "cyber" ? "#000" : "#fff",
@@ -171,19 +176,19 @@ export function Hero() {
               >
                 View My Work
                 <ArrowRight size={16} />
-              </a>
+              </button>
             </MagneticButton>
             <MagneticButton>
-              <a
-                href="#contact"
-                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-bold text-sm uppercase tracking-wider border-2 transition-all"
+              <button
+                onClick={() => scrollToSection("contact")}
+                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-bold text-sm uppercase tracking-wider border-2 transition-all cursor-pointer"
                 style={{
                   borderColor: "var(--domain-primary)",
                   color: "var(--domain-primary)",
                 }}
               >
                 Get in Touch
-              </a>
+              </button>
             </MagneticButton>
           </div>
         </motion.div>

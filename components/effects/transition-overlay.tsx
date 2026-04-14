@@ -1,8 +1,8 @@
 "use client";
 
 import { motion, AnimatePresence } from "motion/react";
-import { useDomain, type Domain } from "@/components/providers/domain-provider";
-import { useEffect, useRef, useState } from "react";
+import { useDomain } from "@/components/providers/domain-provider";
+import { useEffect, useRef } from "react";
 
 function CyberOverlay({ onComplete }: { onComplete: () => void }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -115,29 +115,18 @@ function JavaOverlay({ onComplete }: { onComplete: () => void }) {
 }
 
 export function TransitionOverlay() {
-  const { isTransitioning, domain } = useDomain();
-  const [targetDomain, setTargetDomain] = useState<Domain | null>(null);
-
-  useEffect(() => {
-    if (isTransitioning && domain) {
-      setTargetDomain(domain);
-    }
-  }, [isTransitioning, domain]);
-
-  const handleComplete = () => {
-    setTargetDomain(null);
-  };
+  const { isTransitioning, targetDomain } = useDomain();
 
   return (
     <AnimatePresence>
       {isTransitioning && targetDomain === "cyber" && (
-        <CyberOverlay key="cyber" onComplete={handleComplete} />
+        <CyberOverlay key="cyber" onComplete={() => {}} />
       )}
       {isTransitioning && targetDomain === "frontend" && (
-        <FrontendOverlay key="frontend" onComplete={handleComplete} />
+        <FrontendOverlay key="frontend" onComplete={() => {}} />
       )}
       {isTransitioning && targetDomain === "java" && (
-        <JavaOverlay key="java" onComplete={handleComplete} />
+        <JavaOverlay key="java" onComplete={() => {}} />
       )}
     </AnimatePresence>
   );

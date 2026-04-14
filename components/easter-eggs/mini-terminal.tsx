@@ -36,7 +36,7 @@ export function MiniTerminal() {
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (target.closest("a[href='/portfolio']") || target.closest("[data-logo]")) {
+      if (target.closest("[data-logo]")) {
         setClickCount((c) => {
           const next = c + 1;
           if (next >= 5) {

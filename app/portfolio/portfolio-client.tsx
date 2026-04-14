@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { useDomain, type Domain } from "@/components/providers/domain-provider";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
@@ -34,14 +33,12 @@ export function PortfolioClient({
   urlDomain,
 }: PortfolioClientProps) {
   const { domain, setDomain } = useDomain();
-  const router = useRouter();
 
-  // Sync domain from URL — URL is the source of truth
+  // Set domain from URL on initial load only
   useEffect(() => {
-    if (urlDomain && urlDomain !== domain) {
-      setDomain(urlDomain);
-    }
-  }, [urlDomain, domain, setDomain]);
+    setDomain(urlDomain);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     console.log(
