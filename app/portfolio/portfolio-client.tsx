@@ -47,8 +47,10 @@ export function PortfolioClient({
   }, []);
 
   useEffect(() => {
+    // Console easter-egg styles use static hex strings because console.log
+    // CSS cannot access CSS custom properties — this is intentional.
     console.log(
-      "%c🕵️ Psst... you opened DevTools. You're clearly not a normie.",
+      "%c🕵 Psst... you opened DevTools. You're clearly not a normie.",
       "color: #FF4D00; font-size: 14px; font-weight: bold;"
     );
     console.log(

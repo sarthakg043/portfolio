@@ -40,7 +40,7 @@ export function Experience() {
         <div className="relative">
           {/* Vertical line — thick, solid */}
           <div
-            className="absolute left-[19px] md:left-1/2 top-0 bottom-0 w-[3px] -translate-x-1/2"
+            className="absolute left-4.75 md:left-1/2 top-0 bottom-0 w-0.75 -translate-x-1/2"
             style={{ background: "var(--domain-primary)" }}
           />
 
@@ -52,7 +52,7 @@ export function Experience() {
                 }`}
               >
                 {/* Dot on timeline */}
-                <div className="absolute left-[19px] md:left-1/2 -translate-x-1/2 z-10">
+                <div className="absolute left-4.75 md:left-1/2 -translate-x-1/2 z-10">
                   <motion.div
                     className="w-10 h-10 rounded-full border-3 flex items-center justify-center text-white"
                     style={{

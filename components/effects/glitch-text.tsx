@@ -65,7 +65,7 @@ export function TypewriterText({
         </motion.span>
       ))}
       <motion.span
-        className="inline-block w-[2px] h-[1em] bg-matrix ml-1 align-middle animate-blink"
+        className="inline-block w-0.5 h-[1em] bg-matrix ml-1 align-middle animate-blink"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: text.length * (speed / 1000) }}
@@ -118,7 +118,7 @@ export function DomainText({
 
   if (domain === "java") {
     return (
-      <InkStrokeText className="text-[var(--brand-java-primary)]">{children}</InkStrokeText>
+      <InkStrokeText className="text-(--brand-java-primary)">{children}</InkStrokeText>
     );
   }
 
