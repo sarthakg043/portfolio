@@ -76,7 +76,10 @@ export function DomainProvider({ children }: { children: ReactNode }) {
       if (d === domain || isTransitioning) return;
       setIsTransitioning(true);
       setTargetDomain(d);
-      setDomainState(d);
+      // Delay domain change until overlay has fully covered the screen (~400ms)
+      setTimeout(() => {
+        setDomainState(d);
+      }, 400);
     },
     [domain, isTransitioning]
   );
