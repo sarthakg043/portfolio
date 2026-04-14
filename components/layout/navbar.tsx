@@ -42,9 +42,9 @@ export function Navbar() {
         }}
       >
         {/* Logo / Name — bold comic style */}
-        <a href="/portfolio" className="text-lg font-black tracking-tight text-foreground uppercase">
+        <button data-logo className="text-lg font-black tracking-tight text-foreground uppercase cursor-pointer">
           SG<span style={{ color: "var(--domain-primary)" }}>.</span>
-        </a>
+        </button>
 
         {/* Center — Domain switcher */}
         <DomainSwitcher />

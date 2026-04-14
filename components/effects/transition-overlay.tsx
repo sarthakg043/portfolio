@@ -108,19 +108,10 @@ function FrontendOverlay({ onComplete }: { onComplete: () => void }) {
 
 function JavaOverlay({ onComplete }: { onComplete: () => void }) {
   useEffect(() => {
-    const timeout = setTimeout(onComplete, 1000);
-    return () => clearTimeout(timeout);
+    onComplete();
   }, [onComplete]);
 
-  return (
-    <motion.div
-      className="fixed inset-0 z-[9998] bg-[#0e0c08]"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: [0, 1, 1, 0] }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.9, times: [0, 0.3, 0.7, 1] }}
-    />
-  );
+  return null;
 }
 
 export function TransitionOverlay() {

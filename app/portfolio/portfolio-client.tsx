@@ -43,6 +43,29 @@ export function PortfolioClient({
     }
   }, [urlDomain, domain, setDomain]);
 
+  useEffect(() => {
+    console.log(
+      "%c🕵️ Psst... you opened DevTools. You're clearly not a normie.",
+      "color: #FF4D00; font-size: 14px; font-weight: bold;"
+    );
+    console.log(
+      "%c" +
+        "╔══════════════════════════════════════════════╗\n" +
+        "║  SECRET MENU (shhh, don't tell anyone)       ║\n" +
+        "╠══════════════════════════════════════════════╣\n" +
+        '║  🎮 Konami Code   → ↑↑↓↓←→←→BA               ║\n' +
+        "║  💻 Hidden Terminal → Click logo 5x fast     ║\n" +
+        '║  💻 Also works    → Type "sudo" anywhere     ║\n' +
+        "║  😴 Do nothing    → Wait 30s, get roasted    ║\n" +
+        "╚══════════════════════════════════════════════╝",
+      "color: #CCFF00; font-family: monospace; font-size: 12px;"
+    );
+    console.log(
+      "%cIf you're reading the source code to find these... respect. 🫡",
+      "color: #888; font-style: italic;"
+    );
+  }, []);
+
   if (!domain) return null;
 
   return (

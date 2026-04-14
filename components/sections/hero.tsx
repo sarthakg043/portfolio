@@ -17,7 +17,7 @@ export function Hero() {
   const fontClass = DOMAIN_FONTS[domain];
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-clip px-4 md:px-8">
+    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-clip px-4 md:px-8 pt-20">
       {/* Background particles */}
       <Particles className="z-0 opacity-40" />
 
