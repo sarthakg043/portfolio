@@ -13,6 +13,7 @@ import { LenisProvider } from "@/components/providers/lenis-provider";
 import { CustomCursor } from "@/components/effects/custom-cursor";
 import { TransitionOverlay } from "@/components/effects/transition-overlay";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
   title: "Sarthak Gupta — Developer Portfolio",
@@ -59,6 +60,7 @@ export default function RootLayout({
             <CustomCursor />
             <TransitionOverlay />
             <Analytics />
+            <SpeedInsights />
             {children}
           </LenisProvider>
         </DomainProvider>
