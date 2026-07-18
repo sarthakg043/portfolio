@@ -1,6 +1,6 @@
 "use client";
 
-import { useDomain, type Domain } from "@/components/providers/domain-provider";
+import { useDomain } from "@/components/providers/domain-provider";
 import {
   ScrollReveal,
   StaggerContainer,

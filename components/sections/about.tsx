@@ -2,7 +2,7 @@
 
 import { useDomain } from "@/components/providers/domain-provider";
 import { ScrollReveal } from "@/components/effects/scroll-reveal";
-import { DOMAIN_FONTS, DOMAIN_GRADIENT_CLASS, DOMAIN_HEADING_FONTS } from "@/lib/constants";
+import { DOMAIN_FONTS } from "@/lib/constants";
 import { usePortfolioContent } from "@/components/providers/portfolio-content-provider";
 
 export function About() {

@@ -6,7 +6,7 @@ import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/effect
 import { getLanguageColor, type GitHubRepo } from "@/lib/github";
 import { usePortfolioContent } from "@/components/providers/portfolio-content-provider";
 import { motion, AnimatePresence } from "motion/react";
-import { Star, GitFork, ExternalLink, ArrowUpRight } from "lucide-react";
+import { Star, GitFork, ArrowUpRight } from "lucide-react";
 
 interface ProjectsProps {
   githubRepos: GitHubRepo[];

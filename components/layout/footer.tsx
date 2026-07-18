@@ -1,12 +1,10 @@
 "use client";
 
-import { useDomain } from "@/components/providers/domain-provider";
 import { usePortfolioContent } from "@/components/providers/portfolio-content-provider";
 import { Mail, Heart } from "lucide-react";
 import { GithubIcon, LinkedinIcon, XTwitterIcon } from "@/components/icons/brands";
 
 export function Footer() {
-  const { domain } = useDomain();
   const config = usePortfolioContent();
 
   return (
