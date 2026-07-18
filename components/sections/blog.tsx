@@ -2,15 +2,17 @@
 
 import { useDomain } from "@/components/providers/domain-provider";
 import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/effects/scroll-reveal";
-import config from "@/data/portfolio-config.json";
 import { ArrowUpRight, Calendar } from "lucide-react";
 import { motion } from "motion/react";
+import type { BlogArticleCard } from "@/lib/blog/types";
 
-export function Blog() {
+export function Blog({ articles }: { articles: BlogArticleCard[] }) {
   const { domain } = useDomain();
   if (!domain) return null;
 
-  if (config.blog.length === 0) return null;
+  if (articles.length === 0) return null;
+
+  const blogBaseUrl = process.env.NEXT_PUBLIC_BLOG_URL ?? "http://blog.localhost:3000";
 
   return (
     <section id="blog" className="py-24 md:py-32 px-4 md:px-8">
@@ -25,10 +27,10 @@ export function Blog() {
         </ScrollReveal>
 
         <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {config.blog.map((post, i) => (
-            <StaggerItem key={i}>
+          {articles.map((post) => (
+            <StaggerItem key={post.id}>
               <motion.a
-                href={post.url}
+                href={new URL(`/${post.slug}`, blogBaseUrl).toString()}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block comic-card p-6 group relative overflow-hidden h-[360px] flex flex-col"
@@ -38,7 +40,7 @@ export function Blog() {
                 <div className="flex items-center gap-2 text-xs text-card-text-faint font-bold mb-4">
                   <Calendar size={12} />
                   <span>
-                    {new Date(post.date).toLocaleDateString("en-US", {
+                    {new Date(post.publishedAt).toLocaleDateString("en-US", {
                       year: "numeric",
                       month: "short",
                       day: "numeric",
@@ -49,7 +51,7 @@ export function Blog() {
                   {post.title}
                 </h3>
                 <p className="text-sm text-card-text-muted leading-relaxed mb-4 line-clamp-7">
-                  {post.excerpt}
+                  {post.excerpt ?? post.subtitle}
                 </p>
                 <span
                   className="inline-flex items-center gap-1 text-xs font-black uppercase tracking-wider mt-auto"

@@ -20,7 +20,7 @@ Supabase provides Postgres, GitHub OAuth, Row Level Security, and file storage. 
 
 ## Phase 1 — Application foundation
 
-Status: implementation complete; credentials and OAuth validation pending
+Status: implementation complete and GitHub OAuth validated locally
 
 - Add environment validation and browser/server Supabase clients.
 - Add GitHub OAuth login, callback, logout, and authorization helpers.
@@ -36,7 +36,7 @@ Input checkpoint:
 
 ## Phase 2 — Database, RLS, and storage
 
-Status: hosted schema deployed and verified; Auth hook active and email provider disabled; OAuth App replacement pending
+Status: implementation complete; hosted schema, RLS, Storage, and Auth controls verified
 
 - Add versioned Supabase migrations.
 - Create the private administrator configuration and registry plus the exact-email Before User Created hook.
@@ -51,7 +51,7 @@ Input checkpoint:
 
 ## Phase 3 — Public blog
 
-Status: Vercel and Cloudflare subdomains configured; application deployment pending
+Status: implementation complete locally; production deployment verification pending
 
 - Responsive editorial home page, article page, tag filters, search, and cursor pagination.
 - Light/dark/system theme with no hydration flash.
@@ -182,6 +182,7 @@ Installed for the foundation:
 - `zod` — environment and request validation
 - `next-themes` — light, dark, and system theme handling
 - `server-only` — guard server-only modules from client bundles
+- `highlight.js` — server-side syntax highlighting for published code blocks
 - `supabase` (development dependency) — schema, migration, type-generation, and security workflows
 
 Planned for the editor phase, installed only when that phase starts so the bundle does not gain
@@ -214,14 +215,14 @@ rollback-wrapped security test file executes remotely without SQL errors. The pr
 configuration matches the server environment, all four
 Storage buckets exist, and no test Auth users remain.
 
-Before database-backed feature work continues:
+GitHub OAuth is now configured with an OAuth App and the complete local login flow has been verified.
+The hosted project has `private.hook_restrict_admin_signup` enabled as its Before User Created hook.
+Email authentication is disabled, while anonymous sign-in and manual identity linking remain off.
 
-1. Replace the GitHub App currently configured as the provider with a GitHub OAuth App and rotate or
-   delete the old exposed GitHub App secret.
-2. Confirm the OAuth App uses the Supabase callback URL documented above.
-
-The hosted project already has `private.hook_restrict_admin_signup` enabled as its Before User Created
-hook. Email authentication is disabled, while anonymous sign-in and manual identity linking remain off.
+The Phase 3 public blog now reads published content through the anonymous RLS boundary and includes its
+responsive feed, search, tag filters, cursor pagination, safe Tiptap JSON renderer, article metadata,
+table of contents, reading progress, syntax highlighting, downloads, sharing, related posts, RSS,
+robots, and sitemap routes. The portfolio blog section now uses the latest internal published articles.
 
 ## Scope boundary
 

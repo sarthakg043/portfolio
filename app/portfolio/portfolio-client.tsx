@@ -18,11 +18,13 @@ import { KonamiCode } from "@/components/easter-eggs/konami";
 import { MiniTerminal } from "@/components/easter-eggs/mini-terminal";
 import { IdleDetector } from "@/components/easter-eggs/idle-detector";
 import type { GitHubRepo, GitHubUser } from "@/lib/github";
+import type { BlogArticleCard } from "@/lib/blog/types";
 
 interface PortfolioClientProps {
   githubUser: GitHubUser | null;
   allRepos: GitHubRepo[];
   configRepos: GitHubRepo[];
+  latestArticles: BlogArticleCard[];
   urlDomain: Domain;
 }
 
@@ -30,6 +32,7 @@ export function PortfolioClient({
   githubUser,
   allRepos,
   configRepos,
+  latestArticles,
   urlDomain,
 }: PortfolioClientProps) {
   const { domain, setDomain } = useDomain();
@@ -84,7 +87,7 @@ export function PortfolioClient({
         <Projects githubRepos={configRepos} />
         <GitHubStats user={githubUser} repos={allRepos} />
         <Certifications />
-        <Blog />
+        <Blog articles={latestArticles} />
         <LinkedIn />
         <Contact />
       </main>

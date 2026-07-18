@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { fetchGitHubUser, fetchGitHubRepos, fetchReposByNames } from "@/lib/github";
+import { getLatestPublishedArticles } from "@/lib/blog/queries";
 import config from "@/data/portfolio-config.json";
 import { PortfolioClient } from "../portfolio-client";
 
@@ -25,6 +26,7 @@ export default async function PortfolioPage({
   let user = null;
   let allRepos: Awaited<ReturnType<typeof fetchGitHubRepos>> = [];
   let configRepos: Awaited<ReturnType<typeof fetchReposByNames>> = [];
+  let latestArticles: Awaited<ReturnType<typeof getLatestPublishedArticles>> = [];
 
   try {
     [user, allRepos, configRepos] = await Promise.all([
@@ -38,11 +40,18 @@ export default async function PortfolioPage({
     console.error("Failed to fetch GitHub data:", e);
   }
 
+  try {
+    latestArticles = await getLatestPublishedArticles(3);
+  } catch (error) {
+    console.error("Failed to fetch latest articles:", error);
+  }
+
   return (
     <PortfolioClient
       githubUser={user}
       allRepos={allRepos}
       configRepos={configRepos}
+      latestArticles={latestArticles}
       urlDomain={domain as (typeof VALID_DOMAINS)[number]}
     />
   );

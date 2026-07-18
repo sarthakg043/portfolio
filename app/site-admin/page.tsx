@@ -1,8 +1,7 @@
 import Link from "next/link";
-import { FileText, FolderOpen, LogOut, Settings2 } from "lucide-react";
-import { ThemeToggle } from "@/components/blog/theme-toggle";
+import { FileText, FolderOpen, Settings2 } from "lucide-react";
+import { AdminShell } from "@/components/admin/admin-shell";
 import { requireAdmin } from "@/lib/auth";
-import { signOutAction } from "@/app/site-admin/actions";
 
 export const dynamic = "force-dynamic";
 
@@ -31,28 +30,7 @@ export default async function AdminDashboardPage() {
   const user = await requireAdmin();
 
   return (
-    <div className="min-h-screen bg-neutral-50 text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50">
-      <header className="border-b border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-8">
-          <div>
-            <p className="text-sm font-semibold">Spyboy CMS</p>
-            <p className="text-xs text-neutral-500">Private author workspace</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <ThemeToggle />
-            <form action={signOutAction}>
-              <button
-                type="submit"
-                className="inline-flex size-9 items-center justify-center rounded-full border border-neutral-200 text-neutral-700 hover:bg-neutral-100 dark:border-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-900"
-                aria-label="Sign out"
-              >
-                <LogOut className="size-4" />
-              </button>
-            </form>
-          </div>
-        </div>
-      </header>
-
+    <AdminShell email={user.email ?? "Administrator"}>
       <main className="mx-auto max-w-6xl px-5 py-12 sm:px-8 sm:py-16">
         <p className="text-sm font-medium text-emerald-700 dark:text-emerald-400">
           Signed in as {user.email}
@@ -83,6 +61,6 @@ export default async function AdminDashboardPage() {
           ))}
         </div>
       </main>
-    </div>
+    </AdminShell>
   );
 }
