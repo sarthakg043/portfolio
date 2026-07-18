@@ -23,7 +23,14 @@ export default async function MediaPage() {
               return (
                 <article key={asset.id} className="overflow-hidden rounded-3xl border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900">
                   <div className="flex aspect-[16/9] items-center justify-center bg-neutral-100 dark:bg-neutral-950">
-                    {asset.kind === "image" && publicUrl ? <>{/* eslint-disable-next-line @next/next/no-img-element */}<img src={publicUrl} alt={asset.alt_text ?? ""} className="size-full object-cover" /></> : asset.kind === "image" ? <ImageIcon className="size-8 text-neutral-400" /> : <File className="size-8 text-neutral-400" />}
+                    {asset.kind === "image" && publicUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={publicUrl} alt={asset.alt_text ?? ""} className="size-full object-cover" />
+                    ) : asset.kind === "image" ? (
+                      <ImageIcon className="size-8 text-neutral-400" />
+                    ) : (
+                      <File className="size-8 text-neutral-400" />
+                    )}
                   </div>
                   <form action={updateAssetAction} className="space-y-4 p-5">
                     <input type="hidden" name="id" value={asset.id} />
