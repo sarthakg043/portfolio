@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { useDomain, type Domain } from "@/components/providers/domain-provider";
+import { useDomain } from "@/components/providers/domain-provider";
 
 export function GlitchText({
   children,

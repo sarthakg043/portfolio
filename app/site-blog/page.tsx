@@ -109,7 +109,7 @@ export default async function BlogHomePage({
       <section className="mx-auto max-w-6xl px-5 py-14 sm:px-8 sm:py-20">
         {featured ? (
           <div className="border-b border-neutral-200 pb-14 dark:border-neutral-800">
-            <p className="mb-7 text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">Featured story</p>
+            <p className="mb-7 text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-400">Featured story</p>
             <ArticleCard article={featured} featured />
           </div>
         ) : null}

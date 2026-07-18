@@ -51,7 +51,7 @@ Input checkpoint:
 
 ## Phase 3 — Public blog
 
-Status: implementation complete locally; production deployment verification pending
+Status: implementation complete; production deployment verification pending
 
 - Responsive editorial home page, article page, tag filters, search, and cursor pagination.
 - Light/dark/system theme with no hydration flash.
@@ -61,7 +61,7 @@ Status: implementation complete locally; production deployment verification pend
 
 ## Phase 4 — Private admin CMS
 
-Status: core implementation complete locally; production CRUD and Storage verification pending
+Status: implementation complete; authenticated local CRUD and hosted Storage verified
 
 - Dashboard and article listing with draft, published, archived, and trash states.
 - Medium-inspired distraction-free Tiptap editor.
@@ -72,28 +72,30 @@ Status: core implementation complete locally; production CRUD and Storage verifi
 
 ## Phase 5 — Portfolio migration
 
-Status: planned
+Status: implementation complete; hosted data parity verified
 
-- Refactor components that import `portfolio-config.json` to receive typed data from a server-only data access layer.
-- Retain the JSON file as a migration fixture until database parity is verified.
+- Refactor components that import `portfolio-config.json` to receive typed data from a server-only Supabase data access layer.
+- Retain the JSON file as a reproducible migration fixture after database parity is verified.
 - Keep GitHub API data live while moving its username and display settings into Supabase.
 - Invalidate portfolio and blog cache tags immediately after successful admin changes.
+- Upload the avatar, three domain resumes, and four project covers to `portfolio-assets` and reference their asset IDs from normalized rows.
+- Import the two existing Medium links as published external articles so both the blog and portfolio writing section preserve them.
 
 ## Phase 6 — Security and quality verification
 
-Status: planned
+Status: release baseline complete; production hostname smoke test pending deployment
 
 - Add Zod validation to every untrusted input boundary.
 - Add CSP, HSTS, frame protection, MIME sniffing protection, referrer policy, and `noindex` admin headers.
 - Verify no secret/service key is present in client bundles.
 - Test RLS as anonymous, administrator, and unauthorized authenticated identities.
 - Run Supabase Security and Performance Advisors.
-- Add unit, integration, accessibility, responsive, and Playwright end-to-end coverage.
+- Add routing unit tests, pgTAP integration tests, and Playwright accessibility, responsive, public-data, and admin-redirect coverage.
 - Verify lint, TypeScript, production build, OAuth redirects, storage permissions, and all three production hostnames.
 
 ## Phase 7 — Vercel and Cloudflare rollout
 
-Status: planned
+Status: Vercel domains and Cloudflare DNS configured; deployment smoke test pending
 
 - Add `blog.spyboy.uk` and `admin.spyboy.uk` to the existing Vercel project.
 - Add the exact CNAME targets supplied by Vercel in Cloudflare DNS.
@@ -194,6 +196,8 @@ Installed:
 - Tiptap (`@tiptap/react`, `@tiptap/pm`, `@tiptap/starter-kit`, and selected extensions) — structured article authoring
 - `react-hook-form` and `@hookform/resolvers` — dashboard form state and Zod integration
 - `supabase` (development dependency) — schema, migration, type-generation, and security workflows
+- `vitest` — deployment-mode and hostname-routing unit tests
+- `@playwright/test` and `@axe-core/playwright` — browser, responsive, theme, access-control, and accessibility regression tests
 
 The existing Tailwind, Radix/shadcn, Lucide, and Motion packages cover the dashboard and public UI.
 
@@ -207,16 +211,47 @@ npm run dev
 
 Local hostname testing uses `localhost`, `blog.localhost`, and `admin.localhost` on port 3000. If a browser or operating system does not resolve subdomains of `localhost`, add temporary hosts-file entries or use the path-based development fallback documented by the application.
 
+Quality checks:
+
+```bash
+npm run lint
+npx tsc --noEmit
+npm run test:unit
+npm run test:e2e
+npx supabase test db --local
+NEXT_DEV_MODE=production npm run build
+```
+
+The Playwright configuration reuses an app already running on port 3000 or starts one automatically.
+
+## Portfolio seed and hosted data
+
+`supabase/seed.sql` is an idempotent, single-transaction migration fixture for the original portfolio
+JSON. It resolves the sole owner from `private.admin_users`, never from a committed email address.
+The eight required files must already exist in `portfolio-assets` with their original filenames.
+Applying the seed replaces that owner's portfolio collection rows with the fixture and upserts the
+profile, domains, integrations, external articles, tag, and asset metadata:
+
+```bash
+npx supabase db query --linked --file supabase/seed.sql
+```
+
+The current hosted import contains 1 profile, 3 domains, 4 social links, 48 skills, 4 experiences,
+4 projects, 1 certification, 1 integration row, 8 assets, and 2 published external articles. The
+four source project images were absent, so the uploaded covers are purpose-made illustrative artwork,
+not representations of the real application interfaces.
+
 ## Current implementation checkpoint
 
 The hostname routing, themes, Supabase SSR clients, GitHub OAuth screens/callback, environment-based
-administrator checks, declarative schemas, RLS policies, and Storage bucket definitions are implemented. The Next.js
-production build and targeted lint checks pass. Both migrations reproduce successfully with a clean
-local database reset and are deployed to the linked hosted project. All 24 local pgTAP assertions
-pass; hosted database lint and the hosted Security Advisor report no issues, and the same
-rollback-wrapped security test file executes remotely without SQL errors. The private administrator
-configuration matches the server environment, all four
-Storage buckets exist, and no test Auth users remain.
+administrator checks, declarative schemas, RLS policies, and Storage buckets are implemented. The
+Next.js production and preview builds, ESLint, TypeScript, three routing unit tests, four Playwright
+tests, and all 24 pgTAP authorization assertions pass. Hosted Security and Performance Advisors have
+no error-level findings. The performance advisor has no warning-level findings after scoping public
+SELECT policies to `anon`; unused-index information is expected on this newly populated database.
+The Security Advisor notes that leaked-password protection is disabled, which does not affect this
+GitHub-only, passwordless administrator flow, and identifies the intentionally policy-free private
+administrator registry whose privileges are fully revoked.
 
 GitHub OAuth is now configured with an OAuth App and the complete local login flow has been verified.
 The hosted project has `private.hook_restrict_admin_signup` enabled as its Before User Created hook.
@@ -231,8 +266,9 @@ Phase 4 replaces the dashboard placeholders with working article, revision-histo
 portfolio-content routes. Article management includes draft autosave, publishing-state transitions,
 duplication, trash recovery, permanent deletion, SEO fields, tags, covers, and revision restore.
 The media library uploads through Storage RLS, records asset metadata, and blocks deletion while an
-asset is referenced. Portfolio forms now edit the normalized Supabase records; Phase 5 will switch the
-public portfolio components from the JSON fixture to those records and add cache invalidation.
+asset is referenced. Phase 5 now serves the public portfolio from the normalized hosted records and
+revalidates public routes after dashboard edits. The hosted avatar, resumes, and project covers render
+through public Storage URLs, while the original JSON remains only as a reproducible import fixture.
 
 ## Scope boundary
 

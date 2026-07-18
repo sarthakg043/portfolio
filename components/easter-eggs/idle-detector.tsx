@@ -20,7 +20,10 @@ export function IdleDetector() {
   useEffect(() => {
     const events = ["mousemove", "keydown", "scroll", "touchstart", "click"];
     events.forEach((e) => window.addEventListener(e, resetTimer, { passive: true }));
-    resetTimer();
+    timer.current = setTimeout(() => {
+      setShowMessage(true);
+      setTimeout(() => setShowMessage(false), 4000);
+    }, 30000);
 
     return () => {
       if (timer.current) clearTimeout(timer.current);

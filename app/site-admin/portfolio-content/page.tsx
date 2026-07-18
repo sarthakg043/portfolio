@@ -67,7 +67,7 @@ export default async function PortfolioContentPage() {
   return (
     <AdminShell email={user.email ?? "Administrator"}>
       <main className="mx-auto max-w-7xl space-y-8 px-5 py-10 sm:px-8">
-        <div><p className="admin-eyebrow">Portfolio CMS</p><h1 className="mt-2 text-4xl font-semibold tracking-tight">Portfolio content</h1><p className="mt-2 max-w-2xl text-neutral-600 dark:text-neutral-400">Edit the normalized database content that will replace the static JSON fixture in Phase 5.</p></div>
+        <div><p className="admin-eyebrow">Portfolio CMS</p><h1 className="mt-2 text-4xl font-semibold tracking-tight">Portfolio content</h1><p className="mt-2 max-w-2xl text-neutral-600 dark:text-neutral-400">Edit the normalized Supabase content shown on the public portfolio.</p></div>
 
         <section className="admin-panel">
           <div><p className="admin-eyebrow">Identity</p><h2 className="mt-1 text-2xl font-semibold">Profile</h2></div>

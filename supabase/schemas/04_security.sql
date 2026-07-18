@@ -44,7 +44,7 @@ using (id = 1);
 
 create policy "Public can read published articles"
 on public.articles for select
-to anon, authenticated
+to anon
 using (
   status = 'published'
   and deleted_at is null
@@ -71,7 +71,7 @@ with check (
 
 create policy "Public can read public asset metadata"
 on public.assets for select
-to anon, authenticated
+to anon
 using (visibility = 'public');
 
 create policy "Administrator can manage asset metadata"
@@ -85,7 +85,7 @@ with check (
 
 create policy "Public can read tags"
 on public.tags for select
-to anon, authenticated
+to anon
 using (true);
 
 create policy "Administrator can manage tags"
@@ -99,7 +99,7 @@ with check (
 
 create policy "Public can read published article tags"
 on public.article_tags for select
-to anon, authenticated
+to anon
 using (
   exists (
     select 1
@@ -119,7 +119,7 @@ with check ((select private.is_admin()));
 
 create policy "Public can read published article assets"
 on public.article_assets for select
-to anon, authenticated
+to anon
 using (
   exists (
     select 1
@@ -139,7 +139,7 @@ with check ((select private.is_admin()));
 
 create policy "Public can read portfolio profile"
 on public.portfolio_profile for select
-to anon, authenticated
+to anon
 using (true);
 
 create policy "Administrator can manage portfolio profile"
@@ -153,7 +153,7 @@ with check (
 
 create policy "Public can read visible portfolio domains"
 on public.portfolio_domains for select
-to anon, authenticated
+to anon
 using (visible);
 
 create policy "Administrator can manage portfolio domains"
@@ -167,7 +167,7 @@ with check (
 
 create policy "Public can read visible social links"
 on public.social_links for select
-to anon, authenticated
+to anon
 using (visible);
 
 create policy "Administrator can manage social links"
@@ -181,7 +181,7 @@ with check (
 
 create policy "Public can read visible skills"
 on public.skills for select
-to anon, authenticated
+to anon
 using (visible);
 
 create policy "Administrator can manage skills"
@@ -195,7 +195,7 @@ with check (
 
 create policy "Public can read visible experiences"
 on public.experiences for select
-to anon, authenticated
+to anon
 using (visible);
 
 create policy "Administrator can manage experiences"
@@ -209,7 +209,7 @@ with check (
 
 create policy "Public can read visible projects"
 on public.projects for select
-to anon, authenticated
+to anon
 using (visible);
 
 create policy "Administrator can manage projects"
@@ -223,7 +223,7 @@ with check (
 
 create policy "Public can read visible certifications"
 on public.certifications for select
-to anon, authenticated
+to anon
 using (visible);
 
 create policy "Administrator can manage certifications"
@@ -237,7 +237,7 @@ with check (
 
 create policy "Public can read site integrations"
 on public.site_integrations for select
-to anon, authenticated
+to anon
 using (true);
 
 create policy "Administrator can manage site integrations"

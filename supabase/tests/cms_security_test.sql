@@ -206,8 +206,8 @@ select extensions.is(
 
 select extensions.results_eq(
   $$select slug from public.articles order by slug$$,
-  $$values ('public-post'::text)$$,
-  'An unauthorized authenticated identity cannot read drafts'
+  $$select null::text where false$$,
+  'An unauthorized authenticated identity cannot read any content'
 );
 
 select extensions.throws_ok(

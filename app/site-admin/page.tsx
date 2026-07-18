@@ -40,8 +40,8 @@ export default async function AdminDashboardPage() {
           Good to see you.
         </h1>
         <p className="mt-4 max-w-2xl leading-7 text-neutral-600 dark:text-neutral-400">
-          The secure application foundation is active. Content modules will
-          become live as their database migrations and interfaces are completed.
+          Manage articles, media, and every public portfolio section from this
+          Supabase-backed dashboard.
         </p>
 
         <div className="mt-12 grid gap-4 md:grid-cols-3">

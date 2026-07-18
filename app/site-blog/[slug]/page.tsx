@@ -113,7 +113,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                   {article.attachments.map((asset) => (
                     <a key={asset.id} href={asset.publicUrl} download className="flex items-center gap-4 rounded-2xl border border-neutral-200 p-4 hover:bg-neutral-50 dark:border-neutral-800 dark:hover:bg-neutral-900">
                       <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-neutral-100 dark:bg-neutral-800"><Download className="size-4" /></span>
-                      <span className="min-w-0"><strong className="block truncate text-sm">{asset.displayName}</strong><small className="text-neutral-500">{asset.mimeType} · {formatBytes(asset.byteSize)}</small></span>
+                      <span className="min-w-0"><strong className="block truncate text-sm">{asset.displayName}</strong><small className="text-neutral-500 dark:text-neutral-400">{asset.mimeType} · {formatBytes(asset.byteSize)}</small></span>
                     </a>
                   ))}
                 </div>
@@ -130,7 +130,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             <div className="sticky top-24">
               {tableOfContents.length ? (
                 <nav aria-label="Table of contents">
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-neutral-500">On this page</p>
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-neutral-500 dark:text-neutral-400">On this page</p>
                   <ol className="mt-4 space-y-3 border-l border-neutral-200 pl-4 text-sm dark:border-neutral-800">
                     {tableOfContents.map((item) => (
                       <li key={item.id} className={item.level > 2 ? "pl-3" : ""}>
