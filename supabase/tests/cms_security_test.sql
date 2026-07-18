@@ -3,7 +3,7 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set search_path = public, extensions;
 
-select extensions.plan(24);
+select extensions.plan(35);
 
 select extensions.is(
   private.hook_restrict_admin_signup(
@@ -31,17 +31,40 @@ select extensions.is(
   'Every other email is rejected by the signup hook'
 );
 
-insert into auth.users (id, email, raw_app_meta_data)
+select extensions.is(
+  private.hook_restrict_admin_signup(
+    '{"user":{"email":"admin@example.test","app_metadata":{"provider":"email"}}}'::jsonb
+  ) #>> '{error,http_code}',
+  '403',
+  'The administrator email is rejected unless authentication came from GitHub'
+);
+
+insert into auth.users (id, email, raw_app_meta_data, email_confirmed_at)
 values
   (
     '11111111-1111-4111-8111-111111111111',
     'admin@example.test',
-    '{"provider":"github"}'::jsonb
+    '{"provider":"github"}'::jsonb,
+    now()
   ),
   (
     '22222222-2222-4222-8222-222222222222',
     'someone@example.com',
-    '{"provider":"github"}'::jsonb
+    '{"provider":"github"}'::jsonb,
+    now()
+  );
+
+insert into auth.sessions (id, user_id, not_after)
+values
+  (
+    '33333333-3333-4333-8333-333333333333',
+    '11111111-1111-4111-8111-111111111111',
+    now() + interval '1 hour'
+  ),
+  (
+    '44444444-4444-4444-8444-444444444444',
+    '22222222-2222-4222-8222-222222222222',
+    now() + interval '1 hour'
   );
 
 select extensions.results_eq(
@@ -129,6 +152,34 @@ select extensions.ok(
   'Supabase Auth can read the administrator configuration for the signup hook'
 );
 
+select extensions.is(
+  (
+    select count(*)
+    from information_schema.role_table_grants
+    where grantee = 'anon'
+      and table_schema = 'public'
+      and privilege_type in ('INSERT', 'UPDATE', 'DELETE', 'TRUNCATE', 'TRIGGER', 'REFERENCES')
+  ),
+  0::bigint,
+  'The anonymous role has no mutation privileges on application tables'
+);
+
+select extensions.is(
+  (
+    select count(*)
+    from pg_default_acl as defaults
+    join pg_roles as owner on owner.oid = defaults.defaclrole
+    join pg_namespace as namespace on namespace.oid = defaults.defaclnamespace
+    cross join lateral aclexplode(defaults.defaclacl) as privilege
+    join pg_roles as grantee on grantee.oid = privilege.grantee
+    where owner.rolname = 'postgres'
+      and namespace.nspname = 'public'
+      and grantee.rolname = 'anon'
+  ),
+  0::bigint,
+  'Future public tables, sequences, and functions are not granted to anonymous users by default'
+);
+
 select extensions.results_eq(
   $$
     select id, public, file_size_limit
@@ -195,8 +246,33 @@ select extensions.throws_ok(
   'Anonymous readers cannot create articles'
 );
 
+select extensions.throws_ok(
+  $$update public.articles set title = 'Anonymous edit' where slug = 'public-post'$$,
+  '42501',
+  null,
+  'Anonymous readers cannot update articles'
+);
+
+select extensions.throws_ok(
+  $$delete from public.articles where slug = 'public-post'$$,
+  '42501',
+  null,
+  'Anonymous readers cannot delete articles'
+);
+
+select extensions.throws_ok(
+  $$
+    insert into storage.objects (bucket_id, name)
+    values ('portfolio-assets', 'anonymous/blocked.txt')
+  $$,
+  '42501',
+  null,
+  'Anonymous readers cannot upload Storage objects'
+);
+
 set local role authenticated;
 set local request.jwt.claim.sub = '22222222-2222-4222-8222-222222222222';
+set local request.jwt.claim = '{"sub":"22222222-2222-4222-8222-222222222222","session_id":"44444444-4444-4444-8444-444444444444"}';
 
 select extensions.is(
   private.is_admin(),
@@ -220,7 +296,34 @@ select extensions.throws_ok(
   'An unauthorized authenticated identity cannot create articles'
 );
 
+select extensions.results_eq(
+  $$update public.articles set title = 'Unauthorized edit' where slug = 'public-post' returning id$$,
+  $$select null::uuid where false$$,
+  'An unauthorized authenticated identity cannot update articles'
+);
+
+select extensions.results_eq(
+  $$delete from public.articles where slug = 'public-post' returning id$$,
+  $$select null::uuid where false$$,
+  'An unauthorized authenticated identity cannot delete articles'
+);
+
+select extensions.throws_ok(
+  $$
+    insert into storage.objects (bucket_id, name, owner_id)
+    values (
+      'portfolio-assets',
+      '22222222-2222-4222-8222-222222222222/blocked.txt',
+      '22222222-2222-4222-8222-222222222222'
+    )
+  $$,
+  '42501',
+  null,
+  'An unauthorized authenticated identity cannot upload Storage objects'
+);
+
 set local request.jwt.claim.sub = '11111111-1111-4111-8111-111111111111';
+set local request.jwt.claim = '{"sub":"11111111-1111-4111-8111-111111111111","session_id":"33333333-3333-4333-8333-333333333333"}';
 
 select extensions.is(
   private.is_admin(),
@@ -250,6 +353,25 @@ select extensions.throws_ok(
   '42501',
   null,
   'The administrator cannot assign an article to another identity'
+);
+
+reset role;
+delete from auth.sessions
+where id = '33333333-3333-4333-8333-333333333333';
+set local role authenticated;
+set local request.jwt.claim.sub = '11111111-1111-4111-8111-111111111111';
+set local request.jwt.claim = '{"sub":"11111111-1111-4111-8111-111111111111","session_id":"33333333-3333-4333-8333-333333333333"}';
+
+select extensions.is(
+  private.is_admin(),
+  false,
+  'A revoked or expired session immediately loses administrator authorization'
+);
+
+select extensions.results_eq(
+  $$update public.articles set title = 'Revoked session edit' where slug = 'public-post' returning id$$,
+  $$select null::uuid where false$$,
+  'A revoked administrator session cannot update content'
 );
 
 select * from extensions.finish();

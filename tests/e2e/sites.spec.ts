@@ -57,10 +57,13 @@ test("blog supports theme switching and has no serious accessibility violations"
   expect(seriousViolations).toEqual([]);
 });
 
-test("admin redirects an unauthenticated visitor to GitHub login", async ({ page }) => {
-  await page.goto("http://admin.localhost:3000/");
+test("admin blocks unauthenticated dashboard and mutation screens", async ({ page }) => {
+  for (const path of ["/", "/articles/new", "/media", "/portfolio-content"]) {
+    await page.goto(`http://admin.localhost:3000${path}`);
 
-  await expect(page).toHaveURL("http://admin.localhost:3000/login");
-  await expect(page.getByRole("heading", { name: "Author access" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Continue with GitHub" })).toBeVisible();
+    await expect(page).toHaveURL("http://admin.localhost:3000/login");
+    await expect(page.getByRole("heading", { name: "Author access" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Continue with GitHub" })).toBeVisible();
+    await expect(page.locator('input[type="file"]')).toHaveCount(0);
+  }
 });

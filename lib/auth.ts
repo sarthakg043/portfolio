@@ -17,7 +17,12 @@ export const getAdminUser = cache(async (): Promise<User | null> => {
     error,
   } = await supabase.auth.getUser();
 
-  if (error || !user || !isAdminEmail(user.email)) {
+  const isGitHubIdentity =
+    user?.app_metadata?.provider === "github" &&
+    user.app_metadata?.providers?.includes("github") &&
+    Boolean(user.email_confirmed_at);
+
+  if (error || !user || !isAdminEmail(user.email) || !isGitHubIdentity) {
     return null;
   }
 

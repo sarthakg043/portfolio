@@ -252,6 +252,16 @@ with check (
 revoke all on all tables in schema public from anon, authenticated;
 revoke all on all sequences in schema public from anon, authenticated;
 
+-- Supabase's platform defaults grant new public objects to API roles. Fail
+-- closed for future schema additions until a migration grants read access
+-- explicitly.
+alter default privileges for role postgres in schema public
+  revoke all on tables from anon;
+alter default privileges for role postgres in schema public
+  revoke all on sequences from anon;
+alter default privileges for role postgres in schema public
+  revoke all on functions from anon;
+
 grant select on table
   public.assets,
   public.articles,

@@ -13,6 +13,7 @@ Supabase provides Postgres, GitHub OAuth, Row Level Security, and file storage. 
 - Keep one repository and one Vercel project.
 - Use Next.js `proxy.ts` for hostname rewrites and Supabase cookie refresh.
 - Treat Proxy as routing and an optimistic login check only. Every mutation performs its own authorization check, and Supabase RLS remains the final data boundary.
+- Require the configured email, a confirmed GitHub identity, and a live Supabase session for every database or Storage mutation; anonymous users retain read-only table grants.
 - Store article documents as Tiptap JSON and render them through a controlled extension set. Raw arbitrary HTML is not accepted.
 - Normalize portfolio collections in Postgres; use JSONB only for editor documents and intentionally flexible settings.
 - Keep unpublished media private and promote referenced assets to public buckets at publication time.
@@ -152,9 +153,11 @@ There are two different callback URLs and they must not be mixed up:
    https://admin.spyboy.uk/auth/callback
    ```
 
-The application requests GitHub's `read:user user:email` scopes and still checks the verified
-Supabase user email on every protected server request. RLS independently permits data changes only
-when the authenticated user matches the private administrator configuration. After deploying the
+The application requests GitHub's `read:user user:email` scopes and checks the verified Supabase
+email plus GitHub provider metadata on every protected server request. RLS independently permits
+data changes only when that identity matches the private administrator configuration and its exact
+Supabase session is still live. Revoking or expiring the session therefore removes write access
+without waiting for the JWT to expire. After deploying the
 database migrations, configure the database from the same value used for `ADMIN_EMAIL` by running
 the following once in the Supabase SQL Editor while signed in as the project owner:
 
@@ -246,7 +249,9 @@ not representations of the real application interfaces.
 The hostname routing, themes, Supabase SSR clients, GitHub OAuth screens/callback, environment-based
 administrator checks, declarative schemas, RLS policies, and Storage buckets are implemented. The
 Next.js production and preview builds, ESLint, TypeScript, three routing unit tests, four Playwright
-tests, and all 24 pgTAP authorization assertions pass. Hosted Security and Performance Advisors have
+tests, and all 35 pgTAP authorization assertions pass. The authorization suite covers anonymous and
+non-admin create/update/delete and Storage upload attempts, plus revoked administrator sessions.
+Hosted Security and Performance Advisors have
 no error-level findings. The performance advisor has no warning-level findings after scoping public
 SELECT policies to `anon`; unused-index information is expected on this newly populated database.
 The Security Advisor notes that leaked-password protection is disabled, which does not affect this

@@ -95,6 +95,14 @@ as $$
     join private.admin_config as configuration
       on configuration.id = 1
      and configuration.admin_email = administrator.email
+    join auth.users as identity
+      on identity.id = administrator.user_id
+     and lower(coalesce(identity.raw_app_meta_data->>'provider', '')) = 'github'
+     and identity.email_confirmed_at is not null
+    join auth.sessions as session
+      on session.user_id = administrator.user_id
+     and session.id::text = coalesce((select auth.jwt()->>'session_id'), '')
+     and (session.not_after is null or session.not_after > now())
     where administrator.user_id = (select auth.uid())
   );
 $$;
