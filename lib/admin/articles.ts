@@ -72,3 +72,14 @@ export async function listArticleEditorOptions() {
   return { tags: tags ?? [], assets: assets ?? [] };
 }
 
+export async function listArticleRevisions(articleId: string) {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("article_revisions")
+    .select("id, title, content_text, revision_reason, created_at")
+    .eq("article_id", articleId)
+    .order("created_at", { ascending: false })
+    .limit(100);
+  if (error) throw new Error(`Unable to load revisions: ${error.message}`);
+  return data ?? [];
+}

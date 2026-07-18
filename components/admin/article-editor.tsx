@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -63,7 +63,7 @@ export function ArticleEditor({ article, assets }: { article: AdminArticle | nul
   const [content, setContent] = useState<TiptapNode>(article?.content ?? emptyDocument);
   const [contentText, setContentText] = useState(article?.content_text ?? "");
   const existingTags = useMemo(() => article?.article_tags.flatMap((row) => row.tags?.name ? [row.tags.name] : []).join(", ") ?? "", [article]);
-  const { register, handleSubmit, setValue, getValues, formState: { isDirty } } = useForm<EditorForm>({
+  const { register, handleSubmit, setValue, getValues, watch, formState: { isDirty } } = useForm<EditorForm>({
     defaultValues: {
       title: article?.title ?? "",
       slug: article?.slug ?? "",
@@ -78,6 +78,9 @@ export function ArticleEditor({ article, assets }: { article: AdminArticle | nul
       externalUrl: article?.external_url ?? "",
     },
   });
+  const watchedValues = watch();
+  const autosaveSignature = JSON.stringify({ values: watchedValues, content, contentText });
+  const lastSavedSignature = useRef(autosaveSignature);
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -109,37 +112,64 @@ export function ArticleEditor({ article, assets }: { article: AdminArticle | nul
     if (url) editor.chain().focus().setImage({ src: url }).run();
   }
 
+  function actionInput(values: EditorForm, intent: "draft" | "publish" | "autosave") {
+    return {
+      id: article?.id ?? null,
+      title: values.title,
+      slug: values.slug || slugifyArticleTitle(values.title),
+      subtitle: values.subtitle || null,
+      excerpt: values.excerpt || null,
+      content,
+      contentText,
+      coverAssetId: values.coverAssetId || null,
+      featured: values.featured,
+      seoTitle: values.seoTitle || null,
+      seoDescription: values.seoDescription || null,
+      canonicalUrl: values.canonicalUrl,
+      externalUrl: values.externalUrl,
+      tags: values.tags.split(",").map((tag) => tag.trim()).filter(Boolean),
+      intent,
+    } as const;
+  }
+
   function submit(values: EditorForm, intent: "draft" | "publish") {
     setMessage(null);
     startTransition(async () => {
-      const result = await saveArticleAction({
-        id: article?.id ?? null,
-        title: values.title,
-        slug: values.slug || slugifyArticleTitle(values.title),
-        subtitle: values.subtitle || null,
-        excerpt: values.excerpt || null,
-        content,
-        contentText,
-        coverAssetId: values.coverAssetId || null,
-        featured: values.featured,
-        seoTitle: values.seoTitle || null,
-        seoDescription: values.seoDescription || null,
-        canonicalUrl: values.canonicalUrl,
-        externalUrl: values.externalUrl,
-        tags: values.tags.split(",").map((tag) => tag.trim()).filter(Boolean),
-        intent,
-      });
+      const result = await saveArticleAction(actionInput(values, intent));
 
       if (!result.ok) {
         setMessage(result.error);
         return;
       }
 
+      lastSavedSignature.current = autosaveSignature;
       setMessage(intent === "publish" ? "Published." : "Draft saved.");
       if (!article) router.replace(`/articles/${result.id}`);
       router.refresh();
     });
   }
+
+  useEffect(() => {
+    if (!article || article.status !== "draft" || autosaveSignature === lastSavedSignature.current) return;
+    const values = getValues();
+    if (!values.title.trim() || !(values.slug || slugifyArticleTitle(values.title))) return;
+
+    const timer = window.setTimeout(() => {
+      startTransition(async () => {
+        const result = await saveArticleAction(actionInput(getValues(), "autosave"));
+        if (result.ok) {
+          lastSavedSignature.current = autosaveSignature;
+          setMessage(`Autosaved at ${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`);
+        } else {
+          setMessage(result.error);
+        }
+      });
+    }, 5000);
+
+    return () => window.clearTimeout(timer);
+    // actionInput is intentionally reconstructed from the latest form/editor state.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [article, autosaveSignature, content, contentText, getValues, startTransition]);
 
   return (
     <form className="space-y-8" onSubmit={handleSubmit((values) => submit(values, "draft"))}>
@@ -176,7 +206,7 @@ export function ArticleEditor({ article, assets }: { article: AdminArticle | nul
             </div>
             <EditorContent editor={editor} />
           </div>
-          <p className="text-right text-xs text-neutral-500">{contentText.trim() ? contentText.trim().split(/\s+/).length : 0} words · autosave-ready editor state</p>
+          <p className="text-right text-xs text-neutral-500">{contentText.trim() ? contentText.trim().split(/\s+/).length : 0} words · {article?.status === "draft" ? "autosaves after 5 seconds" : "manual save"}</p>
         </div>
 
         <aside className="space-y-5">
@@ -211,4 +241,3 @@ export function ArticleEditor({ article, assets }: { article: AdminArticle | nul
     </form>
   );
 }
-

@@ -61,11 +61,11 @@ Status: implementation complete locally; production deployment verification pend
 
 ## Phase 4 — Private admin CMS
 
-Status: planned
+Status: core implementation complete locally; production CRUD and Storage verification pending
 
 - Dashboard and article listing with draft, published, archived, and trash states.
 - Medium-inspired distraction-free Tiptap editor.
-- Article create, preview, autosave, update, duplicate, publish, unpublish, trash, restore, and permanent delete.
+- Article create, autosave, update, duplicate, publish, unpublish, archive, trash, restore, and permanent delete.
 - Slug, excerpt, cover, tags, SEO, revision history, and recovery.
 - Media library with upload progress, alt text, usage checks, and safe deletion.
 - Portfolio forms for profile, social links, domain copy, skills, experience, projects, certifications, LinkedIn, GitHub, and ordering.
@@ -176,21 +176,16 @@ cost or if files must exceed the Supabase plan's limits.
 
 ## Dependencies
 
-Installed for the foundation:
+Installed:
 
 - `@supabase/supabase-js` and `@supabase/ssr` — database, Storage, GitHub sessions, and SSR cookies
 - `zod` — environment and request validation
 - `next-themes` — light, dark, and system theme handling
 - `server-only` — guard server-only modules from client bundles
 - `highlight.js` — server-side syntax highlighting for published code blocks
+- Tiptap (`@tiptap/react`, `@tiptap/pm`, `@tiptap/starter-kit`, and selected extensions) — structured article authoring
+- `react-hook-form` and `@hookform/resolvers` — dashboard form state and Zod integration
 - `supabase` (development dependency) — schema, migration, type-generation, and security workflows
-
-Planned for the editor phase, installed only when that phase starts so the bundle does not gain
-unused packages:
-
-- Tiptap (`@tiptap/react`, `@tiptap/pm`, `@tiptap/starter-kit`, selected extensions, and the static renderer)
-- `react-hook-form` and `@hookform/resolvers` for complex dashboard forms
-- a code highlighter selected after measuring its server and client bundle cost
 
 The existing Tailwind, Radix/shadcn, Lucide, and Motion packages cover the dashboard and public UI.
 
@@ -223,6 +218,13 @@ The Phase 3 public blog now reads published content through the anonymous RLS bo
 responsive feed, search, tag filters, cursor pagination, safe Tiptap JSON renderer, article metadata,
 table of contents, reading progress, syntax highlighting, downloads, sharing, related posts, RSS,
 robots, and sitemap routes. The portfolio blog section now uses the latest internal published articles.
+
+Phase 4 replaces the dashboard placeholders with working article, revision-history, media-library, and
+portfolio-content routes. Article management includes draft autosave, publishing-state transitions,
+duplication, trash recovery, permanent deletion, SEO fields, tags, covers, and revision restore.
+The media library uploads through Storage RLS, records asset metadata, and blocks deletion while an
+asset is referenced. Portfolio forms now edit the normalized Supabase records; Phase 5 will switch the
+public portfolio components from the JSON fixture to those records and add cache invalidation.
 
 ## Scope boundary
 

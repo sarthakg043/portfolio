@@ -118,7 +118,7 @@ export async function saveArticleAction(input: ArticleEditorInput): Promise<Arti
       title: parsed.title,
       content: parsed.content,
       content_text: parsed.contentText,
-      revision_reason: parsed.intent === "publish" ? "publish" : "manual",
+      revision_reason: parsed.intent === "publish" ? "publish" : parsed.intent === "autosave" ? "autosave" : "manual",
     });
     if (revisionError) throw new Error(revisionError.message);
 
@@ -192,5 +192,30 @@ export async function articleLifecycleAction(formData: FormData) {
 
   const { error } = await supabase.from("articles").update(updates).eq("id", article.id);
   if (error) throw new Error(error.message);
+  revalidateArticle(article.slug);
+}
+
+export async function restoreArticleRevisionAction(formData: FormData) {
+  const user = await requireAdmin();
+  const parsed = z.object({ articleId: z.uuid(), revisionId: z.coerce.number().int().positive() }).parse({ articleId: formData.get("articleId"), revisionId: formData.get("revisionId") });
+  const supabase = await createClient();
+  const { data: revision, error: revisionError } = await supabase
+    .from("article_revisions")
+    .select("title, content, content_text")
+    .eq("id", parsed.revisionId)
+    .eq("article_id", parsed.articleId)
+    .single();
+  if (revisionError) throw new Error(revisionError.message);
+
+  const { data: article, error: updateError } = await supabase
+    .from("articles")
+    .update({ title: revision.title, content: revision.content, content_text: revision.content_text, reading_time_minutes: readingTime(revision.content_text) })
+    .eq("id", parsed.articleId)
+    .select("slug")
+    .single();
+  if (updateError) throw new Error(updateError.message);
+
+  const { error: snapshotError } = await supabase.from("article_revisions").insert({ article_id: parsed.articleId, editor_id: user.id, title: revision.title, content: revision.content, content_text: revision.content_text, revision_reason: "restore" });
+  if (snapshotError) throw new Error(snapshotError.message);
   revalidateArticle(article.slug);
 }

@@ -18,7 +18,7 @@ export const articleEditorSchema = z.object({
   canonicalUrl: optionalUrl,
   externalUrl: optionalUrl,
   tags: z.array(z.string().trim().min(1).max(50)).max(12),
-  intent: z.enum(["draft", "publish"]),
+  intent: z.enum(["draft", "publish", "autosave"]),
 });
 
 export type ArticleEditorInput = z.input<typeof articleEditorSchema>;
@@ -32,4 +32,3 @@ export function slugifyArticleTitle(value: string): string {
     .replace(/^-|-$/g, "")
     .slice(0, 180);
 }
-
