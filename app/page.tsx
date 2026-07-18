@@ -4,8 +4,9 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useDomain } from "@/components/providers/domain-provider";
 import { LandingScene } from "@/components/landing/landing-scene";
+import { PortfolioProviders } from "@/components/providers/portfolio-providers";
 
-export default function Home() {
+function HomeContent() {
   const { domain } = useDomain();
   const router = useRouter();
 
@@ -25,4 +26,12 @@ export default function Home() {
   if (domain) return null;
 
   return <LandingScene />;
+}
+
+export default function Home() {
+  return (
+    <PortfolioProviders>
+      <HomeContent />
+    </PortfolioProviders>
+  );
 }

@@ -2,12 +2,13 @@
 
 import { useDomain } from "@/components/providers/domain-provider";
 import { ScrollReveal } from "@/components/effects/scroll-reveal";
-import config from "@/data/portfolio-config.json";
-import { Users, UserCheck, ArrowUpRight } from "lucide-react";
+import { usePortfolioContent } from "@/components/providers/portfolio-content-provider";
+import { ArrowUpRight } from "lucide-react";
 import { LinkedinIcon } from "@/components/icons/brands";
 
 export function LinkedIn() {
   const { domain } = useDomain();
+  const config = usePortfolioContent();
   if (!domain) return null;
 
   const { stats, posts } = config.linkedin;

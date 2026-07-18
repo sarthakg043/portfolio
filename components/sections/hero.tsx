@@ -6,7 +6,7 @@ import { Particles } from "@/components/effects/particles";
 import { DomainText } from "@/components/effects/glitch-text";
 import { MagneticButton } from "@/components/effects/magnetic-button";
 import { DOMAIN_FONTS, DOMAIN_GRADIENT_CLASS } from "@/lib/constants";
-import config from "@/data/portfolio-config.json";
+import { usePortfolioContent } from "@/components/providers/portfolio-content-provider";
 import { ArrowRight } from "lucide-react";
 
 function scrollToSection(id: string) {
@@ -16,6 +16,7 @@ function scrollToSection(id: string) {
 
 export function Hero() {
   const { domain } = useDomain();
+  const config = usePortfolioContent();
   if (!domain) return null;
 
   const gradientClass = DOMAIN_GRADIENT_CLASS[domain];

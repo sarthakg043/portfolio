@@ -3,40 +3,21 @@
 import { useDomain } from "@/components/providers/domain-provider";
 import { ScrollReveal } from "@/components/effects/scroll-reveal";
 import { MagneticButton } from "@/components/effects/magnetic-button";
-import config from "@/data/portfolio-config.json";
+import { usePortfolioContent } from "@/components/providers/portfolio-content-provider";
 import { Mail, ArrowUpRight } from "lucide-react";
 import { GithubIcon, LinkedinIcon, XTwitterIcon } from "@/components/icons/brands";
 
-const links = [
-  {
-    icon: Mail,
-    label: "Email",
-    href: `mailto:${config.personal.email}`,
-    text: config.personal.email,
-  },
-  {
-    icon: GithubIcon,
-    label: "GitHub",
-    href: config.socials.github,
-    text: "@sarthakg043",
-  },
-  {
-    icon: LinkedinIcon,
-    label: "LinkedIn",
-    href: config.socials.linkedin,
-    text: "in/sarthak-gupta-webdev",
-  },
-  {
-    icon: XTwitterIcon,
-    label: "Twitter / X",
-    href: config.socials.twitter,
-    text: "@sarthak_webdev",
-  },
-];
-
 export function Contact() {
   const { domain } = useDomain();
+  const config = usePortfolioContent();
   if (!domain) return null;
+
+  const links = [
+    { icon: Mail, label: "Email", href: `mailto:${config.personal.email}`, text: config.personal.email },
+    { icon: GithubIcon, label: "GitHub", href: config.socials.github, text: `@${config.github.username}` },
+    { icon: LinkedinIcon, label: "LinkedIn", href: config.socials.linkedin, text: "LinkedIn profile" },
+    { icon: XTwitterIcon, label: "Twitter / X", href: config.socials.twitter, text: "Twitter profile" },
+  ];
 
   return (
     <section id="contact" className="py-24 md:py-32 px-4 md:px-8">

@@ -4,9 +4,9 @@ import { useState } from "react";
 import { useDomain, type Domain } from "@/components/providers/domain-provider";
 import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/effects/scroll-reveal";
 import { getLanguageColor, type GitHubRepo } from "@/lib/github";
-import config from "@/data/portfolio-config.json";
+import { usePortfolioContent } from "@/components/providers/portfolio-content-provider";
 import { motion, AnimatePresence } from "motion/react";
-import { Star, GitFork, ExternalLink, ArrowUpRight } from "lucide-react";
+import { Star, GitFork, ArrowUpRight } from "lucide-react";
 
 interface ProjectsProps {
   githubRepos: GitHubRepo[];
@@ -16,6 +16,7 @@ const accentColors = ["var(--domain-primary)", "var(--domain-secondary)", "var(-
 
 export function Projects({ githubRepos }: ProjectsProps) {
   const { domain } = useDomain();
+  const config = usePortfolioContent();
   const [filter, setFilter] = useState<"all" | Domain>("all");
 
   if (!domain) return null;
@@ -82,7 +83,7 @@ export function Projects({ githubRepos }: ProjectsProps) {
               <StaggerItem key={project.name}>
                 <motion.a
                   layout
-                  href={project.gh?.html_url ?? `https://github.com/${project.owner}/${project.name}`}
+                  href={project.demoUrl ?? project.repositoryUrl ?? project.gh?.html_url ?? `https://github.com/${project.owner}/${project.name}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block comic-card p-6 group relative overflow-hidden"
@@ -94,6 +95,13 @@ export function Projects({ githubRepos }: ProjectsProps) {
                     className="absolute top-0 left-0 right-0 h-1.5"
                     style={{ background: accentColors[i % accentColors.length] }}
                   />
+
+                  {project.image ? (
+                    <div className="mb-5 mt-1 aspect-[16/9] overflow-hidden rounded-xl border border-card-border bg-card-tag-bg">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={project.image} alt={`${project.name} project preview`} className="size-full object-cover" loading="lazy" />
+                    </div>
+                  ) : null}
 
                   <div className="flex items-start justify-between mb-4">
                     <h3 className="text-xl font-black text-card-text group-hover:text-domain-primary transition-colors">

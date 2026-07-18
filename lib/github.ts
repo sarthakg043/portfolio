@@ -1,4 +1,4 @@
-import { GITHUB_API_BASE, GITHUB_USERNAME } from "./constants";
+import { GITHUB_API_BASE } from "./constants";
 
 export interface GitHubRepo {
   name: string;
@@ -24,8 +24,8 @@ export interface GitHubUser {
   following: number;
 }
 
-export async function fetchGitHubUser(): Promise<GitHubUser> {
-  const res = await fetch(`${GITHUB_API_BASE}/users/${GITHUB_USERNAME}`, {
+export async function fetchGitHubUser(username: string): Promise<GitHubUser> {
+  const res = await fetch(`${GITHUB_API_BASE}/users/${encodeURIComponent(username)}`, {
     next: { revalidate: 3600 },
     headers: {
       Accept: "application/vnd.github.v3+json",
@@ -38,9 +38,9 @@ export async function fetchGitHubUser(): Promise<GitHubUser> {
   return res.json();
 }
 
-export async function fetchGitHubRepos(): Promise<GitHubRepo[]> {
+export async function fetchGitHubRepos(username: string): Promise<GitHubRepo[]> {
   const res = await fetch(
-    `${GITHUB_API_BASE}/users/${GITHUB_USERNAME}/repos?per_page=100&sort=updated`,
+    `${GITHUB_API_BASE}/users/${encodeURIComponent(username)}/repos?per_page=100&sort=updated`,
     {
       next: { revalidate: 3600 },
       headers: {

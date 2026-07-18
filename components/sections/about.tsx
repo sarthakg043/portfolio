@@ -2,11 +2,12 @@
 
 import { useDomain } from "@/components/providers/domain-provider";
 import { ScrollReveal } from "@/components/effects/scroll-reveal";
-import { DOMAIN_FONTS, DOMAIN_GRADIENT_CLASS, DOMAIN_HEADING_FONTS } from "@/lib/constants";
-import config from "@/data/portfolio-config.json";
+import { DOMAIN_FONTS } from "@/lib/constants";
+import { usePortfolioContent } from "@/components/providers/portfolio-content-provider";
 
 export function About() {
   const { domain } = useDomain();
+  const config = usePortfolioContent();
   if (!domain) return null;
 
   return (

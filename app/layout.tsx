@@ -8,12 +8,9 @@ import {
   playfairDisplay,
   plusJakartaSans,
 } from "@/lib/fonts";
-import { DomainProvider } from "@/components/providers/domain-provider";
-import { LenisProvider } from "@/components/providers/lenis-provider";
-import { CustomCursor } from "@/components/effects/custom-cursor";
-import { TransitionOverlay } from "@/components/effects/transition-overlay";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 
 export const metadata: Metadata = {
   title: "Sarthak Gupta — Developer Portfolio",
@@ -45,6 +42,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={cn(
         "antialiased",
         geistSans.variable,
@@ -55,15 +53,11 @@ export default function RootLayout({
       )}
     >
       <body className="min-h-screen bg-background text-foreground font-sans">
-        <DomainProvider>
-          <LenisProvider>
-            <CustomCursor />
-            <TransitionOverlay />
-            <Analytics />
-            <SpeedInsights />
-            {children}
-          </LenisProvider>
-        </DomainProvider>
+        <ThemeProvider>
+          <Analytics />
+          <SpeedInsights />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

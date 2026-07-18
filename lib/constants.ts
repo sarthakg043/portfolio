@@ -49,6 +49,5 @@ export const DOMAIN_CHART_HEX: Record<Domain, string> = {
   cyber: "11c114",
 };
 
-export const GITHUB_USERNAME = "sarthakg043";
 export const GITHUB_API_BASE = "https://api.github.com";
 export const REVALIDATE_SECONDS = 3600; // 1 hour ISR

@@ -22,21 +22,10 @@ interface DomainContextValue {
 
 const DomainContext = createContext<DomainContextValue | null>(null);
 
-const VALID_DOMAINS: Domain[] = ["frontend", "java", "cyber"];
-
 export function DomainProvider({ children }: { children: ReactNode }) {
   const [domain, setDomainState] = useState<Domain | null>(null);
   const [targetDomain, setTargetDomain] = useState<Domain | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
-
-  // Initialize domain from the current URL on first mount (no localStorage)
-  useEffect(() => {
-    const segments = window.location.pathname.split("/");
-    const urlDomain = segments[2] as Domain | undefined;
-    if (urlDomain && VALID_DOMAINS.includes(urlDomain)) {
-      setDomainState(urlDomain);
-    }
-  }, []);
 
   // Sync the CSS data-domain attribute and URL whenever domain changes
   useEffect(() => {

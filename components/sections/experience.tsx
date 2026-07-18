@@ -2,7 +2,7 @@
 
 import { useDomain } from "@/components/providers/domain-provider";
 import { ScrollReveal } from "@/components/effects/scroll-reveal";
-import config from "@/data/portfolio-config.json";
+import { usePortfolioContent } from "@/components/providers/portfolio-content-provider";
 import { motion } from "motion/react";
 import { Briefcase, GraduationCap, Trophy } from "lucide-react";
 
@@ -22,7 +22,10 @@ function getIcon(title: string) {
 
 export function Experience() {
   const { domain } = useDomain();
+  const config = usePortfolioContent();
   if (!domain) return null;
+
+  const experiences = config.experience.filter((experience) => experience.domain.includes(domain));
 
   return (
     <section id="experience" className="py-24 md:py-32 px-4 md:px-8">
@@ -44,8 +47,8 @@ export function Experience() {
             style={{ background: "var(--domain-primary)" }}
           />
 
-          {config.experience.map((exp, i) => (
-            <ScrollReveal key={i} delay={i * 0.15}>
+          {experiences.map((exp, i) => (
+            <ScrollReveal key={exp.id} delay={i * 0.15}>
               <div
                 className={`relative flex items-start gap-6 mb-12 ${
                   i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"

@@ -23,7 +23,6 @@ const COMMANDS: Record<string, string> = {
 export function MiniTerminal() {
   const { domain } = useDomain();
   const [open, setOpen] = useState(false);
-  const [clickCount, setClickCount] = useState(0);
   const [history, setHistory] = useState<{ cmd: string; output: string }[]>([
     { cmd: "", output: "Welcome to SG Terminal v1.0 — Type 'help' for commands" },
   ]);
@@ -31,28 +30,31 @@ export function MiniTerminal() {
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const clickTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const clickCount = useRef(0);
 
   // Track rapid clicks on the logo
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       if (target.closest("[data-logo]")) {
-        setClickCount((c) => {
-          const next = c + 1;
-          if (next >= 5) {
-            setOpen(true);
-            return 0;
-          }
-          return next;
-        });
+        clickCount.current += 1;
+        if (clickCount.current >= 5) {
+          setOpen(true);
+          clickCount.current = 0;
+        }
 
         if (clickTimer.current) clearTimeout(clickTimer.current);
-        clickTimer.current = setTimeout(() => setClickCount(0), 2000);
+        clickTimer.current = setTimeout(() => {
+          clickCount.current = 0;
+        }, 2000);
       }
     };
 
     window.addEventListener("click", handleClick);
-    return () => window.removeEventListener("click", handleClick);
+    return () => {
+      window.removeEventListener("click", handleClick);
+      if (clickTimer.current) clearTimeout(clickTimer.current);
+    };
   }, []);
 
   // Also listen for "sudo" typed anywhere
