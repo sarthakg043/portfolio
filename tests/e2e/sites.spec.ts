@@ -32,6 +32,25 @@ test("portfolio stays within a mobile viewport", async ({ page }) => {
   expect(hasHorizontalOverflow).toBe(false);
 });
 
+test("cyber cursor tracks the pointer without losing its transform", async ({ page }) => {
+  await page.goto("/portfolio/cyber");
+  await page.mouse.move(240, 160);
+
+  const cursor = page.getByTestId("custom-cursor");
+  await expect(cursor).toBeVisible();
+  await expect(cursor).toHaveCSS("left", "240px");
+  await expect(cursor).toHaveCSS("top", "160px");
+  await expect.poll(() => cursor.evaluate((element) => element.style.transform)).toContain(
+    "rotate(45deg) scale(1)"
+  );
+
+  await page.mouse.down();
+  await expect.poll(() => cursor.evaluate((element) => element.style.transform)).toContain(
+    "rotate(45deg) scale(0.8)"
+  );
+  await page.mouse.up();
+});
+
 test("blog supports theme switching and has no serious accessibility violations", async ({
   page,
 }) => {

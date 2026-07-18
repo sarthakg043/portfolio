@@ -1,7 +1,6 @@
 import { z } from "zod";
 import type { TiptapNode } from "@/lib/blog/types";
-
-const optionalUrl = z.union([z.literal(""), z.url().startsWith("https://")]).transform((value) => value || null);
+import { optionalHttpsUrlSchema } from "@/lib/admin/url-schema";
 
 export const articleEditorSchema = z.object({
   id: z.uuid().nullable(),
@@ -15,8 +14,8 @@ export const articleEditorSchema = z.object({
   featured: z.boolean(),
   seoTitle: z.string().trim().max(180).nullable(),
   seoDescription: z.string().trim().max(320).nullable(),
-  canonicalUrl: optionalUrl,
-  externalUrl: optionalUrl,
+  canonicalUrl: optionalHttpsUrlSchema,
+  externalUrl: optionalHttpsUrlSchema,
   tags: z.array(z.string().trim().min(1).max(50)).max(12),
   intent: z.enum(["draft", "publish", "autosave"]),
 });

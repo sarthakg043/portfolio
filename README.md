@@ -248,7 +248,7 @@ not representations of the real application interfaces.
 
 The hostname routing, themes, Supabase SSR clients, GitHub OAuth screens/callback, environment-based
 administrator checks, declarative schemas, RLS policies, and Storage buckets are implemented. The
-Next.js production and preview builds, ESLint, TypeScript, three routing unit tests, four Playwright
+Next.js production and preview builds, ESLint, TypeScript, six unit tests, five Playwright
 tests, and all 35 pgTAP authorization assertions pass. The authorization suite covers anonymous and
 non-admin create/update/delete and Storage upload attempts, plus revoked administrator sessions.
 Hosted Security and Performance Advisors have

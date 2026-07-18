@@ -3,10 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/auth";
+import { httpsUrlSchema, optionalHttpsUrlSchema } from "@/lib/admin/url-schema";
 import { createClient } from "@/lib/supabase/server";
 
 const nullableUuid = z.union([z.literal(""), z.uuid()]).transform((value) => value || null);
-const optionalHttpsUrl = z.union([z.literal(""), z.url().startsWith("https://")]).transform((value) => value || null);
 const order = z.coerce.number().int().min(0).max(10_000);
 
 function checked(value: FormDataEntryValue | null): boolean {
@@ -53,7 +53,7 @@ export async function savePortfolioDomainAction(formData: FormData) {
 
 export async function saveSiteIntegrationsAction(formData: FormData) {
   const user = await requireAdmin();
-  const parsed = z.object({ githubUsername: z.string().trim().min(1).max(100), linkedinFollowers: z.string().trim().max(50), linkedinConnections: z.string().trim().max(50), linkedinHeadline: z.string().trim().max(300), linkedinPosts: z.array(z.url().startsWith("https://")).max(20) }).parse({
+  const parsed = z.object({ githubUsername: z.string().trim().min(1).max(100), linkedinFollowers: z.string().trim().max(50), linkedinConnections: z.string().trim().max(50), linkedinHeadline: z.string().trim().max(300), linkedinPosts: z.array(httpsUrlSchema).max(20) }).parse({
     githubUsername: formData.get("githubUsername"), linkedinFollowers: formData.get("linkedinFollowers"), linkedinConnections: formData.get("linkedinConnections"), linkedinHeadline: formData.get("linkedinHeadline"), linkedinPosts: list(formData.get("linkedinPosts")),
   });
   const supabase = await createClient();
@@ -71,7 +71,7 @@ export async function savePortfolioItemAction(formData: FormData) {
   const supabase = await createClient();
 
   if (kind === "social") {
-    const parsed = itemBase.extend({ platform: z.enum(["github", "github_org", "linkedin", "twitter", "website", "other"]), label: z.string().trim().min(1).max(100), url: z.url().startsWith("https://") }).parse({ ...common, platform: formData.get("platform"), label: formData.get("label"), url: formData.get("url") });
+    const parsed = itemBase.extend({ platform: z.enum(["github", "github_org", "linkedin", "twitter", "website", "other"]), label: z.string().trim().min(1).max(100), url: httpsUrlSchema }).parse({ ...common, platform: formData.get("platform"), label: formData.get("label"), url: formData.get("url") });
     const payload = { owner_id: user.id, platform: parsed.platform, label: parsed.label, url: parsed.url, display_order: parsed.displayOrder, visible: parsed.visible };
     const result = parsed.id ? await supabase.from("social_links").update(payload).eq("id", parsed.id) : await supabase.from("social_links").insert(payload);
     if (result.error) throw new Error(result.error.message);
@@ -92,14 +92,14 @@ export async function savePortfolioItemAction(formData: FormData) {
   }
 
   if (kind === "project") {
-    const parsed = itemBase.extend({ name: z.string().trim().min(1).max(150), repositoryOwner: z.string().trim().min(1).max(100), description: z.string().trim().min(1).max(3000), repositoryUrl: optionalHttpsUrl, demoUrl: optionalHttpsUrl, imageAssetId: nullableUuid, domains: z.array(z.enum(["frontend", "java", "cyber"])).min(1), featured: z.boolean() }).parse({ ...common, name: formData.get("name"), repositoryOwner: formData.get("repositoryOwner"), description: formData.get("description"), repositoryUrl: formData.get("repositoryUrl") ?? "", demoUrl: formData.get("demoUrl") ?? "", imageAssetId: formData.get("imageAssetId") ?? "", domains: list(formData.get("domains")), featured: checked(formData.get("featured")) });
+    const parsed = itemBase.extend({ name: z.string().trim().min(1).max(150), repositoryOwner: z.string().trim().min(1).max(100), description: z.string().trim().min(1).max(3000), repositoryUrl: optionalHttpsUrlSchema, demoUrl: optionalHttpsUrlSchema, imageAssetId: nullableUuid, domains: z.array(z.enum(["frontend", "java", "cyber"])).min(1), featured: z.boolean() }).parse({ ...common, name: formData.get("name"), repositoryOwner: formData.get("repositoryOwner"), description: formData.get("description"), repositoryUrl: formData.get("repositoryUrl") ?? "", demoUrl: formData.get("demoUrl") ?? "", imageAssetId: formData.get("imageAssetId") ?? "", domains: list(formData.get("domains")), featured: checked(formData.get("featured")) });
     const payload = { owner_id: user.id, name: parsed.name, repository_owner: parsed.repositoryOwner, description: parsed.description, repository_url: parsed.repositoryUrl, demo_url: parsed.demoUrl, image_asset_id: parsed.imageAssetId, domains: parsed.domains, featured: parsed.featured, display_order: parsed.displayOrder, visible: parsed.visible };
     const result = parsed.id ? await supabase.from("projects").update(payload).eq("id", parsed.id) : await supabase.from("projects").insert(payload);
     if (result.error) throw new Error(result.error.message);
   }
 
   if (kind === "certification") {
-    const parsed = itemBase.extend({ name: z.string().trim().min(1).max(180), issuer: z.string().trim().min(1).max(150), year: z.string().trim().min(1).max(30), credentialUrl: optionalHttpsUrl, domains: z.array(z.enum(["frontend", "java", "cyber"])).min(1) }).parse({ ...common, name: formData.get("name"), issuer: formData.get("issuer"), year: formData.get("year"), credentialUrl: formData.get("credentialUrl") ?? "", domains: list(formData.get("domains")) });
+    const parsed = itemBase.extend({ name: z.string().trim().min(1).max(180), issuer: z.string().trim().min(1).max(150), year: z.string().trim().min(1).max(30), credentialUrl: optionalHttpsUrlSchema, domains: z.array(z.enum(["frontend", "java", "cyber"])).min(1) }).parse({ ...common, name: formData.get("name"), issuer: formData.get("issuer"), year: formData.get("year"), credentialUrl: formData.get("credentialUrl") ?? "", domains: list(formData.get("domains")) });
     const payload = { owner_id: user.id, name: parsed.name, issuer: parsed.issuer, year_label: parsed.year, credential_url: parsed.credentialUrl, domains: parsed.domains, display_order: parsed.displayOrder, visible: parsed.visible };
     const result = parsed.id ? await supabase.from("certifications").update(payload).eq("id", parsed.id) : await supabase.from("certifications").insert(payload);
     if (result.error) throw new Error(result.error.message);

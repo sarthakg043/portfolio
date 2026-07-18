@@ -7,6 +7,7 @@ import { useDomain } from "@/components/providers/domain-provider";
 export function CustomCursor() {
   const { domain } = useDomain();
   const [hasMoved, setHasMoved] = useState(false);
+  const [initialPosition, setInitialPosition] = useState({ x: -100, y: -100 });
   const [clicking, setClicking] = useState(false);
   const cursorRef = useRef<HTMLDivElement | null>(null);
   const hasMovedRef = useRef(false);
@@ -21,10 +22,12 @@ export function CustomCursor() {
     const onMove = (e: MouseEvent) => {
       // Update DOM directly for lag-free cursor
       if (cursorRef.current) {
-        cursorRef.current.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
+        cursorRef.current.style.left = `${e.clientX}px`;
+        cursorRef.current.style.top = `${e.clientY}px`;
       }
       if (!hasMovedRef.current) {
         hasMovedRef.current = true;
+        setInitialPosition({ x: e.clientX, y: e.clientY });
         setHasMoved(true);
       }
     };
@@ -68,18 +71,24 @@ export function CustomCursor() {
       background: "transparent",
       border: "1px solid var(--cursor-cyber-color, #11c114)",
       boxShadow: "0 0 8px var(--cursor-cyber-glow, rgba(17,193,20,0.4))",
-      transform: `rotate(45deg) scale(${clicking ? 0.8 : 1})`,
     },
   };
+
+  const transform = domain === "cyber"
+    ? `translate(-50%, -50%) rotate(45deg) scale(${clicking ? 0.8 : 1})`
+    : "translate(-50%, -50%)";
 
   return createPortal(
     <div
       ref={cursorRef}
-      className="fixed top-0 left-0 pointer-events-none"
+      className="pointer-events-none fixed"
+      data-testid="custom-cursor"
       style={{
         zIndex: 2147483647,
-        transform: "translate(-100px, -100px) translate(-50%, -50%)",
-        transition: "width 0.15s, height 0.15s",
+        left: initialPosition.x,
+        top: initialPosition.y,
+        transform,
+        transition: "width 0.15s, height 0.15s, transform 0.15s",
         ...cursorStyles[domain],
       }}
     />,

@@ -6,14 +6,23 @@ import { FileUp, Loader2 } from "lucide-react";
 import { registerAssetAction } from "@/app/site-admin/media/actions";
 import { createClient } from "@/lib/supabase/client";
 
-const destinations = {
-  "blog-media": { label: "Published blog image", kind: "image" as const, accept: "image/jpeg,image/png,image/webp,image/avif,image/gif" },
-  "blog-downloads": { label: "Public blog download", kind: "download" as const, accept: ".pdf,.zip,.txt,.json,application/pdf,application/zip,text/plain,application/json" },
-  "portfolio-assets": { label: "Portfolio image or resume", kind: "other" as const, accept: "image/*,.pdf,application/pdf" },
-  "draft-media": { label: "Private draft file", kind: "other" as const, accept: "image/*,.pdf,.zip,.txt,.json" },
+type Destination = "blog-media" | "blog-downloads" | "portfolio-assets" | "draft-media";
+
+type DestinationConfig = {
+  label: string;
+  kind: "image" | "download" | "other";
+  accept: string;
+  allowedMimeTypes: readonly string[];
 };
 
-type Destination = keyof typeof destinations;
+const imageMimeTypes = ["image/jpeg", "image/png", "image/webp", "image/avif"] as const;
+
+const destinations: Record<Destination, DestinationConfig> = {
+  "blog-media": { label: "Published blog image", kind: "image", accept: imageMimeTypes.join(","), allowedMimeTypes: imageMimeTypes },
+  "blog-downloads": { label: "Public blog download", kind: "download", accept: "application/pdf,application/zip,text/plain,application/json", allowedMimeTypes: ["application/pdf", "application/zip", "text/plain", "application/json"] },
+  "portfolio-assets": { label: "Portfolio image or resume", kind: "other", accept: [...imageMimeTypes, "application/pdf"].join(","), allowedMimeTypes: [...imageMimeTypes, "application/pdf"] },
+  "draft-media": { label: "Private draft file", kind: "other", accept: [...imageMimeTypes, "application/pdf", "application/zip"].join(","), allowedMimeTypes: [...imageMimeTypes, "application/pdf", "application/zip"] },
+};
 
 function safeFileName(value: string): string {
   const extension = value.includes(".") ? `.${value.split(".").pop()?.toLowerCase().replace(/[^a-z0-9]/g, "")}` : "";
@@ -29,9 +38,15 @@ export function MediaUploader({ userId }: { userId: string }) {
   const [message, setMessage] = useState<string | null>(null);
 
   async function upload(file: File) {
+    const config = destinations[destination];
+    if (!config.allowedMimeTypes.includes(file.type)) {
+      setMessage(`This file type is not allowed in ${config.label.toLowerCase()}.`);
+      if (inputRef.current) inputRef.current.value = "";
+      return;
+    }
+
     setPending(true);
     setMessage("Uploading securely…");
-    const config = destinations[destination];
     const inferredKind = destination === "portfolio-assets"
       ? file.type === "application/pdf" ? "resume" : file.type.startsWith("image/") ? "image" : "other"
       : destination === "draft-media"
@@ -89,4 +104,3 @@ export function MediaUploader({ userId }: { userId: string }) {
     </section>
   );
 }
-
