@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight, Clock3 } from "lucide-react";
 import { formatArticleDate } from "@/lib/blog/format";
+import { getBlogPath } from "@/lib/blog/url";
 import type { BlogArticleCard as BlogArticleCardType } from "@/lib/blog/types";
 
 export function ArticleCard({
@@ -10,11 +11,16 @@ export function ArticleCard({
   article: BlogArticleCardType;
   featured?: boolean;
 }) {
+  const articleHref = article.externalUrl ?? getBlogPath(`/${article.slug}`);
+  const external = Boolean(article.externalUrl);
+
   return (
     <article className={featured ? "grid gap-7 lg:grid-cols-[1.1fr_0.9fr] lg:items-center" : "group"}>
       {article.cover?.publicUrl ? (
         <Link
-          href={`/${article.slug}`}
+          href={articleHref}
+          target={external ? "_blank" : undefined}
+          rel={external ? "noreferrer noopener" : undefined}
           className={`block overflow-hidden bg-neutral-100 dark:bg-neutral-900 ${featured ? "aspect-[16/10] rounded-[2rem]" : "aspect-[16/9] rounded-2xl"}`}
           tabIndex={-1}
           aria-hidden="true"
@@ -38,7 +44,7 @@ export function ArticleCard({
         </div>
 
         <h2 className={`font-serif font-medium tracking-[-0.025em] ${featured ? "mt-5 text-4xl leading-tight sm:text-5xl" : "mt-3 text-2xl leading-tight"}`}>
-          <Link href={`/${article.slug}`} className="decoration-emerald-500/50 underline-offset-4 hover:underline">
+          <Link href={articleHref} target={external ? "_blank" : undefined} rel={external ? "noreferrer noopener" : undefined} className="decoration-emerald-500/50 underline-offset-4 hover:underline">
             {article.title}
           </Link>
         </h2>
@@ -53,14 +59,16 @@ export function ArticleCard({
           {article.tags.map((tag) => (
             <Link
               key={tag.id}
-              href={`/?tag=${encodeURIComponent(tag.slug)}`}
+              href={getBlogPath(`/?tag=${encodeURIComponent(tag.slug)}`)}
               className="rounded-full bg-neutral-100 px-3 py-1 text-xs font-medium text-neutral-600 hover:bg-neutral-200 dark:bg-neutral-900 dark:text-neutral-300 dark:hover:bg-neutral-800"
             >
               {tag.name}
             </Link>
           ))}
           <Link
-            href={`/${article.slug}`}
+            href={articleHref}
+            target={external ? "_blank" : undefined}
+            rel={external ? "noreferrer noopener" : undefined}
             className="ml-auto inline-flex items-center gap-1 text-sm font-semibold text-emerald-700 hover:underline dark:text-emerald-400"
           >
             Read <ArrowUpRight className="size-4" />
@@ -70,4 +78,3 @@ export function ArticleCard({
     </article>
   );
 }
-

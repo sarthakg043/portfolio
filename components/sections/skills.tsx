@@ -6,7 +6,7 @@ import {
   StaggerContainer,
   StaggerItem,
 } from "@/components/effects/scroll-reveal";
-import config from "@/data/portfolio-config.json";
+import { usePortfolioContent } from "@/components/providers/portfolio-content-provider";
 import { motion } from "motion/react";
 
 const categoryLabels: Record<string, string> = {
@@ -43,6 +43,7 @@ function SkillBadge({
 
 export function Skills() {
   const { domain } = useDomain();
+  const config = usePortfolioContent();
   if (!domain) return null;
 
   const categories = Object.entries(config.skills) as [string, string[]][];

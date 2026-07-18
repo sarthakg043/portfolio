@@ -19,12 +19,16 @@ import { MiniTerminal } from "@/components/easter-eggs/mini-terminal";
 import { IdleDetector } from "@/components/easter-eggs/idle-detector";
 import type { GitHubRepo, GitHubUser } from "@/lib/github";
 import type { BlogArticleCard } from "@/lib/blog/types";
+import type { PortfolioContent } from "@/lib/portfolio/types";
+import { PortfolioContentProvider } from "@/components/providers/portfolio-content-provider";
 
 interface PortfolioClientProps {
   githubUser: GitHubUser | null;
   allRepos: GitHubRepo[];
   configRepos: GitHubRepo[];
   latestArticles: BlogArticleCard[];
+  blogBaseUrl: string;
+  content: PortfolioContent;
   urlDomain: Domain;
 }
 
@@ -33,6 +37,8 @@ export function PortfolioClient({
   allRepos,
   configRepos,
   latestArticles,
+  blogBaseUrl,
+  content,
   urlDomain,
 }: PortfolioClientProps) {
   const { domain, setDomain } = useDomain();
@@ -77,7 +83,7 @@ export function PortfolioClient({
   if (!domain) return null;
 
   return (
-    <>
+    <PortfolioContentProvider content={content}>
       <Navbar />
       <main>
         <Hero />
@@ -85,9 +91,14 @@ export function PortfolioClient({
         <Skills />
         <Experience />
         <Projects githubRepos={configRepos} />
-        <GitHubStats user={githubUser} repos={allRepos} />
+        <GitHubStats
+          user={githubUser}
+          repos={allRepos}
+          showContributions={content.github.showContributions}
+          showLanguages={content.github.showLanguages}
+        />
         <Certifications />
-        <Blog articles={latestArticles} />
+        <Blog articles={latestArticles} blogBaseUrl={blogBaseUrl} />
         <LinkedIn />
         <Contact />
       </main>
@@ -97,6 +108,6 @@ export function PortfolioClient({
       <KonamiCode />
       <MiniTerminal />
       <IdleDetector />
-    </>
+    </PortfolioContentProvider>
   );
 }

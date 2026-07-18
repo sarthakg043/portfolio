@@ -109,18 +109,25 @@ Create `.env.local` from `.env.example`. Never commit `.env.local` or Supabase/G
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
 ADMIN_EMAIL=
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
-NEXT_PUBLIC_BLOG_URL=http://blog.localhost:3000
-NEXT_PUBLIC_ADMIN_URL=http://admin.localhost:3000
+NEXT_DEV_MODE=development
 ```
 
-Production URL values:
+Set `NEXT_DEV_MODE` independently for each Vercel environment:
 
 ```dotenv
-NEXT_PUBLIC_SITE_URL=https://spyboy.uk
-NEXT_PUBLIC_BLOG_URL=https://blog.spyboy.uk
-NEXT_PUBLIC_ADMIN_URL=https://admin.spyboy.uk
+# Vercel Preview environment
+NEXT_DEV_MODE=preview
+
+# Vercel Production environment
+NEXT_DEV_MODE=production
 ```
+
+Development serves the three sites at `localhost:3000`, `blog.localhost:3000`, and
+`admin.localhost:3000`. Production uses `spyboy.uk`, `blog.spyboy.uk`, and
+`admin.spyboy.uk`. A Vercel preview has one generated hostname, so preview mode serves the portfolio
+at `/`, the blog at `/blog`, and the admin CMS at `/admin` on that deployment. Vercel's stable
+`VERCEL_BRANCH_URL` is preferred, with `VERCEL_URL` as the fallback; neither should be copied into
+source control.
 
 The GitHub OAuth client secret belongs only in the Supabase dashboard, not in this Next.js project.
 `ADMIN_EMAIL` is intentionally server-only and must never use the `NEXT_PUBLIC_` prefix.
@@ -139,6 +146,7 @@ There are two different callback URLs and they must not be mixed up:
 
    ```text
    http://admin.localhost:3000/auth/callback
+   https://*-spyboys-projects.vercel.app/**
    https://admin.spyboy.uk/auth/callback
    ```
 

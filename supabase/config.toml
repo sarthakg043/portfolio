@@ -162,6 +162,7 @@ site_url = "http://admin.localhost:3000"
 # A list of *exact* URLs that auth providers are permitted to redirect to post authentication.
 additional_redirect_urls = [
   "http://admin.localhost:3000/auth/callback",
+  "https://*-spyboys-projects.vercel.app/**",
   "https://admin.spyboy.uk/auth/callback",
 ]
 # How long tokens are valid for, in seconds. Defaults to 3600 (1 hour), maximum 604,800 (1 week).

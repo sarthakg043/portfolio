@@ -8,21 +8,21 @@ import { ScrollProgress } from "./scroll-progress";
 import { MagneticButton } from "@/components/effects/magnetic-button";
 import { Mail, Download, Menu, X } from "lucide-react";
 import { GithubIcon, LinkedinIcon, XTwitterIcon } from "@/components/icons/brands";
-import config from "@/data/portfolio-config.json";
-
-const socialLinks = [
-  { icon: GithubIcon, href: config.socials.github, label: "GitHub" },
-  { icon: LinkedinIcon, href: config.socials.linkedin, label: "LinkedIn" },
-  { icon: XTwitterIcon, href: config.socials.twitter, label: "Twitter" },
-  { icon: Mail, href: `mailto:${config.personal.email}`, label: "Email" },
-];
+import { usePortfolioContent } from "@/components/providers/portfolio-content-provider";
 
 export function Navbar() {
   const { domain } = useDomain();
+  const config = usePortfolioContent();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const resumeMap = config.personal.resumeMap as Record<string, string>;
   const resumeHref = domain ? resumeMap[domain] ?? config.personal.resumePdf : config.personal.resumePdf;
+  const socialLinks = [
+    { icon: GithubIcon, href: config.socials.github, label: "GitHub" },
+    { icon: LinkedinIcon, href: config.socials.linkedin, label: "LinkedIn" },
+    { icon: XTwitterIcon, href: config.socials.twitter, label: "Twitter" },
+    { icon: Mail, href: `mailto:${config.personal.email}`, label: "Email" },
+  ];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);

@@ -2,6 +2,8 @@ import Link from "next/link";
 import { ArrowRight, Search, X } from "lucide-react";
 import { ArticleCard } from "@/components/blog/article-card";
 import { listPublishedArticles, listPublishedTags } from "@/lib/blog/queries";
+import { getBlogPath } from "@/lib/blog/url";
+import { getPortfolioBaseUrl } from "@/lib/site-host";
 
 type BlogSearchParams = {
   q?: string | string[];
@@ -61,7 +63,7 @@ export default async function BlogHomePage({
 
       <section className="border-y border-neutral-200 bg-neutral-50/80 dark:border-neutral-800 dark:bg-neutral-900/35">
         <div className="mx-auto max-w-6xl px-5 py-7 sm:px-8">
-          <form action="/" className="flex flex-col gap-3 sm:flex-row" role="search">
+          <form action={getBlogPath()} className="flex flex-col gap-3 sm:flex-row" role="search">
             <label className="relative flex-1">
               <span className="sr-only">Search articles</span>
               <Search className="absolute left-4 top-1/2 size-4 -translate-y-1/2 text-neutral-400" />
@@ -81,7 +83,7 @@ export default async function BlogHomePage({
 
           {tags.length ? (
             <nav className="mt-5 flex flex-wrap gap-2" aria-label="Article topics">
-              <Link href={search ? `/?q=${encodeURIComponent(search)}` : "/"} className={`blog-filter-pill ${!tag ? "blog-filter-pill-active" : ""}`}>
+              <Link href={getBlogPath(search ? `/?q=${encodeURIComponent(search)}` : "/")} className={`blog-filter-pill ${!tag ? "blog-filter-pill-active" : ""}`}>
                 All
               </Link>
               {tags.map((item) => {
@@ -89,13 +91,13 @@ export default async function BlogHomePage({
                 if (search) href.set("q", search);
                 href.set("tag", item.slug);
                 return (
-                  <Link key={item.id} href={`/?${href}`} className={`blog-filter-pill ${tag === item.slug ? "blog-filter-pill-active" : ""}`}>
+                  <Link key={item.id} href={getBlogPath(`/?${href}`)} className={`blog-filter-pill ${tag === item.slug ? "blog-filter-pill-active" : ""}`}>
                     {item.name} <span>{item.articleCount}</span>
                   </Link>
                 );
               })}
               {(search || tag) ? (
-                <Link href="/" className="blog-filter-pill ml-auto">
+                <Link href={getBlogPath()} className="blog-filter-pill ml-auto">
                   <X className="size-3.5" /> Clear
                 </Link>
               ) : null}
@@ -144,11 +146,11 @@ export default async function BlogHomePage({
                 : "Published articles will appear here automatically from the private author dashboard."}
             </p>
             {filtered ? (
-              <Link href="/" className="mt-7 inline-flex items-center gap-2 text-sm font-semibold hover:underline">
+              <Link href={getBlogPath()} className="mt-7 inline-flex items-center gap-2 text-sm font-semibold hover:underline">
                 View all stories <ArrowRight className="size-4" />
               </Link>
             ) : (
-              <a href={process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"} className="mt-7 inline-flex items-center gap-2 text-sm font-semibold hover:underline">
+              <a href={getPortfolioBaseUrl()} className="mt-7 inline-flex items-center gap-2 text-sm font-semibold hover:underline">
                 Explore the portfolio <ArrowRight className="size-4" />
               </a>
             )}
@@ -157,7 +159,7 @@ export default async function BlogHomePage({
 
         {nextCursor ? (
           <div className="mt-14 flex justify-center">
-            <Link href={`/?${nextParams}`} className="inline-flex h-11 items-center rounded-full border border-neutral-300 px-6 text-sm font-semibold hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-900">
+            <Link href={getBlogPath(`/?${nextParams}`)} className="inline-flex h-11 items-center rounded-full border border-neutral-300 px-6 text-sm font-semibold hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-900">
               More stories <ArrowRight className="ml-2 size-4" />
             </Link>
           </div>

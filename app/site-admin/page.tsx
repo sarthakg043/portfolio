@@ -2,6 +2,7 @@ import Link from "next/link";
 import { FileText, FolderOpen, Settings2 } from "lucide-react";
 import { AdminShell } from "@/components/admin/admin-shell";
 import { requireAdmin } from "@/lib/auth";
+import { getAdminPath } from "@/lib/site-host";
 
 export const dynamic = "force-dynamic";
 
@@ -47,7 +48,7 @@ export default async function AdminDashboardPage() {
           {cards.map(({ title, description, href, icon: Icon }) => (
             <Link
               key={title}
-              href={href}
+              href={getAdminPath(href)}
               className="group rounded-3xl border border-neutral-200 bg-white p-6 transition hover:-translate-y-0.5 hover:border-neutral-400 hover:shadow-sm dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-neutral-600"
             >
               <span className="inline-flex size-10 items-center justify-center rounded-2xl bg-neutral-100 dark:bg-neutral-800">

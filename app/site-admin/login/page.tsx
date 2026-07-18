@@ -4,6 +4,7 @@ import { GitHubLoginButton } from "@/components/admin/github-login-button";
 import { ThemeToggle } from "@/components/blog/theme-toggle";
 import { hasAdminEmailConfig } from "@/lib/admin-config";
 import { getAdminUser } from "@/lib/auth";
+import { getAdminPath, getAdminUrl } from "@/lib/site-host";
 import { hasSupabaseConfig } from "@/lib/supabase/config";
 
 const ERROR_MESSAGES: Record<string, string> = {
@@ -19,7 +20,7 @@ export default async function LoginPage({
 }: {
   searchParams: Promise<{ error?: string }>;
 }) {
-  if (await getAdminUser()) redirect("/");
+  if (await getAdminUser()) redirect(getAdminPath());
 
   const configured = hasSupabaseConfig() && hasAdminEmailConfig();
   const { error } = await searchParams;
@@ -58,7 +59,10 @@ export default async function LoginPage({
           ) : null}
 
           <div className="mt-7">
-            <GitHubLoginButton configured={configured} />
+            <GitHubLoginButton
+              configured={configured}
+              callbackUrl={getAdminUrl("/auth/callback")}
+            />
           </div>
           <p className="mt-5 text-xs leading-5 text-neutral-500">
             Authentication is provided by Supabase using GitHub OAuth. No

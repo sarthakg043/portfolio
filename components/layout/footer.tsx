@@ -1,12 +1,13 @@
 "use client";
 
 import { useDomain } from "@/components/providers/domain-provider";
-import config from "@/data/portfolio-config.json";
+import { usePortfolioContent } from "@/components/providers/portfolio-content-provider";
 import { Mail, Heart } from "lucide-react";
 import { GithubIcon, LinkedinIcon, XTwitterIcon } from "@/components/icons/brands";
 
 export function Footer() {
   const { domain } = useDomain();
+  const config = usePortfolioContent();
 
   return (
     <footer className="relative border-t-2 py-12 px-4 md:px-8" style={{ borderColor: "var(--border)" }}>

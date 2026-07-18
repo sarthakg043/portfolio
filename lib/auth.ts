@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
 import { hasAdminEmailConfig, isAdminEmail } from "@/lib/admin-config";
 import { hasSupabaseConfig } from "@/lib/supabase/config";
+import { getAdminPath } from "@/lib/site-host";
 import { createClient } from "@/lib/supabase/server";
 
 export const getAdminUser = cache(async (): Promise<User | null> => {
@@ -25,6 +26,6 @@ export const getAdminUser = cache(async (): Promise<User | null> => {
 
 export async function requireAdmin(): Promise<User> {
   const user = await getAdminUser();
-  if (!user) redirect("/login");
+  if (!user) redirect(getAdminPath("/login"));
   return user;
 }

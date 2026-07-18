@@ -6,13 +6,13 @@ import { ArrowUpRight, Calendar } from "lucide-react";
 import { motion } from "motion/react";
 import type { BlogArticleCard } from "@/lib/blog/types";
 
-export function Blog({ articles }: { articles: BlogArticleCard[] }) {
+export function Blog({ articles, blogBaseUrl }: { articles: BlogArticleCard[]; blogBaseUrl: string }) {
   const { domain } = useDomain();
   if (!domain) return null;
 
   if (articles.length === 0) return null;
 
-  const blogBaseUrl = process.env.NEXT_PUBLIC_BLOG_URL ?? "http://blog.localhost:3000";
+  const normalizedBlogBaseUrl = blogBaseUrl.replace(/\/$/, "");
 
   return (
     <section id="blog" className="py-24 md:py-32 px-4 md:px-8">
@@ -30,7 +30,7 @@ export function Blog({ articles }: { articles: BlogArticleCard[] }) {
           {articles.map((post) => (
             <StaggerItem key={post.id}>
               <motion.a
-                href={new URL(`/${post.slug}`, blogBaseUrl).toString()}
+                href={post.externalUrl ?? `${normalizedBlogBaseUrl}/${encodeURIComponent(post.slug)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block comic-card p-6 group relative overflow-hidden h-[360px] flex flex-col"

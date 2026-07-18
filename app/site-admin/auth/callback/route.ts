@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { isAdminEmail } from "@/lib/admin-config";
-import { getAdminBaseUrl } from "@/lib/site-host";
+import { getAdminUrl } from "@/lib/site-host";
 import { createClient } from "@/lib/supabase/server";
 
 function safeNextPath(value: string | null): string {
@@ -10,19 +10,18 @@ function safeNextPath(value: string | null): string {
 
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
-  const adminBaseUrl = getAdminBaseUrl();
   const code = requestUrl.searchParams.get("code");
   const next = safeNextPath(requestUrl.searchParams.get("next"));
 
   if (!code) {
-    return NextResponse.redirect(new URL("/login?error=oauth", adminBaseUrl));
+    return NextResponse.redirect(getAdminUrl("/login?error=oauth"));
   }
 
   const supabase = await createClient();
   const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
 
   if (exchangeError) {
-    return NextResponse.redirect(new URL("/login?error=oauth", adminBaseUrl));
+    return NextResponse.redirect(getAdminUrl("/login?error=oauth"));
   }
 
   const {
@@ -32,10 +31,8 @@ export async function GET(request: Request) {
 
   if (userError || !user || !isAdminEmail(user.email)) {
     await supabase.auth.signOut({ scope: "global" });
-    return NextResponse.redirect(
-      new URL("/login?error=unauthorized", adminBaseUrl)
-    );
+    return NextResponse.redirect(getAdminUrl("/login?error=unauthorized"));
   }
 
-  return NextResponse.redirect(new URL(next, adminBaseUrl));
+  return NextResponse.redirect(getAdminUrl(next));
 }

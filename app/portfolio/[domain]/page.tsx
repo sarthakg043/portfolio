@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
 import { fetchGitHubUser, fetchGitHubRepos, fetchReposByNames } from "@/lib/github";
 import { getLatestPublishedArticles } from "@/lib/blog/queries";
-import config from "@/data/portfolio-config.json";
+import { getBlogBaseUrl } from "@/lib/blog/url";
+import { getPortfolioContent } from "@/lib/portfolio/queries";
 import { PortfolioClient } from "../portfolio-client";
 
 const VALID_DOMAINS = ["frontend", "java", "cyber"] as const;
@@ -27,13 +28,14 @@ export default async function PortfolioPage({
   let allRepos: Awaited<ReturnType<typeof fetchGitHubRepos>> = [];
   let configRepos: Awaited<ReturnType<typeof fetchReposByNames>> = [];
   let latestArticles: Awaited<ReturnType<typeof getLatestPublishedArticles>> = [];
+  const content = await getPortfolioContent();
 
   try {
     [user, allRepos, configRepos] = await Promise.all([
-      fetchGitHubUser(),
-      fetchGitHubRepos(),
+      fetchGitHubUser(content.github.username),
+      fetchGitHubRepos(content.github.username),
       fetchReposByNames(
-        config.repos.map((r) => ({ name: r.name, owner: r.owner }))
+        content.repos.map((repository) => ({ name: repository.name, owner: repository.owner }))
       ),
     ]);
   } catch (e) {
@@ -52,6 +54,8 @@ export default async function PortfolioPage({
       allRepos={allRepos}
       configRepos={configRepos}
       latestArticles={latestArticles}
+      blogBaseUrl={getBlogBaseUrl()}
+      content={content}
       urlDomain={domain as (typeof VALID_DOMAINS)[number]}
     />
   );

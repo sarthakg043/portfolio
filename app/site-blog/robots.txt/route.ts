@@ -1,7 +1,7 @@
-import { getBlogBaseUrl } from "@/lib/blog/url";
+import { getBlogUrl } from "@/lib/blog/url";
 
 export function GET() {
-  const sitemap = new URL("/sitemap.xml", getBlogBaseUrl()).toString();
+  const sitemap = getBlogUrl("/sitemap.xml");
   const body = `User-agent: *\nAllow: /\nSitemap: ${sitemap}\n`;
 
   return new Response(body, {
@@ -11,4 +11,3 @@ export function GET() {
     },
   });
 }
-

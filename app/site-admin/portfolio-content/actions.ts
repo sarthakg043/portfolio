@@ -19,7 +19,7 @@ function list(value: FormDataEntryValue | null): string[] {
 
 function refreshPortfolio() {
   revalidatePath("/site-admin/portfolio-content");
-  revalidatePath("/portfolio/[domain]", "page");
+  revalidatePath("/portfolio", "layout");
 }
 
 export async function savePortfolioProfileAction(formData: FormData) {
@@ -117,4 +117,3 @@ export async function deletePortfolioItemAction(formData: FormData) {
   if (error) throw new Error(error.message);
   refreshPortfolio();
 }
-

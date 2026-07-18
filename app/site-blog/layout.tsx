@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { BlogHeader } from "@/components/blog/blog-header";
-import { getBlogBaseUrl } from "@/lib/blog/url";
+import { getBlogBaseUrl, getBlogPath } from "@/lib/blog/url";
+import { getPortfolioBaseUrl } from "@/lib/site-host";
 
 export const metadata: Metadata = {
   metadataBase: new URL(getBlogBaseUrl()),
@@ -10,14 +11,14 @@ export const metadata: Metadata = {
   },
   description:
     "Notes on frontend engineering, backend systems, cybersecurity, and building practical software.",
-  alternates: { canonical: "/" },
+  alternates: { canonical: getBlogBaseUrl() },
   openGraph: {
     type: "website",
     siteName: "Sarthak Gupta — Blog",
     title: "Sarthak Gupta — Blog",
     description:
       "Notes on frontend engineering, backend systems, cybersecurity, and building practical software.",
-    url: "/",
+    url: getBlogBaseUrl(),
   },
   twitter: { card: "summary_large_image" },
 };
@@ -33,8 +34,8 @@ export default function BlogLayout({
         <div className="mx-auto flex max-w-6xl flex-col gap-3 px-5 py-10 text-sm text-neutral-500 sm:flex-row sm:items-center sm:justify-between sm:px-8 dark:text-neutral-400">
           <p>© {new Date().getFullYear()} Sarthak Gupta. Written with care.</p>
           <div className="flex gap-4">
-            <a href="/rss.xml" className="hover:text-neutral-950 dark:hover:text-white">RSS</a>
-            <a href={process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"} className="hover:text-neutral-950 dark:hover:text-white">Portfolio</a>
+            <a href={getBlogPath("/rss.xml")} className="hover:text-neutral-950 dark:hover:text-white">RSS</a>
+            <a href={getPortfolioBaseUrl()} className="hover:text-neutral-950 dark:hover:text-white">Portfolio</a>
           </div>
         </div>
       </footer>

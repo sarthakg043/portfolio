@@ -3,9 +3,14 @@
 import { useState } from "react";
 import { GithubIcon } from "@/components/icons/brands";
 import { createClient } from "@/lib/supabase/client";
-import { getAdminBaseUrl } from "@/lib/site-host";
 
-export function GitHubLoginButton({ configured }: { configured: boolean }) {
+export function GitHubLoginButton({
+  configured,
+  callbackUrl,
+}: {
+  configured: boolean;
+  callbackUrl: string;
+}) {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -20,7 +25,7 @@ export function GitHubLoginButton({ configured }: { configured: boolean }) {
       const { error: signInError } = await supabase.auth.signInWithOAuth({
         provider: "github",
         options: {
-          redirectTo: getAdminBaseUrl() + "/auth/callback",
+          redirectTo: callbackUrl,
           scopes: "read:user user:email",
         },
       });

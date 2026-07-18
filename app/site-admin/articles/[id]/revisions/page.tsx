@@ -7,6 +7,7 @@ import { restoreArticleRevisionAction } from "@/app/site-admin/articles/actions"
 import { getAdminArticle, listArticleRevisions } from "@/lib/admin/articles";
 import { requireAdmin } from "@/lib/auth";
 import { formatArticleDate } from "@/lib/blog/format";
+import { getAdminPath } from "@/lib/site-host";
 
 export const dynamic = "force-dynamic";
 
@@ -20,7 +21,7 @@ export default async function RevisionsPage({ params }: { params: Promise<{ id: 
   return (
     <AdminShell email={user.email ?? "Administrator"}>
       <main className="mx-auto max-w-4xl px-5 py-10 sm:px-8">
-        <Link href={`/articles/${article.id}`} className="inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-neutral-950 dark:hover:text-white"><ArrowLeft className="size-4" /> Back to editor</Link>
+        <Link href={getAdminPath(`/articles/${article.id}`)} className="inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-neutral-950 dark:hover:text-white"><ArrowLeft className="size-4" /> Back to editor</Link>
         <p className="admin-eyebrow mt-10">Recovery</p><h1 className="mt-2 text-4xl font-semibold tracking-tight">Revision history</h1><p className="mt-2 text-neutral-600 dark:text-neutral-400">{article.title}</p>
         <div className="mt-8 overflow-hidden rounded-3xl border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900">
           {revisions.length ? revisions.map((revision) => (
@@ -34,4 +35,3 @@ export default async function RevisionsPage({ params }: { params: Promise<{ id: 
     </AdminShell>
   );
 }
-

@@ -10,6 +10,8 @@ import { Star, GitFork, Users, BookOpen } from "lucide-react";
 interface GitHubStatsProps {
   user: GitHubUser | null;
   repos: GitHubRepo[];
+  showContributions: boolean;
+  showLanguages: boolean;
 }
 
 function StatCard({
@@ -105,7 +107,7 @@ function LanguageBar({ repos }: { repos: GitHubRepo[] }) {
   );
 }
 
-export function GitHubStats({ user, repos }: GitHubStatsProps) {
+export function GitHubStats({ user, repos, showContributions, showLanguages }: GitHubStatsProps) {
   const { domain } = useDomain();
   if (!domain || !user) return null;
 
@@ -131,10 +133,10 @@ export function GitHubStats({ user, repos }: GitHubStatsProps) {
           <StatCard icon={<Users size={22} />} label="Followers" value={user.followers} delay={0.3} accent />
         </div>
 
-        <LanguageBar repos={repos} />
+        {showLanguages ? <LanguageBar repos={repos} /> : null}
 
         {/* GitHub contribution graph */}
-        <ScrollReveal delay={0.4}>
+        {showContributions ? <ScrollReveal delay={0.4}>
           <div className="mt-8 comic-card p-4 overflow-hidden">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -144,7 +146,7 @@ export function GitHubStats({ user, repos }: GitHubStatsProps) {
               loading="lazy"
             />
           </div>
-        </ScrollReveal>
+        </ScrollReveal> : null}
       </div>
     </section>
   );

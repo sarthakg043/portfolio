@@ -2,15 +2,17 @@
 
 import { useDomain } from "@/components/providers/domain-provider";
 import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/effects/scroll-reveal";
-import config from "@/data/portfolio-config.json";
+import { usePortfolioContent } from "@/components/providers/portfolio-content-provider";
 import { Award, ArrowUpRight } from "lucide-react";
 import { motion } from "motion/react";
 
 export function Certifications() {
   const { domain } = useDomain();
+  const config = usePortfolioContent();
   if (!domain) return null;
 
-  if (config.certifications.length === 0) return null;
+  const certifications = config.certifications.filter((certification) => certification.domain.includes(domain));
+  if (certifications.length === 0) return null;
 
   return (
     <section id="certifications" className="py-24 md:py-32 px-4 md:px-8">
@@ -22,10 +24,10 @@ export function Certifications() {
         </ScrollReveal>
 
         <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {config.certifications.map((cert, i) => (
-            <StaggerItem key={i}>
+          {certifications.map((cert, i) => (
+            <StaggerItem key={cert.id}>
               <motion.a
-                href={cert.url}
+                href={cert.url ?? undefined}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block comic-card p-6 group relative overflow-hidden"

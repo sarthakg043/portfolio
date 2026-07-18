@@ -8,7 +8,8 @@ import { ShareActions } from "@/components/blog/share-actions";
 import { formatArticleDate, formatBytes } from "@/lib/blog/format";
 import { getPublishedArticle, getRelatedArticles } from "@/lib/blog/queries";
 import { renderTiptapDocument } from "@/lib/blog/tiptap-renderer";
-import { getBlogArticleUrl } from "@/lib/blog/url";
+import { getBlogArticleUrl, getBlogPath } from "@/lib/blog/url";
+import { getPortfolioBaseUrl } from "@/lib/site-host";
 
 type ArticlePageProps = { params: Promise<{ slug: string }> };
 
@@ -57,7 +58,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     datePublished: article.publishedAt,
     dateModified: article.updatedAt,
     mainEntityOfPage: articleUrl,
-    author: { "@type": "Person", name: "Sarthak Gupta", url: process.env.NEXT_PUBLIC_SITE_URL },
+    author: { "@type": "Person", name: "Sarthak Gupta", url: getPortfolioBaseUrl() },
     image: article.cover?.publicUrl,
     keywords: article.tags.map((tag) => tag.name).join(", "),
   };
@@ -69,12 +70,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
       <article>
         <header className="mx-auto max-w-4xl px-5 pb-10 pt-12 text-center sm:px-8 sm:pb-14 sm:pt-20">
-          <Link href="/" className="inline-flex items-center gap-2 text-sm font-medium text-neutral-500 hover:text-neutral-950 dark:text-neutral-400 dark:hover:text-white">
+          <Link href={getBlogPath()} className="inline-flex items-center gap-2 text-sm font-medium text-neutral-500 hover:text-neutral-950 dark:text-neutral-400 dark:hover:text-white">
             <ArrowLeft className="size-4" /> All stories
           </Link>
           <div className="mt-8 flex flex-wrap justify-center gap-2">
             {article.tags.map((tag) => (
-              <Link key={tag.id} href={`/?tag=${encodeURIComponent(tag.slug)}`} className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">
+              <Link key={tag.id} href={getBlogPath(`/?tag=${encodeURIComponent(tag.slug)}`)} className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">
                 {tag.name}
               </Link>
             ))}
@@ -158,4 +159,3 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     </main>
   );
 }
-

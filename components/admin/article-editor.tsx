@@ -56,7 +56,15 @@ function ToolbarButton({ active, label, onClick, children }: { active?: boolean;
   );
 }
 
-export function ArticleEditor({ article, assets }: { article: AdminArticle | null; assets: EditorAsset[] }) {
+export function ArticleEditor({
+  article,
+  assets,
+  adminPathPrefix,
+}: {
+  article: AdminArticle | null;
+  assets: EditorAsset[];
+  adminPathPrefix: string;
+}) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [message, setMessage] = useState<string | null>(null);
@@ -144,7 +152,7 @@ export function ArticleEditor({ article, assets }: { article: AdminArticle | nul
 
       lastSavedSignature.current = autosaveSignature;
       setMessage(intent === "publish" ? "Published." : "Draft saved.");
-      if (!article) router.replace(`/articles/${result.id}`);
+      if (!article) router.replace(`${adminPathPrefix}/articles/${result.id}`);
       router.refresh();
     });
   }

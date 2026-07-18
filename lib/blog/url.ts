@@ -1,8 +1,17 @@
+import { getSitePath, getSiteUrl } from "@/lib/site-host";
+
 export function getBlogBaseUrl(): string {
-  return process.env.NEXT_PUBLIC_BLOG_URL ?? "http://blog.localhost:3000";
+  return getSiteUrl("blog");
+}
+
+export function getBlogPath(path = "/"): string {
+  return getSitePath("blog", path);
+}
+
+export function getBlogUrl(path = "/"): string {
+  return getSiteUrl("blog", path);
 }
 
 export function getBlogArticleUrl(slug: string): string {
-  return new URL(`/${encodeURIComponent(slug)}`, getBlogBaseUrl()).toString();
+  return getBlogUrl(`/${encodeURIComponent(slug)}`);
 }
-

@@ -1,13 +1,14 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { getSiteKind } from "@/lib/site-host";
+import { getSiteKind, getSitePathPrefix } from "@/lib/site-host";
 import { hasSupabaseConfig, getSupabaseConfig } from "@/lib/supabase/config";
 
 const INTERNAL_PREFIXES = ["/site-blog", "/site-admin"];
 
 function rewriteForSite(request: NextRequest) {
   const site = getSiteKind(
-    request.headers.get("x-forwarded-host") ?? request.headers.get("host")
+    request.headers.get("x-forwarded-host") ?? request.headers.get("host"),
+    request.nextUrl.pathname
   );
 
   if (
@@ -23,7 +24,11 @@ function rewriteForSite(request: NextRequest) {
 
   const url = request.nextUrl.clone();
   const prefix = site === "blog" ? "/site-blog" : "/site-admin";
-  url.pathname = `${prefix}${url.pathname === "/" ? "" : url.pathname}`;
+  const publicPrefix = getSitePathPrefix(site);
+  const publicPath = publicPrefix
+    ? url.pathname.slice(publicPrefix.length) || "/"
+    : url.pathname;
+  url.pathname = `${prefix}${publicPath === "/" ? "" : publicPath}`;
 
   return { site, response: NextResponse.rewrite(url) };
 }

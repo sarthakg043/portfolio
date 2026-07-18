@@ -5,6 +5,7 @@ import { articleLifecycleAction } from "@/app/site-admin/articles/actions";
 import { listAdminArticles } from "@/lib/admin/articles";
 import { requireAdmin } from "@/lib/auth";
 import { formatArticleDate } from "@/lib/blog/format";
+import { getAdminPath } from "@/lib/site-host";
 
 const filters = ["all", "draft", "published", "archived", "trash"] as const;
 
@@ -27,12 +28,12 @@ export default async function ArticlesPage({ searchParams }: { searchParams: Pro
       <main className="mx-auto max-w-7xl px-5 py-10 sm:px-8">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div><p className="admin-eyebrow">Editorial workspace</p><h1 className="mt-2 text-4xl font-semibold tracking-tight">Articles</h1><p className="mt-2 text-neutral-600 dark:text-neutral-400">Draft, publish, archive, restore, and revise every story.</p></div>
-          <Link href="/articles/new" className="admin-primary-button w-fit"><FilePlus2 className="size-4" /> New story</Link>
+          <Link href={getAdminPath("/articles/new")} className="admin-primary-button w-fit"><FilePlus2 className="size-4" /> New story</Link>
         </div>
 
         <nav className="scrollbar-hidden mt-8 flex gap-2 overflow-x-auto" aria-label="Article status filters">
           {filters.map((filter) => (
-            <Link key={filter} href={filter === "all" ? "/articles" : `/articles?status=${filter}`} className={`blog-filter-pill capitalize ${active === filter ? "blog-filter-pill-active" : ""}`}>
+            <Link key={filter} href={getAdminPath(filter === "all" ? "/articles" : `/articles?status=${filter}`)} className={`blog-filter-pill capitalize ${active === filter ? "blog-filter-pill-active" : ""}`}>
               {filter}
             </Link>
           ))}
@@ -47,7 +48,7 @@ export default async function ArticlesPage({ searchParams }: { searchParams: Pro
                 <p className="mt-1 text-sm text-neutral-500">Updated {formatArticleDate(article.updated_at)} · {article.reading_time_minutes} min</p>
               </div>
               <div className="flex flex-wrap items-center gap-2">
-                {!article.deleted_at ? <Link href={`/articles/${article.id}`} className="admin-secondary-button"><Edit3 className="size-4" /> Edit</Link> : null}
+                {!article.deleted_at ? <Link href={getAdminPath(`/articles/${article.id}`)} className="admin-secondary-button"><Edit3 className="size-4" /> Edit</Link> : null}
                 <form action={articleLifecycleAction}><input type="hidden" name="id" value={article.id} /><button name="intent" value="duplicate" className="admin-icon-button" title="Duplicate"><Copy className="size-4" /></button></form>
                 {article.deleted_at ? (
                   <><form action={articleLifecycleAction}><input type="hidden" name="id" value={article.id} /><button name="intent" value="restore" className="admin-icon-button" title="Restore"><RotateCcw className="size-4" /></button></form><form action={articleLifecycleAction}><input type="hidden" name="id" value={article.id} /><button name="intent" value="delete" className="admin-icon-button text-red-600" title="Delete permanently"><Trash2 className="size-4" /></button></form></>
@@ -56,10 +57,9 @@ export default async function ArticlesPage({ searchParams }: { searchParams: Pro
                 )}
               </div>
             </article>
-          )) : <div className="px-6 py-16 text-center"><p className="font-serif text-2xl">No {active === "all" ? "articles" : active + " articles"} yet.</p><Link href="/articles/new" className="mt-4 inline-flex text-sm font-semibold text-emerald-700 hover:underline dark:text-emerald-400">Write the first story</Link></div>}
+          )) : <div className="px-6 py-16 text-center"><p className="font-serif text-2xl">No {active === "all" ? "articles" : active + " articles"} yet.</p><Link href={getAdminPath("/articles/new")} className="mt-4 inline-flex text-sm font-semibold text-emerald-700 hover:underline dark:text-emerald-400">Write the first story</Link></div>}
         </div>
       </main>
     </AdminShell>
   );
 }
-
