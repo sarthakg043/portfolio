@@ -110,6 +110,7 @@ export async function saveArticleAction(input: ArticleEditorInput): Promise<Arti
       articleId = data.id;
     }
 
+    if (!articleId) throw new Error("Article ID was not returned after saving.");
     await syncTags(articleId, parsed.tags, user.id);
     const { error: revisionError } = await supabase.from("article_revisions").insert({
       article_id: articleId,
@@ -142,10 +143,28 @@ export async function articleLifecycleAction(formData: FormData) {
 
   if (parsed.intent === "duplicate") {
     const suffix = crypto.randomUUID().slice(0, 8);
-    const { id: _id, created_at: _createdAt, updated_at: _updatedAt, search_vector: _searchVector, ...copy } = article;
     const { data: duplicate, error } = await supabase
       .from("articles")
-      .insert({ ...copy, author_id: user.id, title: `${article.title} (copy)`, slug: `${article.slug}-copy-${suffix}`, status: "draft", published_at: null, scheduled_at: null, deleted_at: null, featured: false })
+      .insert({
+        author_id: user.id,
+        title: `${article.title} (copy)`,
+        slug: `${article.slug}-copy-${suffix}`,
+        subtitle: article.subtitle,
+        excerpt: article.excerpt,
+        content: article.content,
+        content_text: article.content_text,
+        cover_asset_id: article.cover_asset_id,
+        status: "draft",
+        featured: false,
+        seo_title: article.seo_title,
+        seo_description: article.seo_description,
+        canonical_url: null,
+        external_url: article.external_url,
+        reading_time_minutes: article.reading_time_minutes,
+        published_at: null,
+        scheduled_at: null,
+        deleted_at: null,
+      })
       .select("id")
       .single();
     if (error) throw new Error(error.message);
