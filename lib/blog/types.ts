@@ -39,6 +39,7 @@ export type BlogArticle = {
   content: TiptapNode;
   contentText: string;
   featured: boolean;
+  isEdited: boolean;
   seoTitle: string | null;
   seoDescription: string | null;
   canonicalUrl: string | null;

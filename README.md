@@ -70,6 +70,8 @@ Status: implementation complete; authenticated local CRUD and hosted Storage ver
 - Slug, excerpt, cover, tags, SEO, revision history, and recovery.
 - Media library with upload progress, alt text, usage checks, and safe deletion.
 - Portfolio forms for profile, social links, domain copy, skills, experience, projects, certifications, LinkedIn, GitHub, and ordering.
+- Admin loading skeletons and recoverable error/404 screens; inline pending, success, and validation feedback on every CMS form.
+- Accessible confirmations for delete, trash, publish/unpublish, and revision restore; editor link/image dialogs; duplicate-submit protection and recoverable upload failures.
 
 ## Phase 5 — Portfolio migration
 

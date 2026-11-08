@@ -1,3 +1,4 @@
+import { AdminActionForm } from "@/components/admin/action-form";
 import { Trash2 } from "lucide-react";
 import { AdminShell } from "@/components/admin/admin-shell";
 import {
@@ -45,12 +46,12 @@ function Collection({ title, kind, rows, assets }: { title: string; kind: ItemKi
           return (
             <details key={id || `new-${kind}`} className="rounded-2xl border border-neutral-200 p-4 dark:border-neutral-700" open={!row}>
               <summary className="cursor-pointer font-semibold">{row ? text(row, "name") || text(row, "label") || text(row, "title") || `Edit ${kind}` : `Add ${kind}`}</summary>
-              <form action={savePortfolioItemAction} className="mt-5 grid gap-4">
+              <AdminActionForm action={savePortfolioItemAction} className="mt-5 grid gap-4">
                 <input type="hidden" name="kind" value={kind} /><input type="hidden" name="id" value={id} />
                 <ItemFields kind={kind} row={row} assets={assets} />
                 <button className="admin-primary-button w-fit" type="submit">{row ? "Save changes" : `Add ${kind}`}</button>
-              </form>
-              {row ? <form action={deletePortfolioItemAction} className="mt-3"><input type="hidden" name="kind" value={kind} /><input type="hidden" name="id" value={id} /><button className="inline-flex items-center gap-2 text-xs font-semibold text-red-600"><Trash2 className="size-3.5" /> Delete</button></form> : null}
+              </AdminActionForm>
+              {row ? <AdminActionForm action={deletePortfolioItemAction} successMessage="Item deleted." confirmation={{ title: "Delete this item?", description: "This portfolio entry will be permanently removed. This cannot be undone.", label: "Delete item" }} className="mt-3"><input type="hidden" name="kind" value={kind} /><input type="hidden" name="id" value={id} /><button className="inline-flex items-center gap-2 text-xs font-semibold text-red-600"><Trash2 className="size-3.5" /> Delete</button></AdminActionForm> : null}
             </details>
           );
         })}
@@ -71,14 +72,14 @@ export default async function PortfolioContentPage() {
 
         <section className="admin-panel">
           <div><p className="admin-eyebrow">Identity</p><h2 className="mt-1 text-2xl font-semibold">Profile</h2></div>
-          <form action={savePortfolioProfileAction} className="grid gap-4 md:grid-cols-2">
+          <AdminActionForm action={savePortfolioProfileAction} className="grid gap-4 md:grid-cols-2">
             <label className="admin-field"><span>Name</span><input name="name" defaultValue={text(data.profile, "name")} required /></label><label className="admin-field"><span>Contact email</span><input type="email" name="contactEmail" defaultValue={text(data.profile, "contact_email")} required /></label><label className="admin-field md:col-span-2"><span>Tagline</span><input name="tagline" defaultValue={text(data.profile, "tagline")} required /></label><label className="admin-field"><span>Location</span><input name="location" defaultValue={text(data.profile, "location")} required /></label><label className="admin-field"><span>Avatar</span><AssetSelect name="avatarAssetId" value={text(data.profile, "avatar_asset_id")} assets={data.assets} kinds={["image", "avatar"]} /></label><label className="admin-field"><span>Default resume</span><AssetSelect name="defaultResumeAssetId" value={text(data.profile, "default_resume_asset_id")} assets={data.assets} kinds={["resume", "download"]} /></label><div className="md:col-span-2"><button className="admin-primary-button">Save profile</button></div>
-          </form>
+          </AdminActionForm>
         </section>
 
         <section className="admin-panel">
           <div><p className="admin-eyebrow">Three paths</p><h2 className="mt-1 text-2xl font-semibold">Domain copy and resumes</h2></div>
-          <div className="grid gap-4 lg:grid-cols-3">{domains.map((domain) => <form key={text(domain, "id")} action={savePortfolioDomainAction} className="grid gap-4 rounded-2xl border border-neutral-200 p-4 dark:border-neutral-700"><input type="hidden" name="id" value={text(domain, "id")} /><h3 className="font-semibold capitalize">{text(domain, "id")}</h3><label className="admin-field"><span>Tagline</span><input name="tagline" defaultValue={text(domain, "tagline")} required /></label><label className="admin-field"><span>About</span><textarea name="about" defaultValue={text(domain, "about")} rows={6} required /></label><label className="admin-field"><span>Resume</span><AssetSelect name="resumeAssetId" value={text(domain, "resume_asset_id")} assets={data.assets} kinds={["resume", "download"]} /></label><label className="admin-field"><span>Order</span><input type="number" min="0" name="displayOrder" defaultValue={number(domain, "display_order")} /></label><label className="flex items-center gap-2 text-sm"><input type="checkbox" name="visible" defaultChecked={bool(domain, "visible", true)} /> Visible</label><button className="admin-secondary-button">Save domain</button></form>)}</div>
+          <div className="grid gap-4 lg:grid-cols-3">{domains.map((domain) => <AdminActionForm key={text(domain, "id")} action={savePortfolioDomainAction} className="grid gap-4 rounded-2xl border border-neutral-200 p-4 dark:border-neutral-700"><input type="hidden" name="id" value={text(domain, "id")} /><h3 className="font-semibold capitalize">{text(domain, "id")}</h3><label className="admin-field"><span>Tagline</span><input name="tagline" defaultValue={text(domain, "tagline")} required /></label><label className="admin-field"><span>About</span><textarea name="about" defaultValue={text(domain, "about")} rows={6} required /></label><label className="admin-field"><span>Resume</span><AssetSelect name="resumeAssetId" value={text(domain, "resume_asset_id")} assets={data.assets} kinds={["resume", "download"]} /></label><label className="admin-field"><span>Order</span><input type="number" min="0" name="displayOrder" defaultValue={number(domain, "display_order")} /></label><label className="flex items-center gap-2 text-sm"><input type="checkbox" name="visible" defaultChecked={bool(domain, "visible", true)} /> Visible</label><button className="admin-secondary-button">Save domain</button></AdminActionForm>)}</div>
         </section>
 
         <Collection title="Social links" kind="social" rows={data.socials} assets={data.assets} />
@@ -89,9 +90,9 @@ export default async function PortfolioContentPage() {
 
         <section className="admin-panel">
           <div><p className="admin-eyebrow">Live integrations</p><h2 className="mt-1 text-2xl font-semibold">GitHub and LinkedIn</h2></div>
-          <form action={saveSiteIntegrationsAction} className="grid gap-4 md:grid-cols-2">
+          <AdminActionForm action={saveSiteIntegrationsAction} className="grid gap-4 md:grid-cols-2">
             <label className="admin-field"><span>GitHub username</span><input name="githubUsername" defaultValue={text(data.integrations, "github_username")} required /></label><div className="flex flex-wrap items-center gap-5"><label className="flex items-center gap-2 text-sm"><input type="checkbox" name="showGithubContributions" defaultChecked={bool(data.integrations, "show_github_contributions", true)} /> Contributions</label><label className="flex items-center gap-2 text-sm"><input type="checkbox" name="showGithubLanguages" defaultChecked={bool(data.integrations, "show_github_languages", true)} /> Languages</label></div><label className="admin-field"><span>LinkedIn followers</span><input name="linkedinFollowers" defaultValue={text(data.integrations, "linkedin_followers_label")} /></label><label className="admin-field"><span>LinkedIn connections</span><input name="linkedinConnections" defaultValue={text(data.integrations, "linkedin_connections_label")} /></label><label className="admin-field md:col-span-2"><span>LinkedIn headline</span><input name="linkedinHeadline" defaultValue={text(data.integrations, "linkedin_headline")} /></label><label className="admin-field md:col-span-2"><span>LinkedIn post URLs</span><textarea name="linkedinPosts" defaultValue={csv(data.integrations, "linkedin_post_urls")} rows={4} placeholder="Comma-separated HTTPS embed URLs" /></label><div className="md:col-span-2"><button className="admin-primary-button">Save integrations</button></div>
-          </form>
+          </AdminActionForm>
         </section>
       </main>
     </AdminShell>

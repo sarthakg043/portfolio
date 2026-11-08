@@ -1,3 +1,4 @@
+import { AdminActionForm } from "@/components/admin/action-form";
 import Link from "next/link";
 import { Copy, Edit3, FilePlus2, RotateCcw, Send, Trash2, Undo2 } from "lucide-react";
 import { AdminShell } from "@/components/admin/admin-shell";
@@ -49,11 +50,11 @@ export default async function ArticlesPage({ searchParams }: { searchParams: Pro
               </div>
               <div className="flex flex-wrap items-center gap-2">
                 {!article.deleted_at ? <Link href={getAdminPath(`/articles/${article.id}`)} className="admin-secondary-button"><Edit3 className="size-4" /> Edit</Link> : null}
-                <form action={articleLifecycleAction}><input type="hidden" name="id" value={article.id} /><button name="intent" value="duplicate" className="admin-icon-button" title="Duplicate"><Copy className="size-4" /></button></form>
+                <AdminActionForm action={articleLifecycleAction} successMessage="Article updated."><input type="hidden" name="id" value={article.id} /><button name="intent" value="duplicate" className="admin-icon-button" title="Duplicate"><Copy className="size-4" /></button></AdminActionForm>
                 {article.deleted_at ? (
-                  <><form action={articleLifecycleAction}><input type="hidden" name="id" value={article.id} /><button name="intent" value="restore" className="admin-icon-button" title="Restore"><RotateCcw className="size-4" /></button></form><form action={articleLifecycleAction}><input type="hidden" name="id" value={article.id} /><button name="intent" value="delete" className="admin-icon-button text-red-600" title="Delete permanently"><Trash2 className="size-4" /></button></form></>
+                  <><AdminActionForm action={articleLifecycleAction} successMessage="Article updated."><input type="hidden" name="id" value={article.id} /><button name="intent" value="restore" className="admin-icon-button" title="Restore"><RotateCcw className="size-4" /></button></AdminActionForm><AdminActionForm action={articleLifecycleAction} successMessage="Article updated."><input type="hidden" name="id" value={article.id} /><button name="intent" value="delete" className="admin-icon-button text-red-600" title="Delete permanently"><Trash2 className="size-4" /></button></AdminActionForm></>
                 ) : (
-                  <><form action={articleLifecycleAction}><input type="hidden" name="id" value={article.id} /><button name="intent" value={article.status === "published" ? "unpublish" : "publish"} className="admin-icon-button" title={article.status === "published" ? "Unpublish" : "Publish"}>{article.status === "published" ? <Undo2 className="size-4" /> : <Send className="size-4" />}</button></form><form action={articleLifecycleAction}><input type="hidden" name="id" value={article.id} /><button name="intent" value="trash" className="admin-icon-button text-red-600" title="Move to trash"><Trash2 className="size-4" /></button></form></>
+                  <><AdminActionForm action={articleLifecycleAction} successMessage="Article updated."><input type="hidden" name="id" value={article.id} /><button name="intent" value={article.status === "published" ? "unpublish" : "publish"} className="admin-icon-button" title={article.status === "published" ? "Unpublish" : "Publish"}>{article.status === "published" ? <Undo2 className="size-4" /> : <Send className="size-4" />}</button></AdminActionForm><AdminActionForm action={articleLifecycleAction} successMessage="Article updated."><input type="hidden" name="id" value={article.id} /><button name="intent" value="trash" className="admin-icon-button text-red-600" title="Move to trash"><Trash2 className="size-4" /></button></AdminActionForm></>
                 )}
               </div>
             </article>

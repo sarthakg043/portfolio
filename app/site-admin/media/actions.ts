@@ -1,5 +1,6 @@
 "use server";
 
+import { adminActionError, runAdminAction } from "@/lib/admin/run-action";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/auth";
@@ -48,13 +49,13 @@ export async function registerAssetAction(input: z.input<typeof registerSchema>)
     revalidatePath("/site-admin/media");
     return { ok: true as const, id: data.id };
   } catch (error) {
-    return { ok: false as const, error: error instanceof Error ? error.message : "Unable to register upload" };
+    return { ok: false as const, error: adminActionError(error) };
   }
 }
 
 const updateSchema = z.object({ id: z.uuid(), displayName: z.string().trim().min(1).max(255), altText: z.string().trim().max(500).nullable() });
 
-export async function updateAssetAction(formData: FormData) {
+async function updateAssetActionImpl(formData: FormData) {
   await requireAdmin();
   const parsed = updateSchema.parse({ id: formData.get("id"), displayName: formData.get("displayName"), altText: formData.get("altText") || null });
   const supabase = await createClient();
@@ -63,7 +64,7 @@ export async function updateAssetAction(formData: FormData) {
   revalidatePath("/site-admin/media");
 }
 
-export async function deleteAssetAction(formData: FormData) {
+async function deleteAssetActionImpl(formData: FormData) {
   await requireAdmin();
   const id = z.uuid().parse(formData.get("id"));
   const supabase = await createClient();
@@ -85,5 +86,14 @@ export async function deleteAssetAction(formData: FormData) {
   const { error: metadataError } = await supabase.from("assets").delete().eq("id", id);
   if (metadataError) throw new Error(metadataError.message);
   revalidatePath("/site-admin/media");
+}
+
+
+export async function updateAssetAction(formData: FormData) {
+  return runAdminAction(() => updateAssetActionImpl(formData));
+}
+
+export async function deleteAssetAction(formData: FormData) {
+  return runAdminAction(() => deleteAssetActionImpl(formData));
 }
 

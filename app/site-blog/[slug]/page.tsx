@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Clock3, Download } from "lucide-react";
 import { ArticleCard } from "@/components/blog/article-card";
+import { ArticleUpdatedTag } from "@/components/blog/article-updated-tag";
 import { ReadingProgress } from "@/components/blog/reading-progress";
 import { ShareActions } from "@/components/blog/share-actions";
 import { formatArticleDate, formatBytes } from "@/lib/blog/format";
@@ -90,6 +91,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             <time dateTime={article.publishedAt}>{formatArticleDate(article.publishedAt)}</time>
             <span aria-hidden="true">·</span>
             <span className="inline-flex items-center gap-1.5"><Clock3 className="size-4" /> {article.readingTimeMinutes} min read</span>
+            <ArticleUpdatedTag isEdited={article.isEdited} updatedAt={article.updatedAt} />
           </div>
         </header>
 

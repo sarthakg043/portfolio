@@ -9,6 +9,7 @@ export type AdminArticleListItem = {
   slug: string;
   status: "draft" | "scheduled" | "published" | "archived";
   featured: boolean;
+  is_edited: boolean;
   reading_time_minutes: number;
   published_at: string | null;
   updated_at: string;
@@ -32,7 +33,7 @@ export async function listAdminArticles(): Promise<AdminArticleListItem[]> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("articles")
-    .select("id, title, slug, status, featured, reading_time_minutes, published_at, updated_at, deleted_at")
+    .select("id, title, slug, status, featured, is_edited, reading_time_minutes, published_at, updated_at, deleted_at")
     .order("updated_at", { ascending: false });
 
   if (error) throw new Error(`Unable to load articles: ${error.message}`);
@@ -45,7 +46,7 @@ export async function getAdminArticle(id: string): Promise<AdminArticle | null> 
     .from("articles")
     .select(`
       id, title, slug, subtitle, excerpt, content, content_text, cover_asset_id,
-      status, featured, seo_title, seo_description, canonical_url, external_url,
+      status, featured, is_edited, seo_title, seo_description, canonical_url, external_url,
       reading_time_minutes, published_at, updated_at, deleted_at,
       article_tags(tags(id, name, slug))
     `)
