@@ -800,7 +800,9 @@
 }
 
 .admin-primary-button:disabled,
-.admin-secondary-button:disabled {
+.admin-secondary-button:disabled,
+.admin-icon-button:disabled,
+.admin-site fieldset:disabled button {
   cursor: wait;
   opacity: 0.55;
 }

@@ -1,3 +1,4 @@
+import { AdminActionForm } from "@/components/admin/action-form";
 import Link from "next/link";
 import { FileText, FolderOpen, LayoutDashboard, LogOut, Settings2 } from "lucide-react";
 import { ThemeToggle } from "@/components/blog/theme-toggle";
@@ -36,11 +37,11 @@ export function AdminShell({
           </nav>
           <div className="flex shrink-0 items-center gap-2">
             <ThemeToggle />
-            <form action={signOutAction}>
+            <AdminActionForm action={signOutAction}>
               <button type="submit" className="inline-flex size-9 items-center justify-center rounded-full border border-neutral-200 text-neutral-700 hover:bg-neutral-100 dark:border-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-900" aria-label="Sign out">
                 <LogOut className="size-4" />
               </button>
-            </form>
+            </AdminActionForm>
           </div>
         </div>
       </header>

@@ -1,5 +1,6 @@
 "use server";
 
+import { runAdminAction } from "@/lib/admin/run-action";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/auth";
@@ -22,7 +23,7 @@ function refreshPortfolio() {
   revalidatePath("/portfolio", "layout");
 }
 
-export async function savePortfolioProfileAction(formData: FormData) {
+async function savePortfolioProfileActionImpl(formData: FormData) {
   const user = await requireAdmin();
   const parsed = z.object({
     name: z.string().trim().min(1).max(100),
@@ -40,7 +41,7 @@ export async function savePortfolioProfileAction(formData: FormData) {
   refreshPortfolio();
 }
 
-export async function savePortfolioDomainAction(formData: FormData) {
+async function savePortfolioDomainActionImpl(formData: FormData) {
   const user = await requireAdmin();
   const parsed = z.object({ id: z.enum(["frontend", "java", "cyber"]), tagline: z.string().trim().min(1).max(250), about: z.string().trim().min(1).max(3000), resumeAssetId: nullableUuid, displayOrder: order, visible: z.boolean() }).parse({
     id: formData.get("id"), tagline: formData.get("tagline"), about: formData.get("about"), resumeAssetId: formData.get("resumeAssetId") ?? "", displayOrder: formData.get("displayOrder"), visible: checked(formData.get("visible")),
@@ -51,7 +52,7 @@ export async function savePortfolioDomainAction(formData: FormData) {
   refreshPortfolio();
 }
 
-export async function saveSiteIntegrationsAction(formData: FormData) {
+async function saveSiteIntegrationsActionImpl(formData: FormData) {
   const user = await requireAdmin();
   const parsed = z.object({ githubUsername: z.string().trim().min(1).max(100), linkedinFollowers: z.string().trim().max(50), linkedinConnections: z.string().trim().max(50), linkedinHeadline: z.string().trim().max(300), linkedinPosts: z.array(httpsUrlSchema).max(20) }).parse({
     githubUsername: formData.get("githubUsername"), linkedinFollowers: formData.get("linkedinFollowers"), linkedinConnections: formData.get("linkedinConnections"), linkedinHeadline: formData.get("linkedinHeadline"), linkedinPosts: list(formData.get("linkedinPosts")),
@@ -64,7 +65,7 @@ export async function saveSiteIntegrationsAction(formData: FormData) {
 
 const itemBase = z.object({ id: z.union([z.literal(""), z.uuid()]), displayOrder: order, visible: z.boolean() });
 
-export async function savePortfolioItemAction(formData: FormData) {
+async function savePortfolioItemActionImpl(formData: FormData) {
   const user = await requireAdmin();
   const kind = z.enum(["social", "skill", "experience", "project", "certification"]).parse(formData.get("kind"));
   const common = { id: formData.get("id") ?? "", displayOrder: formData.get("displayOrder") ?? 0, visible: checked(formData.get("visible")) };
@@ -108,7 +109,7 @@ export async function savePortfolioItemAction(formData: FormData) {
   refreshPortfolio();
 }
 
-export async function deletePortfolioItemAction(formData: FormData) {
+async function deletePortfolioItemActionImpl(formData: FormData) {
   await requireAdmin();
   const parsed = z.object({ kind: z.enum(["social", "skill", "experience", "project", "certification"]), id: z.uuid() }).parse({ kind: formData.get("kind"), id: formData.get("id") });
   const table = { social: "social_links", skill: "skills", experience: "experiences", project: "projects", certification: "certifications" } as const;
@@ -116,4 +117,24 @@ export async function deletePortfolioItemAction(formData: FormData) {
   const { error } = await supabase.from(table[parsed.kind]).delete().eq("id", parsed.id);
   if (error) throw new Error(error.message);
   refreshPortfolio();
+}
+
+export async function savePortfolioProfileAction(formData: FormData) {
+  return runAdminAction(() => savePortfolioProfileActionImpl(formData));
+}
+
+export async function savePortfolioDomainAction(formData: FormData) {
+  return runAdminAction(() => savePortfolioDomainActionImpl(formData));
+}
+
+export async function saveSiteIntegrationsAction(formData: FormData) {
+  return runAdminAction(() => saveSiteIntegrationsActionImpl(formData));
+}
+
+export async function savePortfolioItemAction(formData: FormData) {
+  return runAdminAction(() => savePortfolioItemActionImpl(formData));
+}
+
+export async function deletePortfolioItemAction(formData: FormData) {
+  return runAdminAction(() => deletePortfolioItemActionImpl(formData));
 }

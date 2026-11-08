@@ -1,12 +1,14 @@
 "use server";
 
+import { adminActionError, runAdminAction } from "@/lib/admin/run-action";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { articleEditorSchema, slugifyArticleTitle, type ArticleEditorInput } from "@/lib/admin/article-schema";
+import { firstPublicationDate } from "@/lib/admin/article-dates";
 import { requireAdmin } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
-export type ArticleActionResult = { ok: true; id: string } | { ok: false; error: string };
+export type ArticleActionResult = { ok: true; id: string; publishedAt: string | null; updatedAt: string } | { ok: false; error: string };
 
 function nullable(value: string | null): string | null {
   const normalized = value?.trim();
@@ -78,7 +80,20 @@ export async function saveArticleAction(input: ArticleEditorInput): Promise<Arti
       externalUrl: input.externalUrl ?? "",
     });
     const supabase = await createClient();
-    const now = new Date().toISOString();
+    let previousPublishedAt: string | null = null;
+    let wasEdited = false;
+    let tagsEdited = false;
+    if (parsed.id) {
+      const { data: existing, error } = await supabase.from("articles").select("published_at, is_edited").eq("id", parsed.id).single();
+      if (error) throw error;
+      previousPublishedAt = existing.published_at;
+      wasEdited = existing.is_edited;
+      const { data: links, error: tagsError } = await supabase.from("article_tags").select("tags(slug)").eq("article_id", parsed.id);
+      if (tagsError) throw tagsError;
+      const oldSlugs = (links as unknown as Array<{ tags: { slug: string } | null }>).flatMap((link) => link.tags ? [link.tags.slug] : []).sort();
+      const nextSlugs = [...new Set(parsed.tags.map(slugifyArticleTitle).filter(Boolean))].sort();
+      tagsEdited = JSON.stringify(oldSlugs) !== JSON.stringify(nextSlugs);
+    }
     const payload = {
       author_id: user.id,
       title: parsed.title,
@@ -90,24 +105,28 @@ export async function saveArticleAction(input: ArticleEditorInput): Promise<Arti
       cover_asset_id: parsed.coverAssetId,
       status: parsed.intent === "publish" ? "published" : "draft",
       featured: parsed.featured,
+      is_edited: wasEdited || tagsEdited,
       seo_title: parsed.seoTitle,
       seo_description: parsed.seoDescription,
       canonical_url: parsed.canonicalUrl,
       external_url: parsed.externalUrl,
       reading_time_minutes: readingTime(parsed.contentText),
-      published_at: parsed.intent === "publish" ? now : null,
+      published_at: firstPublicationDate(previousPublishedAt, parsed.intent),
       scheduled_at: null,
       deleted_at: null,
     };
 
     let articleId = parsed.id;
+    let savedDates: { published_at: string | null; updated_at: string };
     if (articleId) {
-      const { error } = await supabase.from("articles").update(payload).eq("id", articleId);
+      const { data, error } = await supabase.from("articles").update(payload).eq("id", articleId).select("published_at, updated_at").single();
       if (error) throw new Error(error.message);
+      savedDates = data;
     } else {
-      const { data, error } = await supabase.from("articles").insert(payload).select("id").single();
+      const { data, error } = await supabase.from("articles").insert(payload).select("id, published_at, updated_at").single();
       if (error) throw new Error(error.message);
       articleId = data.id;
+      savedDates = data;
     }
 
     if (!articleId) throw new Error("Article ID was not returned after saving.");
@@ -123,9 +142,9 @@ export async function saveArticleAction(input: ArticleEditorInput): Promise<Arti
     if (revisionError) throw new Error(revisionError.message);
 
     revalidateArticle(parsed.slug);
-    return { ok: true, id: articleId };
+    return { ok: true, id: articleId, publishedAt: savedDates.published_at, updatedAt: savedDates.updated_at };
   } catch (error) {
-    return { ok: false, error: error instanceof Error ? error.message : "Unable to save article" };
+    return { ok: false, error: adminActionError(error) };
   }
 }
 
@@ -134,7 +153,7 @@ const lifecycleSchema = z.object({
   intent: z.enum(["publish", "unpublish", "archive", "trash", "restore", "duplicate", "delete"]),
 });
 
-export async function articleLifecycleAction(formData: FormData) {
+async function articleLifecycleActionImpl(formData: FormData) {
   const user = await requireAdmin();
   const parsed = lifecycleSchema.parse({ id: formData.get("id"), intent: formData.get("intent") });
   const supabase = await createClient();
@@ -183,8 +202,8 @@ export async function articleLifecycleAction(formData: FormData) {
   }
 
   const updates = {
-    publish: { status: "published", published_at: article.published_at ?? new Date().toISOString(), deleted_at: null },
-    unpublish: { status: "draft", published_at: null },
+    publish: { status: "published", published_at: firstPublicationDate(article.published_at, "publish"), deleted_at: null },
+    unpublish: { status: "draft" },
     archive: { status: "archived" },
     trash: { status: "archived", deleted_at: new Date().toISOString() },
     restore: { status: "draft", deleted_at: null },
@@ -195,7 +214,7 @@ export async function articleLifecycleAction(formData: FormData) {
   revalidateArticle(article.slug);
 }
 
-export async function restoreArticleRevisionAction(formData: FormData) {
+async function restoreArticleRevisionActionImpl(formData: FormData) {
   const user = await requireAdmin();
   const parsed = z.object({ articleId: z.uuid(), revisionId: z.coerce.number().int().positive() }).parse({ articleId: formData.get("articleId"), revisionId: formData.get("revisionId") });
   const supabase = await createClient();
@@ -218,4 +237,12 @@ export async function restoreArticleRevisionAction(formData: FormData) {
   const { error: snapshotError } = await supabase.from("article_revisions").insert({ article_id: parsed.articleId, editor_id: user.id, title: revision.title, content: revision.content, content_text: revision.content_text, revision_reason: "restore" });
   if (snapshotError) throw new Error(snapshotError.message);
   revalidateArticle(article.slug);
+}
+
+export async function articleLifecycleAction(formData: FormData) {
+  return runAdminAction(() => articleLifecycleActionImpl(formData));
+}
+
+export async function restoreArticleRevisionAction(formData: FormData) {
+  return runAdminAction(() => restoreArticleRevisionActionImpl(formData));
 }

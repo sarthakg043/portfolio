@@ -1,3 +1,4 @@
+import { AdminActionForm } from "@/components/admin/action-form";
 import { ExternalLink, File, ImageIcon, Trash2 } from "lucide-react";
 import { AdminShell } from "@/components/admin/admin-shell";
 import { MediaUploader } from "@/components/admin/media-uploader";
@@ -32,7 +33,7 @@ export default async function MediaPage() {
                       <File className="size-8 text-neutral-400" />
                     )}
                   </div>
-                  <form action={updateAssetAction} className="space-y-4 p-5">
+                  <AdminActionForm action={updateAssetAction} className="space-y-4 p-5">
                     <input type="hidden" name="id" value={asset.id} />
                     <label className="admin-field"><span>Display name</span><input name="displayName" defaultValue={asset.display_name} required /></label>
                     {asset.kind === "image" ? <label className="admin-field"><span>Alt text</span><textarea name="altText" defaultValue={asset.alt_text ?? ""} rows={2} /></label> : <input type="hidden" name="altText" value="" />}
@@ -43,11 +44,11 @@ export default async function MediaPage() {
                         {publicUrl ? <a href={publicUrl} target="_blank" rel="noreferrer" className="admin-icon-button" aria-label="Open public file"><ExternalLink className="size-4" /></a> : null}
                       </div>
                     </div>
-                  </form>
-                  <form action={deleteAssetAction} className="border-t border-neutral-200 p-4 dark:border-neutral-800">
+                  </AdminActionForm>
+                  <AdminActionForm action={deleteAssetAction} successMessage="File deleted." confirmation={{ title: "Delete this file?", description: "The file and its metadata will be permanently removed. Files still in use cannot be deleted.", label: "Delete file" }} className="border-t border-neutral-200 p-4 dark:border-neutral-800">
                     <input type="hidden" name="id" value={asset.id} />
                     <button className="inline-flex items-center gap-2 text-xs font-semibold text-red-600"><Trash2 className="size-3.5" /> Delete if unused</button>
-                  </form>
+                  </AdminActionForm>
                 </article>
               );
             })}

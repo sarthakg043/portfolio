@@ -21,6 +21,7 @@ const ARTICLE_CARD_SELECT = `
   subtitle,
   excerpt,
   featured,
+  is_edited,
   seo_title,
   seo_description,
   canonical_url,
@@ -94,6 +95,7 @@ type RawArticle = {
   subtitle: string | null;
   excerpt: string | null;
   featured: boolean;
+  is_edited: boolean;
   seo_title: string | null;
   seo_description: string | null;
   canonical_url: string | null;
@@ -164,6 +166,7 @@ function mapCard(raw: RawArticle): BlogArticleCard {
     subtitle: raw.subtitle,
     excerpt: raw.excerpt,
     featured: raw.featured,
+    isEdited: raw.is_edited,
     seoTitle: raw.seo_title,
     seoDescription: raw.seo_description,
     canonicalUrl: raw.canonical_url,

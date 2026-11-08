@@ -1,3 +1,4 @@
+import { AdminActionForm } from "@/components/admin/action-form";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, RotateCcw } from "lucide-react";
@@ -27,7 +28,7 @@ export default async function RevisionsPage({ params }: { params: Promise<{ id: 
           {revisions.length ? revisions.map((revision) => (
             <article key={revision.id} className="flex items-center gap-5 border-b border-neutral-200 p-5 last:border-0 dark:border-neutral-800">
               <div className="min-w-0 flex-1"><p className="font-semibold">{revision.title}</p><p className="mt-1 text-sm text-neutral-500">{revision.revision_reason} · {formatArticleDate(revision.created_at)} · {revision.content_text.trim() ? revision.content_text.trim().split(/\s+/).length : 0} words</p></div>
-              <form action={restoreArticleRevisionAction}><input type="hidden" name="articleId" value={article.id} /><input type="hidden" name="revisionId" value={revision.id} /><button className="admin-secondary-button"><RotateCcw className="size-4" /> Restore</button></form>
+              <AdminActionForm action={restoreArticleRevisionAction} successMessage="Revision restored." confirmation={{ title: "Restore this revision?", description: "The saved revision will replace the current article title and content. Review it in the editor after restoring.", label: "Restore revision" }}><input type="hidden" name="articleId" value={article.id} /><input type="hidden" name="revisionId" value={revision.id} /><button className="admin-secondary-button"><RotateCcw className="size-4" /> Restore</button></AdminActionForm>
             </article>
           )) : <p className="p-8 text-center text-neutral-500">No saved revisions yet.</p>}
         </div>

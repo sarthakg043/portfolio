@@ -7,6 +7,14 @@ export function formatArticleDate(value: string): string {
   }).format(new Date(value));
 }
 
+export function formatArticleDateTime(value: string): string {
+  return new Intl.DateTimeFormat("en-IN", {
+    day: "numeric", month: "short", year: "numeric",
+    hour: "numeric", minute: "2-digit", hour12: true,
+    timeZone: "Asia/Kolkata", timeZoneName: "short",
+  }).format(new Date(value));
+}
+
 export function formatBytes(value: number): string {
   if (value < 1024) return `${value} B`;
   const units = ["KB", "MB", "GB", "TB"];

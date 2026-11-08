@@ -3,6 +3,7 @@ import { ArrowUpRight, Clock3 } from "lucide-react";
 import { formatArticleDate } from "@/lib/blog/format";
 import { getBlogPath } from "@/lib/blog/url";
 import type { BlogArticleCard as BlogArticleCardType } from "@/lib/blog/types";
+import { ArticleUpdatedTag } from "@/components/blog/article-updated-tag";
 
 export function ArticleCard({
   article,
@@ -37,6 +38,7 @@ export function ArticleCard({
       <div className={article.cover?.publicUrl && !featured ? "pt-5" : ""}>
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-xs font-medium text-neutral-500 dark:text-neutral-400">
           <time dateTime={article.publishedAt}>{formatArticleDate(article.publishedAt)}</time>
+          <ArticleUpdatedTag isEdited={article.isEdited} updatedAt={article.updatedAt} compact />
           <span aria-hidden="true">·</span>
           <span className="inline-flex items-center gap-1.5">
             <Clock3 className="size-3.5" /> {article.readingTimeMinutes} min read
